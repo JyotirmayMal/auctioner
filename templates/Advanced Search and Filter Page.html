@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Search & Filter - Antique Auction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        .filter-section {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .filter-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #fbbf24;
+        }
+        .filter-section label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d1d5db; /* gray-300 */
+        }
+        .filter-section input[type="text"],
+        .filter-section input[type="number"],
+        .filter-section select {
+            background-color: #3a3a3a;
+            border: 1px solid #4a4a4a;
+            color: #f5f5f5;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            width: 100%;
+        }
+        .filter-section input[type="checkbox"],
+        .filter-section input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+        .item-card {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+        .item-card:hover {
+            transform: translateY(-3px);
+        }
+        .item-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .item-card-content {
+            padding: 1rem;
+        }
+        .item-card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 0.5rem;
+        }
+        .item-card-category {
+            font-size: 0.875rem;
+            color: #9ca3af; /* gray-400 */
+            margin-bottom: 0.5rem;
+        }
+        .item-card-price {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+        .item-card-time {
+            font-size: 0.875rem;
+            color: #9ca3af; /* gray-400 */
+        }
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #9ca3af;
+            font-size: 1.25rem;
+        }
+        .active-filter-tag {
+            background-color: #fbbf24;
+            color: #1a1a1a;
+            padding: 0.3rem 0.7rem;
+            border-radius: 9999px; /* full rounded */
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .active-filter-tag button {
+            margin-left: 0.5rem;
+            background: none;
+            border: none;
+            color: #1a1a1a;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        /* Collapsible filters for mobile */
+        @media (max-width: 1023px) {
+            .filter-group {
+                display: none;
+            }
+            .filter-group.active {
+                display: block;
+            }
+            .filter-toggle-button {
+                display: block;
+                width: 100%;
+                text-align: left;
+                padding: 0.75rem 1rem;
+                background-color: #3a3a3a;
+                color: #f5f5f5;
+                border-radius: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .filter-toggle-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-gray-900 shadow-sm py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" class="text-2xl font-bold text-white font-serif">Antique Auction</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-300 hover:text-amber-400">Home</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400 active">Auctions</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Categories</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">How It Works</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">About</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="px-4 py-2 text-gray-300 hover:text-amber-600">Login</button>
+                <button class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">Register</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content - Search & Filter -->
+    <main class="py-16 px-6 bg-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8 text-center">Advanced Auction Search</h1>
+
+            <!-- 1. Search Bar -->
+            <div class="mb-8">
+                <div class="relative">
+                    <input type="text" id="keywordSearch" placeholder="Search by item name, lot number, seller, or keywords..."
+                           class="w-full py-3 pl-12 pr-4 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+
+            <!-- Breadcrumbs (Optional Enhancement) -->
+            <nav class="text-gray-400 text-sm mb-6">
+                <ol class="list-none p-0 inline-flex">
+                    <li class="flex items-center">
+                        <a href="#" class="hover:text-amber-400">Home</a>
+                        <span class="mx-2">/</span>
+                    </li>
+                    <li class="flex items-center">
+                        <a href="#" class="hover:text-amber-400">Auctions</a>
+                        <span class="mx-2">/</span>
+                    </li>
+                    <li class="flex items-center text-white">Advanced Search</li>
+                </ol>
+            </nav>
+
+            <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+                <!-- Filter Sidebar -->
+                <aside class="lg:col-span-1">
+                    <div class="filter-section">
+                        <h2 class="text-2xl font-bold text-white mb-4 lg:hidden">Filters</h2>
+                        
+                        <!-- Collapsible Filter Toggles for Mobile -->
+                        <button class="filter-toggle-button lg:hidden" data-target="priceFilter">Price Range <i class="fas fa-chevron-down float-right"></i></button>
+                        <div id="priceFilter" class="filter-group">
+                            <h3>Price Range</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="minPrice">Min ($)</label>
+                                    <input type="number" id="minPrice" placeholder="0" class="filter-input">
+                                </div>
+                                <div>
+                                    <label for="maxPrice">Max ($)</label>
+                                    <input type="number" id="maxPrice" placeholder="100000" class="filter-input">
+                                </div>
+                            </div>
+                            <!-- Optional: Range Slider would go here -->
+                        </div>
+
+                        <button class="filter-toggle-button lg:hidden" data-target="categoryFilter">Category <i class="fas fa-chevron-down float-right"></i></button>
+                        <div id="categoryFilter" class="filter-group">
+                            <h3>Category</h3>
+                            <select id="categorySelect" class="filter-input">
+                                <option value="">All Categories</option>
+                                <option value="antiques">Antiques</option>
+                                <option value="art">Art</option>
+                                <option value="furniture">Furniture</option>
+                                <option value="jewelry">Jewelry</option>
+                                <option value="collectibles">Collectibles</option>
+                                <option value="vehicles">Vehicles</option>
+                                <option value="electronics">Electronics</option>
+                            </select>
+                            <!-- Or Checkbox List -->
+                            <!--
+                            <div class="space-y-2">
+                                <label><input type="checkbox" name="category" value="antiques" class="filter-input"> Antiques</label>
+                                <label><input type="checkbox" name="category" value="art" class="filter-input"> Art</label>
+                                <label><input type="checkbox" name="category" value="furniture" class="filter-input"> Furniture</label>
+                            </div>
+                            -->
+                        </div>
+
+                        <button class="filter-toggle-button lg:hidden" data-target="locationFilter">Location <i class="fas fa-chevron-down float-right"></i></button>
+                        <div id="locationFilter" class="filter-group">
+                            <h3>Location</h3>
+                            <label for="cityStateZip">City, State, or Zip Code</label>
+                            <input type="text" id="cityStateZip" placeholder="e.g., London, SW1A" class="filter-input">
+                            <!-- Optional: Map integration placeholder -->
+                            <div class="mt-4 bg-gray-700 h-32 rounded-md flex items-center justify-center text-gray-400 text-sm">
+                                Map Integration Placeholder
+                            </div>
+                        </div>
+
+                        <button class="filter-toggle-button lg:hidden" data-target="conditionFilter">Condition <i class="fas fa-chevron-down float-right"></i></button>
+                        <div id="conditionFilter" class="filter-group">
+                            <h3>Condition</h3>
+                            <div class="space-y-2">
+                                <label><input type="radio" name="condition" value="any" checked class="filter-input"> Any</label>
+                                <label><input type="radio" name="condition" value="new" class="filter-input"> New</label>
+                                <label><input type="radio" name="condition" value="used" class="filter-input"> Used</label>
+                                <label><input type="radio" name="condition" value="refurbished" class="filter-input"> Refurbished</label>
+                                <label><input type="radio" name="condition" value="unspecified" class="filter-input"> Unspecified</label>
+                            </div>
+                        </div>
+
+                        <button class="filter-toggle-button lg:hidden" data-target="biddingStatusFilter">Bidding Status <i class="fas fa-chevron-down float-right"></i></button>
+                        <div id="biddingStatusFilter" class="filter-group">
+                            <h3>Bidding Status</h3>
+                            <div class="space-y-2">
+                                <label><input type="checkbox" name="biddingStatus" value="live" class="filter-input"> Live Auctions</label>
+                                <label><input type="checkbox" name="biddingStatus" value="upcoming" class="filter-input"> Upcoming Auctions</label>
+                                <label><input type="checkbox" name="biddingStatus" value="closed" class="filter-input"> Closed Auctions</label>
+                                <label><input type="checkbox" name="biddingStatus" value="buyNow" class="filter-input"> Buy Now Available</label>
+                            </div>
+                        </div>
+
+                        <!-- Additional Attributes (Dynamic Filter Placeholder) -->
+                        <button class="filter-toggle-button lg:hidden" data-target="dynamicAttributesFilter">Item-Specific Filters <i class="fas fa-chevron-down float-right"></i></button>
+                        <div id="dynamicAttributesFilter" class="filter-group">
+                            <h3>Item-Specific Filters</h3>
+                            <div id="dynamicFiltersContent" class="space-y-4">
+                                <p class="text-gray-400 text-sm">Select a category to see specific filters.</p>
+                                <!-- Dynamic filters will be loaded here based on category selection -->
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex flex-col space-y-3">
+                            <button id="applyFilters" class="bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-md transition">Apply Filters</button>
+                            <button id="clearAllFilters" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md transition">Clear All Filters</button>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Results Display Area -->
+                <section class="lg:col-span-3">
+                    <!-- Active Filters Display -->
+                    <div id="activeFiltersDisplay" class="mb-6 flex flex-wrap items-center">
+                        <span class="text-gray-400 mr-2">Active Filters:</span>
+                        <!-- Active filter tags will be inserted here -->
+                        <button id="clearAllActiveFilters" class="text-amber-400 hover:underline text-sm hidden">Clear All</button>
+                    </div>
+
+                    <!-- Sorting Options -->
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-white">Results (<span id="resultsCount">0</span> items)</h2>
+                        <div class="flex items-center space-x-2">
+                            <label for="sortOptions" class="text-gray-300">Sort by:</label>
+                            <select id="sortOptions" class="bg-gray-700 border border-gray-600 text-white py-2 px-3 rounded-md">
+                                <option value="relevance">Relevance</option>
+                                <option value="endingSoonest">Ending Soonest</option>
+                                <option value="newest">Newest Listings</option>
+                                <option value="lowestPrice">Lowest Price</option>
+                                <option value="highestPrice">Highest Price</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Item Listings Grid -->
+                    <div id="itemResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Item cards will be dynamically loaded here -->
+                    </div>
+
+                    <!-- No Results Message -->
+                    <div id="noResultsMessage" class="no-results hidden">
+                        <p>No items found matching your criteria. Try adjusting your filters.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 px-6 mt-8">
+        <div class="max-w-7xl mx-auto text-center text-gray-400">
+            <p>© 2023 Antique Auction System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dummy Data for Items
+        const allItems = [
+            { id: 1, name: "French Porcelain Vase", category: "Antiques", price: 3200, timeLeft: "2d 14h", status: "live", image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de1ed3d3-2133-45b6-a37b-06d1c6c19f98.png", condition: "used", buyNow: false, material: "Porcelain", style: "Rococo" },
+            { id: 2, name: "Renaissance Wooden Chest", category: "Furniture", price: 8750, timeLeft: "6h 23m", status: "live", image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b03087f3-14b1-4093-b1ee-727268cba191.png", condition: "used", buyNow: true, material: "Oak", style: "Renaissance", age: "16th Century" },
+            { id: 3, name: "Vintage Pocket Watch", category: "Jewelry", price: 5000, timeLeft: "Upcoming", status: "upcoming", image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef8bd089-ded7-4252-89a9-d85eb3c2c085.png", condition: "used", buyNow: false, brand: "Patek Philippe", model: "Calatrava" },
+            { id: 4, name: "Art Nouveau Mirror", category: "Art", price: 890, timeLeft: "1d 8h", status: "live", image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/89a8c7f5-6e9b-4d36-9986-ac5746583bfb.png", condition: "used", buyNow: false, material: "Wood", style: "Art Nouveau" },
+            { id: 5, name: "Civil War Officer's Sword", category: "Collectibles", price: 2150, timeLeft: "10h 30m", status: "live", image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ed18899b-5c45-480a-a51e-9da2bb80f1fa.png", condition: "used", buyNow: false },
+            { id: 6, name: "Tiffany Stained Glass Lamp", category: "Art", price: 5400, timeLeft: "3h 15m", status: "live", image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3112a98f-02a6-4ce3-bc08-cc8c0b82f191.png", condition: "used", buyNow: true, material: "Glass", style: "Art Nouveau" },
+            { id: 7, name: "Antique Persian Rug", category: "Furniture", price: 3200, timeLeft: "1d 12h", status: "live", image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6d33265c-6835-49bb-9272-2d0254e691db.png", condition: "used", buyNow: false, material: "Wool", style: "Persian" },
+            { id: 8, name: "Victorian Era Desk", category: "Furniture", price: 1500, timeLeft: "Closed", status: "closed", image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a6c2e9c1-6168-44ec-8680-bcde5f9894bb.png", condition: "used", buyNow: false, material: "Mahogany", style: "Victorian", age: "19th Century" },
+            { id: 9, name: "Rare Stamp Collection", category: "Collectibles", price: 750, timeLeft: "5d 2h", status: "live", image: "https://via.placeholder.com/300/FFD700/000000?text=Stamps", condition: "used", buyNow: false },
+            { id: 10, name: "Vintage Turntable", category: "Electronics", price: 450, timeLeft: "3h 0m", status: "live", image: "https://via.placeholder.com/300/A9A9A9/FFFFFF?text=Turntable", condition: "used", buyNow: true, brand: "Technics", model: "SL-1200" },
+            { id: 11, name: "Diamond Engagement Ring", category: "Jewelry", price: 12000, timeLeft: "Upcoming", status: "upcoming", image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cd2839ee-4843-459b-b639-30cc546a9774.png", condition: "new", buyNow: false, material: "Gold", carat: "1.5" },
+            { id: 12, name: "Classic Ford Mustang", category: "Vehicles", price: 45000, timeLeft: "Closed", status: "closed", image: "https://via.placeholder.com/300/B0C4DE/000000?text=Mustang", condition: "used", buyNow: false, make: "Ford", year: "1967" }
+        ];
+
+        // Dynamic Filter Options based on Category
+        const dynamicFilters = {
+            "Furniture": [
+                { type: "text", name: "material", label: "Material" },
+                { type: "text", name: "style", label: "Style" },
+                { type: "select", name: "age", label: "Age", options: ["Any", "17th Century", "18th Century", "19th Century", "20th Century"] }
+            ],
+            "Electronics": [
+                { type: "text", name: "brand", label: "Brand" },
+                { type: "text", name: "model", label: "Model" },
+                { type: "checkbox", name: "warranty", label: "Warranty Available" }
+            ],
+            "Jewelry": [
+                { type: "text", name: "material", label: "Material" },
+                { type: "number", name: "carat", label: "Min Carat" }
+            ],
+            "Vehicles": [
+                { type: "text", name: "make", label: "Make" },
+                { type: "number", name: "year", label: "Min Year" }
+            ],
+            "Art": [
+                { type: "text", name: "artist", label: "Artist" },
+                { type: "text", name: "medium", label: "Medium" }
+            ]
+            // Add more categories and their specific filters
+        };
+
+        // DOM Elements
+        const keywordSearchInput = document.getElementById('keywordSearch');
+        const minPriceInput = document.getElementById('minPrice');
+        const maxPriceInput = document.getElementById('maxPrice');
+        const categorySelect = document.getElementById('categorySelect');
+        const cityStateZipInput = document.getElementById('cityStateZip');
+        const conditionRadios = document.querySelectorAll('input[name="condition"]');
+        const biddingStatusCheckboxes = document.querySelectorAll('input[name="biddingStatus"]');
+        const dynamicFiltersContent = document.getElementById('dynamicFiltersContent');
+        const itemResultsDiv = document.getElementById('itemResults');
+        const resultsCountSpan = document.getElementById('resultsCount');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        const sortOptionsSelect = document.getElementById('sortOptions');
+        const applyFiltersButton = document.getElementById('applyFilters');
+        const clearAllFiltersButton = document.getElementById('clearAllFilters');
+        const activeFiltersDisplay = document.getElementById('activeFiltersDisplay');
+        const clearAllActiveFiltersButton = document.getElementById('clearAllActiveFilters');
+        const filterToggleButtons = document.querySelectorAll('.filter-toggle-button');
+
+        let currentFilters = {}; // Object to store active filters
+
+        // --- Functions ---
+
+        // Render Dynamic Filters based on Category
+        function renderDynamicFilters(category) {
+            dynamicFiltersContent.innerHTML = ''; // Clear previous dynamic filters
+            if (category && dynamicFilters[category]) {
+                dynamicFilters[category].forEach(filter => {
+                    const div = document.createElement('div');
+                    div.className = 'mb-4';
+                    if (filter.type === 'text') {
+                        div.innerHTML = `
+                            <label for="${filter.name}">${filter.label}</label>
+                            <input type="text" id="${filter.name}" placeholder="${filter.label}" class="filter-input dynamic-filter">
+                        `;
+                    } else if (filter.type === 'number') {
+                        div.innerHTML = `
+                            <label for="${filter.name}">${filter.label}</label>
+                            <input type="number" id="${filter.name}" placeholder="${filter.label}" class="filter-input dynamic-filter">
+                        `;
+                    } else if (filter.type === 'select') {
+                        const optionsHtml = filter.options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+                        div.innerHTML = `
+                            <label for="${filter.name}">${filter.label}</label>
+                            <select id="${filter.name}" class="filter-input dynamic-filter">
+                                ${optionsHtml}
+                            </select>
+                        `;
+                    } else if (filter.type === 'checkbox') {
+                        div.innerHTML = `
+                            <label class="flex items-center">
+                                <input type="checkbox" id="${filter.name}" class="filter-input dynamic-filter"> ${filter.label}
+                            </label>
+                        `;
+                    }
+                    dynamicFiltersContent.appendChild(div);
+                });
+            } else {
+                dynamicFiltersContent.innerHTML = '<p class="text-gray-400 text-sm">Select a category to see specific filters.</p>';
+            }
+        }
+
+        // Apply Filters and Render Results
+        function applyAndRenderFilters() {
+            const keyword = keywordSearchInput.value.toLowerCase().trim();
+            const minPrice = parseFloat(minPriceInput.value) || 0;
+            const maxPrice = parseFloat(maxPriceInput.value) || Infinity;
+            const selectedCategory = categorySelect.value;
+            const location = cityStateZipInput.value.toLowerCase().trim();
+            const selectedCondition = document.querySelector('input[name="condition"]:checked').value;
+            const selectedBiddingStatuses = Array.from(biddingStatusCheckboxes)
+                                                .filter(cb => cb.checked)
+                                                .map(cb => cb.value);
+
+            // Collect dynamic filters
+            const dynamicFilterValues = {};
+            if (selectedCategory && dynamicFilters[selectedCategory]) {
+                dynamicFilters[selectedCategory].forEach(filter => {
+                    const input = document.getElementById(filter.name);
+                    if (input) {
+                        if (filter.type === 'checkbox') {
+                            dynamicFilterValues[filter.name] = input.checked;
+                        } else if (input.value.trim()) {
+                            dynamicFilterValues[filter.name] = input.value.toLowerCase().trim();
+                        }
+                    }
+                });
+            }
+
+            // Update currentFilters object for active filter display
+            currentFilters = {
+                keyword: keyword || null,
+                minPrice: minPrice > 0 ? minPrice : null,
+                maxPrice: maxPrice !== Infinity ? maxPrice : null,
+                category: selectedCategory || null,
+                location: location || null,
+                condition: selectedCondition !== 'any' ? selectedCondition : null,
+                biddingStatus: selectedBiddingStatuses.length > 0 ? selectedBiddingStatuses : null,
+                dynamic: Object.keys(dynamicFilterValues).length > 0 ? dynamicFilterValues : null
+            };
+
+            let filteredItems = allItems.filter(item => {
+                // Keyword Search
+                const matchesKeyword = !keyword ||
+                                       item.name.toLowerCase().includes(keyword) ||
+                                       item.category.toLowerCase().includes(keyword) ||
+                                       (item.description && item.description.toLowerCase().includes(keyword)) ||
+                                       (item.lotNumber && item.lotNumber.toLowerCase().includes(keyword)) ||
+                                       (item.sellerName && item.sellerName.toLowerCase().includes(keyword)); // Assuming these fields exist in item data
+
+                // Price Range
+                const matchesPrice = item.price >= minPrice && item.price <= maxPrice;
+
+                // Category
+                const matchesCategory = !selectedCategory || item.category.toLowerCase() === selectedCategory.toLowerCase();
+
+                // Location (dummy check, would be more complex with real data)
+                const matchesLocation = !location || (item.location && item.location.toLowerCase().includes(location));
+
+                // Condition
+                const matchesCondition = selectedCondition === 'any' || item.condition.toLowerCase() === selectedCondition.toLowerCase();
+
+                // Bidding Status
+                const matchesBiddingStatus = selectedBiddingStatuses.length === 0 ||
+                                             selectedBiddingStatuses.includes(item.status) ||
+                                             (selectedBiddingStatuses.includes('buyNow') && item.buyNow);
+
+                // Dynamic Filters
+                let matchesDynamicFilters = true;
+                if (currentFilters.dynamic) {
+                    for (const key in currentFilters.dynamic) {
+                        const filterValue = currentFilters.dynamic[key];
+                        const itemValue = item[key] ? String(item[key]).toLowerCase() : null;
+
+                        if (filterValue === true) { // For checkboxes like 'warranty'
+                            if (!item[key]) {
+                                matchesDynamicFilters = false;
+                                break;
+                            }
+                        } else if (typeof filterValue === 'number') { // For number inputs like 'minCarat', 'minYear'
+                            if (item[key] < filterValue) {
+                                matchesDynamicFilters = false;
+                                break;
+                            }
+                        } else if (filterValue !== 'any' && itemValue !== filterValue) {
+                            matchesDynamicFilters = false;
+                            break;
+                        }
+                    }
+                }
+
+                return matchesKeyword && matchesPrice && matchesCategory && matchesLocation &&
+                       matchesCondition && matchesBiddingStatus && matchesDynamicFilters;
+            });
+
+            // Apply Sorting
+            const sortBy = sortOptionsSelect.value;
+            filteredItems.sort((a, b) => {
+                if (sortBy === 'lowestPrice') return a.price - b.price;
+                if (sortBy === 'highestPrice') return b.price - a.price;
+                if (sortBy === 'newest') {
+                    // Dummy logic for newest, assuming higher ID means newer
+                    return b.id - a.id;
+                }
+                if (sortBy === 'endingSoonest') {
+                    // This would require parsing timeLeft into actual dates/times
+                    // For now, a simple dummy sort
+                    if (a.status === 'live' && b.status !== 'live') return -1;
+                    if (a.status !== 'live' && b.status === 'live') return 1;
+                    return 0; // Placeholder
+                }
+                return 0; // Relevance or default
+            });
+
+            renderResults(filteredItems);
+            updateActiveFiltersDisplay();
+        }
+
+        // Render Search Results
+        function renderResults(items) {
+            itemResultsDiv.innerHTML = '';
+            resultsCountSpan.textContent = items.length;
+
+            if (items.length === 0) {
+                noResultsMessage.classList.remove('hidden');
+            } else {
+                noResultsMessage.classList.add('hidden');
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="item-card-content">
+                            <h3 class="item-card-title">${item.name}</h3>
+                            <p class="item-card-category">${item.category}</p>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="item-card-price">$${item.price.toLocaleString()}</span>
+                                <span class="item-card-time">${item.timeLeft}</span>
+                            </div>
+                            <button class="mt-4 w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-md transition">
+                                ${item.status === 'live' ? 'Place Bid' : (item.status === 'upcoming' ? 'View Details' : 'View Details')}
+                            </button>
+                        </div>
+                    `;
+                    itemResultsDiv.appendChild(card);
+                });
+            }
+        }
+
+        // Update Active Filters Display
+        function updateActiveFiltersDisplay() {
+            activeFiltersDisplay.innerHTML = '<span class="text-gray-400 mr-2">Active Filters:</span>';
+            let hasActiveFilters = false;
+
+            for (const key in currentFilters) {
+                if (currentFilters[key]) {
+                    if (key === 'dynamic' && currentFilters[key]) {
+                        for (const dKey in currentFilters[key]) {
+                            const dValue = currentFilters[key][dKey];
+                            if (dValue !== null && dValue !== '' && dValue !== 'any' && dValue !== false) {
+                                const label = dynamicFilters[currentFilters.category]?.find(f => f.name === dKey)?.label || dKey;
+                                addActiveFilterTag(`${label}: ${dValue}`, `dynamic-${dKey}`);
+                                hasActiveFilters = true;
+                            }
+                        }
+                    } else if (key === 'biddingStatus' && Array.isArray(currentFilters[key])) {
+                        currentFilters[key].forEach(status => {
+                            addActiveFilterTag(`Status: ${status}`, `biddingStatus-${status}`);
+                            hasActiveFilters = true;
+                        });
+                    } else if (currentFilters[key] !== null && currentFilters[key] !== '' && currentFilters[key] !== 'any') {
+                        let label = key;
+                        let value = currentFilters[key];
+                        if (key === 'minPrice') label = 'Min Price';
+                        if (key === 'maxPrice') label = 'Max Price';
+                        if (key === 'category') label = 'Category';
+                        if (key === 'location') label = 'Location';
+                        if (key === 'condition') label = 'Condition';
+                        
+                        addActiveFilterTag(`${label}: ${value}`, key);
+                        hasActiveFilters = true;
+                    }
+                }
+            }
+
+            if (hasActiveFilters) {
+                clearAllActiveFiltersButton.classList.remove('hidden');
+                activeFiltersDisplay.appendChild(clearAllActiveFiltersButton);
+            } else {
+                clearAllActiveFiltersButton.classList.add('hidden');
+                activeFiltersDisplay.innerHTML = '<span class="text-gray-400 mr-2">Active Filters: None</span>';
+            }
+        }
+
+        function addActiveFilterTag(text, filterKey) {
+            const tag = document.createElement('span');
+            tag.className = 'active-filter-tag';
+            tag.innerHTML = `${text} <button type="button" data-filter-key="${filterKey}"><i class="fas fa-times"></i></button>`;
+            activeFiltersDisplay.insertBefore(tag, clearAllActiveFiltersButton);
+        }
+
+        // Clear a specific filter
+        activeFiltersDisplay.addEventListener('click', (event) => {
+            if (event.target.tagName === 'BUTTON' && event.target.dataset.filterKey) {
+                const filterKey = event.target.dataset.filterKey;
+                if (filterKey.startsWith('dynamic-')) {
+                    const dynamicKey = filterKey.split('-')[1];
+                    if (currentFilters.dynamic) {
+                        delete currentFilters.dynamic[dynamicKey];
+                        const input = document.getElementById(dynamicKey);
+                        if (input) {
+                            if (input.type === 'checkbox') input.checked = false;
+                            else input.value = '';
+                        }
+                    }
+                } else if (filterKey.startsWith('biddingStatus-')) {
+                    const statusToRemove = filterKey.split('-')[1];
+                    if (currentFilters.biddingStatus) {
+                        currentFilters.biddingStatus = currentFilters.biddingStatus.filter(s => s !== statusToRemove);
+                        const checkbox = document.querySelector(`input[name="biddingStatus"][value="${statusToRemove}"]`);
+                        if (checkbox) checkbox.checked = false;
+                    }
+                } else {
+                    // Clear standard filters
+                    if (filterKey === 'keyword') keywordSearchInput.value = '';
+                    if (filterKey === 'minPrice') minPriceInput.value = '';
+                    if (filterKey === 'maxPrice') maxPriceInput.value = '';
+                    if (filterKey === 'category') {
+                        categorySelect.value = '';
+                        renderDynamicFilters(''); // Clear dynamic filters
+                    }
+                    if (filterKey === 'location') cityStateZipInput.value = '';
+                    if (filterKey === 'condition') document.querySelector('input[name="condition"][value="any"]').checked = true;
+                }
+                applyAndRenderFilters(); // Re-apply filters
+            }
+        });
+
+        // Clear All Filters
+        clearAllFiltersButton.addEventListener('click', () => {
+            keywordSearchInput.value = '';
+            minPriceInput.value = '';
+            maxPriceInput.value = '';
+            categorySelect.value = '';
+            cityStateZipInput.value = '';
+            document.querySelector('input[name="condition"][value="any"]').checked = true;
+            biddingStatusCheckboxes.forEach(cb => cb.checked = false);
+            renderDynamicFilters(''); // Clear dynamic filters
+            applyAndRenderFilters();
+        });
+
+        clearAllActiveFiltersButton.addEventListener('click', () => {
+            clearAllFiltersButton.click(); // Simulate click on the main clear all button
+        });
+
+        // --- Event Listeners ---
+        categorySelect.addEventListener('change', (event) => {
+            renderDynamicFilters(event.target.value);
+        });
+
+        applyFiltersButton.addEventListener('click', applyAndRenderFilters);
+        sortOptionsSelect.addEventListener('change', applyAndRenderFilters);
+
+        // Initial render on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDynamicFilters(categorySelect.value); // Render initial dynamic filters
+            applyAndRenderFilters(); // Render all items initially
+            
+            // Collapsible filters for mobile
+            filterToggleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    const targetElement = document.getElementById(targetId);
+                    targetElement.classList.toggle('active');
+                    const icon = button.querySelector('i');
+                    if (targetElement.classList.contains('active')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+        });
+
+        // Optional: Live search on keyword input (can be performance heavy for large datasets)
+        // keywordSearchInput.addEventListener('input', applyAndRenderFilters);
+    </script>
+</body>
+</html>

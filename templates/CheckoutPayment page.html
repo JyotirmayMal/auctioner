@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Antique Auction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        .checkout-card {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .progress-indicator::before {
+            content: '';
+            position: absolute;
+            width: calc(100% - 40px);
+            height: 2px;
+            background-color: #4a4a4a;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4a4a4a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #f5f5f5;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .progress-step.active .progress-circle {
+            background-color: #fbbf24;
+            color: #1a1a1a;
+        }
+        .progress-step.completed .progress-circle {
+            background-color: #22c55e; /* Green */
+            color: #1a1a1a;
+        }
+        .progress-label {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #9ca3af;
+            transition: color 0.3s;
+        }
+        .progress-step.active .progress-label,
+        .progress-step.completed .progress-label {
+            color: #f5f5f5;
+        }
+        .payment-method-option {
+            background-color: #3a3a3a;
+            border: 2px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .payment-method-option.selected {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.5);
+        }
+        .payment-method-option:hover {
+            border-color: #fbbf24;
+        }
+        .payment-method-option img {
+            max-height: 30px;
+            display: inline-block;
+            margin-right: 0.75rem;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            color: #f5f5f5;
+            font-size: 0.875rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="email"],
+        .input-group input[type="tel"],
+        .input-group input[type="password"],
+        .input-group select {
+            background-color: #3a3a3a;
+            color: #f5f5f5;
+            border: 1px solid #4a4a4a;
+            border-radius: 0.375rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+            outline: none;
+        }
+        .error-message {
+            color: #ef4444; /* Red-500 */
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        .trust-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: #3a3a3a;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #d1d5db;
+        }
+        .trust-badge i {
+            color: #22c55e; /* Green */
+            margin-right: 0.5rem;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #fbbf24; /* Amber */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="py-16 px-4 bg-gray-900">
+    <div class="checkout-card mx-auto max-w-4xl">
+        <!-- Progress Indicator -->
+        <div class="progress-indicator">
+            <div class="progress-step active" id="step1">
+                <div class="progress-circle">1</div>
+                <div class="progress-label">Review</div>
+            </div>
+            <div class="progress-step" id="step2">
+                <div class="progress-circle">2</div>
+                <div class="progress-label">Payment</div>
+            </div>
+            <div class="progress-step" id="step3">
+                <div class="progress-circle">3</div>
+                <div class="progress-label">Confirmation</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Review Auction Details -->
+        <div id="reviewStep" class="current-step">
+            <h2 class="text-3xl font-bold text-white mb-6 text-center">Review Your Order</h2>
+
+            <div class="flex flex-col md:flex-row items-center md:items-start bg-gray-700 rounded-lg p-6 mb-6">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b03087f3-14b1-4093-b1ee-727268cba191.png" alt="Renaissance Wooden Chest" class="w-48 h-48 object-cover rounded-md mb-4 md:mb-0 md:mr-6">
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Renaissance Wooden Chest</h3>
+                    <p class="text-gray-300 mb-2">Beautifully crafted antique table from the 19th century.</p>
+                    <p class="text-gray-400 text-sm">Auction ID: #AUC8750</p>
+                    <p class="text-gray-400 text-sm">Winning Bid: <span class="text-amber-400 font-bold text-lg">$8,750.00</span></p>
+                    <a href="#" class="text-amber-400 hover:underline text-sm mt-2 inline-block">View Auction Listing</a>
+                </div>
+            </div>
+
+            <div class="bg-gray-700 rounded-lg p-6 mb-6">
+                <h3 class="text-xl font-bold text-white mb-4">Order Summary</h3>
+                <div class="flex justify-between text-gray-300 mb-2">
+                    <span>Winning Bid:</span>
+                    <span>$8,750.00</span>
+                </div>
+                <div class="flex justify-between text-gray-300 mb-2">
+                    <span>Buyer's Premium (15%):</span>
+                    <span>$1,312.50</span>
+                </div>
+                <div class="flex justify-between text-gray-300 mb-2">
+                    <span>Shipping & Handling:</span>
+                    <span>$150.00</span>
+                </div>
+                <div class="flex justify-between text-gray-300 mb-4">
+                    <span>Taxes (5%):</span>
+                    <span>$443.13</span>
+                </div>
+                <div class="border-t border-gray-600 pt-4 flex justify-between text-white text-xl font-bold">
+                    <span>Total Amount Due:</span>
+                    <span id="totalAmount">$10,655.63</span>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="proceedToPaymentBtn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-lg transition">
+                    Proceed to Payment
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Payment Method Selection & Information Entry -->
+        <div id="paymentStep" class="hidden current-step">
+            <h2 class="text-3xl font-bold text-white mb-6 text-center">Select Payment Method</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="payment-method-option" data-method="creditCard">
+                    <input type="radio" name="paymentMethod" id="creditCard" value="creditCard" class="hidden">
+                    <label for="creditCard" class="flex items-center cursor-pointer">
+                        <img src="https://via.placeholder.com/30x20/FFFFFF/000000?text=Visa" alt="Visa" class="mr-2">
+                        <img src="https://via.placeholder.com/30x20/FFFFFF/000000?text=MC" alt="Mastercard" class="mr-2">
+                        <span class="text-white font-semibold">Credit/Debit Card</span>
+                    </label>
+                </div>
+                <div class="payment-method-option" data-method="paypal">
+                    <input type="radio" name="paymentMethod" id="paypal" value="paypal" class="hidden">
+                    <label for="paypal" class="flex items-center cursor-pointer">
+                        <img src="https://via.placeholder.com/30x20/FFFFFF/000000?text=PayPal" alt="PayPal" class="mr-2">
+                        <span class="text-white font-semibold">PayPal</span>
+                    </label>
+                </div>
+                <div class="payment-method-option" data-method="upi">
+                    <input type="radio" name="paymentMethod" id="upi" value="upi" class="hidden">
+                    <label for="upi" class="flex items-center cursor-pointer">
+                        <img src="https://via.placeholder.com/30x20/FFFFFF/000000?text=UPI" alt="UPI" class="mr-2">
+                        <span class="text-white font-semibold">UPI / Net Banking</span>
+                    </label>
+                </div>
+                <div class="payment-method-option" data-method="wallet">
+                    <input type="radio" name="paymentMethod" id="wallet" value="wallet" class="hidden">
+                    <label for="wallet" class="flex items-center cursor-pointer">
+                        <img src="https://via.placeholder.com/30x20/FFFFFF/000000?text=Wallet" alt="Wallet" class="mr-2">
+                        <span class="text-white font-semibold">Digital Wallet</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Payment Forms (Dynamically Shown) -->
+            <form id="paymentForm" class="hidden"> <!-- This form is now correctly hidden initially -->
+                <!-- Credit Card Form -->
+                <div id="creditCardForm" class="payment-form hidden">
+                    <h3 class="text-xl font-bold text-white mb-4">Credit/Debit Card Details</h3>
+                    <div class="input-group">
+                        <label for="cardName">Name on Card <span class="text-red-500">*</span></label>
+                        <input type="text" id="cardName" placeholder="John Doe" required>
+                        <p class="error-message hidden" id="cardNameError"></p>
+                    </div>
+                    <div class="input-group">
+                        <label for="cardNumber">Card Number <span class="text-red-500">*</span></label>
+                        <input type="text" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" required>
+                        <p class="error-message hidden" id="cardNumberError"></p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="input-group">
+                            <label for="expiryDate">Expiry Date <span class="text-red-500">*</span></label>
+                            <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                            <p class="error-message hidden" id="expiryDateError"></p>
+                        </div>
+                        <div class="input-group">
+                            <label for="cvv">CVV <span class="text-red-500">*</span></label>
+                            <input type="password" id="cvv" placeholder="XXX" maxlength="4" required>
+                            <p class="error-message hidden" id="cvvError"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PayPal Form (Redirect) -->
+                <div id="paypalForm" class="payment-form hidden text-center">
+                    <h3 class="text-xl font-bold text-white mb-4">Pay with PayPal</h3>
+                    <p class="text-gray-300 mb-6">You will be redirected to PayPal's secure website to complete your purchase.</p>
+                    <button type="button" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transition">
+                        <i class="fab fa-paypal mr-2"></i> Continue to PayPal
+                    </button>
+                </div>
+
+                <!-- UPI Form -->
+                <div id="upiForm" class="payment-form hidden">
+                    <h3 class="text-xl font-bold text-white mb-4">Pay with UPI / Net Banking</h3>
+                    <div class="input-group">
+                        <label for="upiId">UPI ID <span class="text-red-500">*</span></label>
+                        <input type="text" id="upiId" placeholder="yourname@bankupi" required>
+                        <p class="error-message hidden" id="upiIdError"></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">
+                        After clicking "Pay Now", please open your UPI app to approve the payment request.
+                    </p>
+                </div>
+
+                <!-- Digital Wallet Form -->
+                <div id="walletForm" class="payment-form hidden text-center">
+                    <h3 class="text-xl font-bold text-white mb-4">Pay with Digital Wallet</h3>
+                    <p class="text-gray-300 mb-6">Select your preferred wallet:</p>
+                    <div class="flex justify-center space-x-4">
+                        <button type="button" class="bg-gray-700 hover:bg-gray-800 text-white py-3 px-6 rounded-lg transition">
+                            <i class="fab fa-google-pay mr-2"></i> Google Pay
+                        </button>
+                        <button type="button" class="bg-gray-700 hover:bg-gray-800 text-white py-3 px-6 rounded-lg transition">
+                            <i class="fab fa-apple-pay mr-2"></i> Apple Pay
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-8">
+                    <button id="backToReviewBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                        <i class="fas fa-arrow-left mr-2"></i> Back
+                    </button>
+                    <button type="submit" id="payNowBtn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-lg transition hidden"> <!-- Still hidden initially -->
+                        Pay Now <span id="payNowLoader" class="loader hidden"></span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-8 text-center">
+                <div class="trust-badge">
+                    <i class="fas fa-lock"></i> SSL Secure
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-shield-alt"></i> PCI Compliant
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-check-circle"></i> Buyer Protection
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Transaction Confirmation -->
+        <div id="confirmationStep" class="hidden current-step">
+            <h2 class="text-3xl font-bold text-white mb-6 text-center">Payment Successful!</h2>
+            <div class="text-center text-green-500 text-6xl mb-6">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p class="text-gray-300 text-center text-lg mb-8">
+                Your payment for the Renaissance Wooden Chest has been successfully processed.
+            </p>
+
+            <div class="bg-gray-700 rounded-lg p-6 mb-6">
+                <h3 class="text-xl font-bold text-white mb-4">Transaction Summary</h3>
+                <div class="flex justify-between text-gray-300 mb-2">
+                    <span>Transaction ID:</span>
+                    <span id="confTransactionId">#TXN123456789</span>
+                </div>
+                <div class="flex justify-between text-gray-300 mb-2">
+                    <span>Payment Method:</span>
+                    <span id="confPaymentMethod">Credit Card</span>
+                </div>
+                <div class="flex justify-between text-gray-300 mb-2">
+                    <span>Amount Paid:</span>
+                    <span id="confAmountPaid">$10,655.63</span>
+                </div>
+                <div class="flex justify-between text-gray-300 mb-2">
+                    <span>Delivery Status:</span>
+                    <span>Processing for Shipment</span>
+                </div>
+                <div class="flex justify-between text-gray-300 mb-2">
+                    <span>Estimated Delivery:</span>
+                    <span>7-10 business days</span>
+                </div>
+            </div>
+
+            <div class="bg-gray-700 rounded-lg p-6 mb-6">
+                <h3 class="text-xl font-bold text-white mb-4">Need Assistance?</h3>
+                <p class="text-gray-300 mb-2">
+                    If you have any questions regarding your order, please contact our support team:
+                </p>
+                <p class="text-gray-300"><i class="fas fa-envelope mr-2"></i> support@antiqueauction.com</p>
+                <p class="text-gray-300"><i class="fas fa-phone mr-2"></i> +44 20 7946 0958</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                    <i class="fas fa-truck mr-2"></i> Track Your Order
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                    <i class="fas fa-gavel mr-2"></i> View My Auctions
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const reviewStep = document.getElementById('reviewStep');
+        const paymentStep = document.getElementById('paymentStep');
+        const confirmationStep = document.getElementById('confirmationStep');
+
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2'); // Corrected typo here
+        const step3 = document.getElementById('step3');
+
+        const proceedToPaymentBtn = document.getElementById('proceedToPaymentBtn');
+        const backToReviewBtn = document.getElementById('backToReviewBtn');
+        const paymentMethodOptions = document.querySelectorAll('.payment-method-option');
+        const paymentForms = document.querySelectorAll('.payment-form');
+        const paymentFormContainer = document.getElementById('paymentForm'); // The <form> element itself
+        const payNowBtn = document.getElementById('payNowBtn');
+        const payNowLoader = document.getElementById('payNowLoader');
+
+        // Card form elements
+        const cardNameInput = document.getElementById('cardName');
+        const cardNumberInput = document.getElementById('cardNumber');
+        const expiryDateInput = document.getElementById('expiryDate');
+        const cvvInput = document.getElementById('cvv');
+        const cardNameError = document.getElementById('cardNameError');
+        const cardNumberError = document.getElementById('cardNumberError');
+        const expiryDateError = document.getElementById('expiryDateError');
+        const cvvError = document.getElementById('cvvError');
+
+        // UPI form elements
+        const upiIdInput = document.getElementById('upiId');
+        const upiIdError = document.getElementById('upiIdError');
+
+        let currentStep = 1;
+        let selectedPaymentMethod = null;
+
+        // Helper function to show/hide error messages
+        function showError(element, message) {
+            element.textContent = message;
+            element.classList.remove('hidden');
+        }
+
+        function hideError(element) {
+            element.classList.add('hidden');
+        }
+
+        // --- Navigation Functions ---
+        function goToStep(stepNum) {
+            // Hide all steps
+            reviewStep.classList.add('hidden');
+            paymentStep.classList.add('hidden');
+            confirmationStep.classList.add('hidden');
+
+            // Deactivate all progress steps
+            step1.classList.remove('active', 'completed');
+            step2.classList.remove('active', 'completed');
+            step3.classList.remove('active', 'completed');
+
+            if (stepNum === 1) {
+                reviewStep.classList.remove('hidden');
+                step1.classList.add('active');
+            } else if (stepNum === 2) {
+                paymentStep.classList.remove('hidden');
+                step1.classList.add('completed');
+                step2.classList.add('active');
+                // Ensure payment form container and payNowBtn are hidden until a method is selected
+                paymentFormContainer.classList.add('hidden'); // Hide the form container
+                payNowBtn.classList.add('hidden'); // Hide the Pay Now button
+                paymentForms.forEach(form => form.classList.add('hidden')); // Hide all specific forms
+            } else if (stepNum === 3) {
+                confirmationStep.classList.remove('hidden');
+                step1.classList.add('completed');
+                step2.classList.add('completed');
+                step3.classList.add('active');
+            }
+            currentStep = stepNum;
+        }
+
+        // --- Event Listeners ---
+        proceedToPaymentBtn.addEventListener('click', () => {
+            console.log("Proceed to Payment button clicked.");
+            goToStep(2);
+        });
+        backToReviewBtn.addEventListener('click', () => {
+            console.log("Back to Review button clicked.");
+            goToStep(1);
+        });
+
+        paymentMethodOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                console.log("Payment method option clicked:", option.dataset.method);
+
+                // Deselect all options
+                paymentMethodOptions.forEach(opt => opt.classList.remove('selected'));
+                // Hide all payment forms
+                paymentForms.forEach(form => form.classList.add('hidden'));
+
+                // Select clicked option
+                option.classList.add('selected');
+                const radio = option.querySelector('input[type="radio"]');
+                radio.checked = true;
+                selectedPaymentMethod = radio.value;
+
+                // Show the payment form container and the Pay Now button
+                paymentFormContainer.classList.remove('hidden'); // <--- THIS IS THE KEY FIX
+                payNowBtn.classList.remove('hidden');
+                console.log("paymentFormContainer visibility:", paymentFormContainer.classList.contains('hidden') ? 'hidden' : 'visible');
+                console.log("payNowBtn visibility:", payNowBtn.classList.contains('hidden') ? 'hidden' : 'visible');
+
+
+                // Show corresponding specific payment form
+                const formToShow = document.getElementById(`${selectedPaymentMethod}Form`);
+                if (formToShow) {
+                    formToShow.classList.remove('hidden');
+                    console.log("Specific form shown:", formToShow.id);
+                }
+            });
+        });
+
+        // --- Payment Form Submission ---
+        paymentFormContainer.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            console.log("Payment form submitted!");
+
+            let formIsValid = true;
+
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => el.classList.add('hidden'));
+
+            if (!selectedPaymentMethod) {
+                console.error("No payment method selected on submit.");
+                alert('Please select a payment method.');
+                return;
+            }
+
+            // Validate based on selected method
+            if (selectedPaymentMethod === 'creditCard') {
+                console.log("Validating Credit Card form...");
+                if (!cardNameInput.value.trim()) { showError(cardNameError, 'Name on Card is required.'); formIsValid = false; }
+                if (!/^\d{16}$/.test(cardNumberInput.value.replace(/\s/g, ''))) { showError(cardNumberError, 'Valid 16-digit card number is required.'); formIsValid = false; }
+                if (!/^(0[1-9]|1[0-2])\/?([0-9]{2})$/.test(expiryDateInput.value)) { showError(expiryDateError, 'Valid MM/YY is required.'); formIsValid = false; }
+                if (!/^\d{3,4}$/.test(cvvInput.value)) { showError(cvvError, 'Valid 3 or 4 digit CVV is required.'); formIsValid = false; }
+            } else if (selectedPaymentMethod === 'upi') {
+                console.log("Validating UPI form...");
+                if (!upiIdInput.value.trim()) { showError(upiIdError, 'UPI ID is required.'); formIsValid = false; }
+                else if (!/^[\w.-]+@[\w.-]+$/.test(upiIdInput.value)) { showError(upiIdError, 'Please enter a valid UPI ID.'); formIsValid = false; }
+            } else if (selectedPaymentMethod === 'paypal' || selectedPaymentMethod === 'wallet') {
+                console.log("Redirect method selected, skipping client-side validation for fields.");
+                // For redirect methods, the "Continue to PayPal" or "Google Pay" buttons would handle the actual redirect
+                // For this demo, we'll just proceed if the button was clicked (which triggers this submit)
+            }
+
+            if (!formIsValid) {
+                console.log("Form is NOT valid. Stopping submission.");
+                return;
+            }
+
+            console.log("Form is valid. Proceeding with simulated payment.");
+            // Show loader and disable button
+            payNowBtn.disabled = true;
+            payNowLoader.classList.remove('hidden');
+            payNowBtn.classList.add('opacity-70', 'cursor-not-allowed');
+
+            // Simulate payment processing
+            setTimeout(() => {
+                console.log("Simulating payment processing...");
+                // In a real application, this would be an API call to the payment gateway
+                const paymentSuccess = Math.random() > 0.1; // 90% success rate for demo
+
+                if (paymentSuccess) {
+                    console.log("Payment simulation: SUCCESS!");
+                    // Update confirmation details
+                    document.getElementById('confTransactionId').textContent = '#TXN' + Math.floor(Math.random() * 1000000000);
+                    document.getElementById('confPaymentMethod').textContent = selectedPaymentMethod === 'creditCard' ? 'Credit Card' : (selectedPaymentMethod === 'paypal' ? 'PayPal' : (selectedPaymentMethod === 'upi' ? 'UPI' : 'Digital Wallet'));
+                    document.getElementById('confAmountPaid').textContent = document.getElementById('totalAmount').textContent;
+
+                    goToStep(3); // Go to confirmation step
+                } else {
+                    console.log("Payment simulation: FAILED!");
+                    alert('Payment failed. Please try again or choose a different method.');
+                }
+
+                // Hide loader and re-enable button
+                payNowBtn.disabled = false;
+                payNowLoader.classList.add('hidden');
+                payNowBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+
+            }, 2000); // Simulate 2-second payment processing
+        });
+
+        // --- Card Number Formatting ---
+        cardNumberInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\s/g, ''); // Remove existing spaces
+            let formattedValue = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            e.target.value = formattedValue;
+        });
+
+        // --- Expiry Date Formatting ---
+        expiryDateInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\//g, ''); // Remove existing slashes
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // Initial load
+        goToStep(1);
+    </script>
+</body>
+</html>

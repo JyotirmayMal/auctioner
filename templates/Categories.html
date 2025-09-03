@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - Online Auction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        .active {
+            border-bottom: 2px solid #fbbf24; /* Amber color for active page */
+        }
+        .category-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.5rem;
+        }
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 30px;
+            font-size: 17px;
+            opacity: 0;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-gray-900 shadow-sm py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" class="text-2xl font-bold text-white font-serif">Online Auction</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-300 hover:text-amber-400">Home</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Auctions</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400 active">Categories</a>
+                <a href="#" id="wishlist-nav-link" class="text-gray-300 hover:text-amber-400">Wishlist</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-white mb-6 text-center" id="main-title">Browse Categories</h2>
+
+            <!-- Search Bar -->
+            <div class="mb-8" id="search-bar-container">
+                <input type="text" id="search" placeholder="Search items..." class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline bg-gray-200">
+            </div>
+
+            <!-- Category Filters -->
+            <div class="flex flex-wrap mb-8" id="category-filters-container">
+                <div class="flex items-center mr-4">
+                    <input type="checkbox" id="electronics" class="mr-2" checked>
+                    <label for="electronics" class="text-gray-300">Electronics (10)</label>
+                </div>
+                <div class="flex items-center mr-4">
+                    <input type="checkbox" id="furniture" class="mr-2" checked>
+                    <label for="furniture" class="text-gray-300">Furniture (5)</label>
+                </div>
+                <div class="flex items-center mr-4">
+                    <input type="checkbox" id="vehicles" class="mr-2" checked>
+                    <label for="vehicles" class="text-gray-300">Vehicles (3)</label>
+                </div>
+                <div class="flex items-center mr-4">
+                    <input type="checkbox" id="jewelry" class="mr-2" checked>
+                    <label for="jewelry" class="text-gray-300">Jewelry (8)</label>
+                </div>
+                <div class="flex items-center mr-4">
+                    <input type="checkbox" id="art" class="mr-2" checked>
+                    <label for="art" class="text-gray-300">Art (6)</label>
+                </div>
+                <div class="flex items-center mr-4">
+                    <input type="checkbox" id="collectibles" class="mr-2" checked>
+                    <label for="collectibles" class="text-gray-300">Collectibles (4)</label>
+                </div>
+            </div>
+
+            <!-- Item Listings -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="item-listings">
+                <!-- Item Card Template -->
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6" data-item-id="1">
+                    <img src="https://via.placeholder.com/300" alt="Item Image" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-white mb-2">Vintage Camera</h3>
+                    <p class="text-gray-300 mb-2">A classic vintage camera in excellent condition.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-amber-400 font-bold">$150.00</span>
+                        <span class="text-gray-400">2h 30m left</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full mr-2">Place Bid</button>
+                        <button class="wishlist-button text-gray-400 hover:text-red-500 text-2xl"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6" data-item-id="2">
+                    <img src="https://via.placeholder.com/300" alt="Item Image" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-white mb-2">Antique Table</h3>
+                    <p class="text-gray-300 mb-2">Beautifully crafted antique table from the 19th century.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-amber-400 font-bold">$300.00</span>
+                        <span class="text-gray-400">1d 5h left</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full mr-2">View Details</button>
+                        <button class="wishlist-button text-gray-400 hover:text-red-500 text-2xl"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6" data-item-id="3">
+                    <img src="https://via.placeholder.com/300" alt="Item Image" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-white mb-2">Gold Necklace</h3>
+                    <p class="text-gray-300 mb-2">Elegant gold necklace with intricate design.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-amber-400 font-bold">$500.00</span>
+                        <span class="text-gray-400">3h 15m left</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full mr-2">Place Bid</button>
+                        <button class="wishlist-button text-gray-400 hover:text-red-500 text-2xl"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <!-- Additional antique items -->
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6" data-item-id="4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/eb90c329-5b61-4398-ab0e-67a791d42f16.png" alt="Antique Victorian Clock" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-white mb-2">Antique Victorian Clock</h3>
+                    <p class="text-gray-300 mb-2">Handcrafted wooden grandfather clock from 1890s.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-amber-400 font-bold">$1,250.00</span>
+                        <span class="text-gray-400">4h 45m left</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full mr-2">Place Bid</button>
+                        <button class="wishlist-button text-gray-400 hover:text-red-500 text-2xl"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6" data-item-id="5">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bf6899cb-b345-4afc-83f5-e4e9e89e19e4.png" alt="Ming Dynasty Vase" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-white mb-2">Ming Dynasty Vase</h3>
+                    <p class="text-gray-300 mb-2">Original blue-and-white porcelain from 15th century.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-amber-400 font-bold">$3,750.00</span>
+                        <span class="text-gray-400">2d 3h left</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full mr-2">View Details</button>
+                        <button class="wishlist-button text-gray-400 hover:text-red-500 text-2xl"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6" data-item-id="6">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/89a8c7f5-6e9b-4d36-9986-ac5746583bfb.png" alt="Art Nouveau Mirror" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-white mb-2">Art Nouveau Mirror</h3>
+                    <p class="text-gray-300 mb-2">Hand-carved wooden frame with floral motifs, circa 1905.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-amber-400 font-bold">$890.00</span>
+                        <span class="text-gray-400">1d 8h left</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full mr-2">Place Bid</button>
+                        <button class="wishlist-button text-gray-400 hover:text-red-500 text-2xl"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6" data-item-id="7">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ed18899b-5c45-480a-a51e-9da2bb80f1fa.png" alt="Civil War Officer's Sword" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-white mb-2">Civil War Officer's Sword</h3>
+                    <p class="text-gray-300 mb-2">Authentic Union cavalry officer's saber from 1863.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-amber-400 font-bold">$2,150.00</span>
+                        <span class="text-gray-400">10h 30m left</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full mr-2">Place Bid</button>
+                        <button class="wishlist-button text-gray-400 hover:text-red-500 text-2xl"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6" data-item-id="8">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3112a98f-02a6-4ce3-bc08-cc8c0b82f191.png" alt="Tiffany Stained Glass Lamp" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-white mb-2">Tiffany Stained Glass Lamp</h3>
+                    <p class="text-gray-300 mb-2">Original Louis Comfort Tiffany lamp shade, circa 1915.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-amber-400 font-bold">$5,400.00</span>
+                        <span class="text-gray-400">3h 15m left</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full mr-2">View Details</button>
+                        <button class="wishlist-button text-gray-400 hover:text-red-500 text-2xl"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6" data-item-id="9">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6d33265c-6835-49bb-9272-2d0254e691db.png" alt="Antique Persian Rug" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-white mb-2">Antique Persian Rug</h3>
+                    <p class="text-gray-300 mb-2">Handwoven silk and wool rug from Tabriz, circa 1920.</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-amber-400 font-bold">$3,200.00</span>
+                        <span class="text-gray-400">1d 12h left</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full mr-2">Place Bid</button>
+                        <button class="wishlist-button text-gray-400 hover:text-red-500 text-2xl"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <!-- More items can be added here -->
+            </div>
+
+            <!-- Wishlist Page Content -->
+            <div id="wishlist-page" class="hidden">
+                <h2 class="text-4xl font-bold text-white mb-6 text-center">Your Wishlist</h2>
+                <div id="wishlist-items" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Wishlist items will be rendered here -->
+                </div>
+                <p id="empty-wishlist-message" class="text-center text-gray-400 text-xl mt-8 hidden">Your wishlist is empty. Start adding items you love!</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">Online Auction</h3>
+                <p class="text-gray-400">Bringing history's treasures to discerning collectors worldwide since 1995.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Authentication Process</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Contact</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400">123 Auction House Lane</li>
+                    <li class="text-gray-400">London, UK</li>
+                    <li class="text-gray-400">+44 20 7946 0958</li>
+                    <li class="text-gray-400">info@onlineauction.com</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Newsletter</h4>
+                <p class="text-gray-400 mb-4">Subscribe to receive updates on upcoming auctions.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Your email" class="px-4 py-2 w-full rounded-l text-gray-800 focus:outline-none">
+                    <button class="px-4 py-2 bg-amber-600 rounded-r hover:bg-amber-700 transition">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto pt-8 mt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>© 2023 Online Auction. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Message -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Dummy user ID for demonstration (replace with actual login system)
+        const USER_ID = 'guest_user_123'; 
+
+        // Function to show toast messages
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Wishlist Data Handling
+        function getWishlist() {
+            const wishlist = localStorage.getItem(`wishlist_${USER_ID}`);
+            return wishlist ? JSON.parse(wishlist) : [];
+        }
+
+        function saveWishlist(wishlist) {
+            localStorage.setItem(`wishlist_${USER_ID}`, JSON.stringify(wishlist));
+        }
+
+        function isItemInWishlist(itemId) {
+            const wishlist = getWishlist();
+            return wishlist.some(item => item.id === itemId);
+        }
+
+        function addItemToWishlist(item) {
+            const wishlist = getWishlist();
+            if (!isItemInWishlist(item.id)) {
+                wishlist.push(item);
+                saveWishlist(wishlist);
+                showToast('Item added to wishlist');
+                updateWishlistButton(item.id, true);
+            }
+        }
+
+        function removeItemFromWishlist(itemId) {
+            let wishlist = getWishlist();
+            wishlist = wishlist.filter(item => item.id !== itemId);
+            saveWishlist(wishlist);
+            showToast('Item removed from wishlist');
+            updateWishlistButton(itemId, false);
+            renderWishlist(); // Re-render wishlist if on wishlist page
+        }
+
+        function updateWishlistButton(itemId, isInWishlist) {
+            const itemCard = document.querySelector(`[data-item-id="${itemId}"]`);
+            if (itemCard) {
+                const wishlistButton = itemCard.querySelector('.wishlist-button i');
+                if (wishlistButton) {
+                    if (isInWishlist) {
+                        wishlistButton.classList.remove('far');
+                        wishlistButton.classList.add('fas');
+                        wishlistButton.classList.add('text-red-500');
+                    } else {
+                        wishlistButton.classList.remove('fas');
+                        wishlistButton.classList.remove('text-red-500');
+                        wishlistButton.classList.add('far');
+                    }
+                }
+            }
+        }
+
+        // Render Wishlist Page
+        function renderWishlist() {
+            const wishlistItemsContainer = document.getElementById('wishlist-items');
+            const emptyMessage = document.getElementById('empty-wishlist-message');
+            const wishlist = getWishlist();
+            wishlistItemsContainer.innerHTML = ''; // Clear previous items
+
+            if (wishlist.length === 0) {
+                emptyMessage.classList.remove('hidden');
+            } else {
+                emptyMessage.classList.add('hidden');
+                wishlist.forEach(item => {
+                    const itemCard = document.createElement('div');
+                    itemCard.classList.add('bg-gray-800', 'rounded-lg', 'shadow-lg', 'p-6');
+                    itemCard.setAttribute('data-item-id', item.id);
+                    itemCard.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-bold text-white mb-2">${item.name}</h3>
+                        <p class="text-gray-300 mb-2">${item.description}</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-amber-400 font-bold">${item.price}</span>
+                            <span class="text-gray-400">${item.timeLeft}</span>
+                        </div>
+                        <div class="flex flex-col space-y-2">
+                            <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg w-full wishlist-action-button" data-action="place-bid" data-item-id="${item.id}">Place Bid</button>
+                            ${item.buyNowPrice ? `<button class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg w-full wishlist-action-button" data-action="buy-now" data-item-id="${item.id}">Buy Now (${item.buyNowPrice})</button>` : ''}
+                            <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg w-full wishlist-action-button" data-action="remove" data-item-id="${item.id}">Remove</button>
+                        </div>
+                    `;
+                    wishlistItemsContainer.appendChild(itemCard);
+                });
+
+                // Add event listeners for wishlist action buttons
+                wishlistItemsContainer.querySelectorAll('.wishlist-action-button').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const itemId = event.target.dataset.itemId;
+                        const action = event.target.dataset.action;
+                        if (action === 'remove') {
+                            removeItemFromWishlist(itemId);
+                        } else if (action === 'place-bid') {
+                            showToast(`Redirecting to auction for item ID: ${itemId}`);
+                            // In a real app, this would navigate to the item's detail page
+                        } else if (action === 'buy-now') {
+                            showToast(`Buying item ID: ${itemId}`);
+                            // In a real app, this would initiate a purchase flow
+                            removeItemFromWishlist(itemId); // Remove from wishlist after purchase
+                        }
+                    });
+                });
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const allItemCards = document.querySelectorAll('#item-listings > div');
+            allItemCards.forEach(card => {
+                const itemId = card.dataset.itemId;
+                const wishlistButton = card.querySelector('.wishlist-button');
+
+                // Initialize wishlist button state
+                updateWishlistButton(itemId, isItemInWishlist(itemId));
+
+                wishlistButton.addEventListener('click', () => {
+                    const itemData = {
+                        id: itemId,
+                        image: card.querySelector('img').src,
+                        name: card.querySelector('h3').textContent,
+                        description: card.querySelector('p').textContent,
+                        price: card.querySelector('.text-amber-400').textContent,
+                        timeLeft: card.querySelector('.text-gray-400').textContent,
+                        // Add buyNowPrice if applicable for some items
+                        buyNowPrice: (itemId === '2' || itemId === '8') ? '$400.00' : null // Example: Antique Table and Tiffany Lamp have Buy Now
+                    };
+
+                    if (isItemInWishlist(itemId)) {
+                        removeItemFromWishlist(itemId);
+                    } else {
+                        addItemToWishlist(itemData);
+                    }
+                });
+            });
+
+            // Navigation to Wishlist Page
+            const wishlistNavLink = document.getElementById('wishlist-nav-link');
+            const itemListingsSection = document.getElementById('item-listings');
+            const wishlistPageSection = document.getElementById('wishlist-page');
+            const mainTitle = document.getElementById('main-title');
+            const searchBarContainer = document.getElementById('search-bar-container');
+            const categoryFiltersContainer = document.getElementById('category-filters-container');
+
+            wishlistNavLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Hide main content and show wishlist content
+                itemListingsSection.classList.add('hidden');
+                searchBarContainer.classList.add('hidden');
+                categoryFiltersContainer.classList.add('hidden');
+                mainTitle.textContent = 'Your Wishlist';
+                wishlistPageSection.classList.remove('hidden');
+                
+                // Update active navigation link
+                document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+                wishlistNavLink.classList.add('active');
+
+                renderWishlist(); // Render wishlist items when navigating to the page
+            });
+
+            // Back to Categories (or Home) functionality - for demonstration, clicking "Categories" again
+            document.querySelector('nav a.active').addEventListener('click', (e) => {
+                if (e.target.textContent === 'Categories') {
+                    e.preventDefault();
+                    itemListingsSection.classList.remove('hidden');
+                    searchBarContainer.classList.remove('hidden');
+                    categoryFiltersContainer.classList.remove('hidden');
+                    mainTitle.textContent = 'Browse Categories';
+                    wishlistPageSection.classList.add('hidden');
+
+                    // Update active navigation link
+                    document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+                    e.target.classList.add('active');
+                }
+            });
+        });
+
+        // JavaScript for search functionality (existing)
+        const searchInput = document.getElementById('search');
+        const itemListings = document.getElementById('item-listings');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const items = itemListings.children;
+
+            for (let item of items) {
+                const title = item.querySelector('h3').textContent.toLowerCase();
+                const description = item.querySelector('p').textContent.toLowerCase();
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

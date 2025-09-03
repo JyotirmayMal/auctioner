@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracking - Antique Auction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        .tracking-card {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1.5rem;
+        }
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px; /* full rounded */
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-confirmed { background-color: #fbbf24; color: #1a1a1a; } /* Amber */
+        .status-paid { background-color: #22c55e; color: #1a1a1a; } /* Green */
+        .status-pending { background-color: #f59e0b; color: #1a1a1a; } /* Orange */
+        .status-failed { background-color: #ef4444; color: #1a1a1a; } /* Red */
+        .status-shipped { background-color: #3b82f6; color: #1a1a1a; } /* Blue */
+        .status-intransit { background-color: #8b5cf6; color: #1a1a1a; } /* Purple */
+        .status-outfordelivery { background-color: #14b8a6; color: #1a1a1a; } /* Teal */
+        .status-delivered { background-color: #22c55e; color: #1a1a1a; } /* Green */
+        .status-issue { background-color: #ef4444; color: #1a1a1a; } /* Red */
+
+        /* Timeline styles */
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: #4a4a4a;
+            top: 0;
+            bottom: 0;
+            left: 10px; /* Adjust for circle position */
+            border-radius: 2px;
+        }
+        .timeline-item {
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 40px; /* Space for circle and line */
+        }
+        .timeline-circle {
+            width: 24px;
+            height: 24px;
+            background-color: #4a4a4a;
+            border-radius: 50%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f5f5f5;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .timeline-item.active .timeline-circle {
+            background-color: #fbbf24;
+            color: #1a1a1a;
+        }
+        .timeline-item.completed .timeline-circle {
+            background-color: #22c55e;
+            color: #1a1a1a;
+        }
+        .timeline-content {
+            background-color: #3a3a3a;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .timeline-date {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-bottom: 0.5rem;
+        }
+        .timeline-title {
+            font-weight: 600;
+            color: #f5f5f5;
+        }
+        .timeline-description {
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+        .issue-alert {
+            background-color: #ef4444;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .issue-alert i {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body class="py-16 px-4 bg-gray-900">
+    <div class="mx-auto max-w-5xl">
+        <h1 class="text-4xl font-bold text-white mb-8 text-center">Order Tracking</h1>
+
+        <!-- Order ID and Breadcrumbs -->
+        <div class="flex justify-between items-center mb-6">
+            <p class="text-gray-400 text-lg">Order ID: <span class="font-bold text-white">#ORD987654321</span></p>
+            <nav class="text-gray-400 text-sm">
+                <ol class="list-none p-0 inline-flex">
+                    <li class="flex items-center">
+                        <a href="#" class="hover:text-amber-400">My Auctions</a>
+                        <span class="mx-2">/</span>
+                    </li>
+                    <li class="flex items-center text-white">Order Tracking</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- 1. Order Confirmation Section -->
+        <div class="tracking-card">
+            <div class="flex flex-col md:flex-row items-center md:items-start">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b03087f3-14b1-4093-b1ee-727268cba191.png" alt="Renaissance Wooden Chest" class="w-32 h-32 object-cover rounded-md mb-4 md:mb-0 md:mr-6">
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold text-white mb-2">Renaissance Wooden Chest</h2>
+                    <p class="text-gray-300 mb-1">Lot Number: <span class="font-semibold">#LOT12345</span></p>
+                    <p class="text-gray-300 mb-1">Auction Won: <span class="font-semibold">May 20, 2023</span></p>
+                    <p class="text-gray-300 mb-4">Winning Bid: <span class="font-bold text-amber-400 text-xl">$8,750.00</span></p>
+                    <span class="status-badge status-confirmed">Order Confirmed</span>
+                </div>
+                <div class="mt-4 md:mt-0 md:ml-auto flex flex-col space-y-3">
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition">
+                        <i class="fas fa-receipt mr-2"></i> Download Receipt
+                    </button>
+                    <button class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition">
+                        <i class="fas fa-print mr-2"></i> Print Order Details
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Payment Status -->
+        <div class="tracking-card">
+            <h3 class="text-xl font-bold text-white mb-4">Payment Status</h3>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <div>
+                    <p class="text-gray-300 mb-1">Status: <span id="paymentStatusText" class="font-semibold text-green-400">Paid</span></p>
+                    <p class="text-gray-300 mb-1">Method: <span id="paymentMethodUsed" class="font-semibold">Credit Card</span></p>
+                    <p class="text-gray-300 mb-1">Transaction ID: <span id="transactionId" class="font-semibold">#TXN123456789</span></p>
+                    <p class="text-gray-300">Timestamp: <span id="paymentTimestamp" class="font-semibold">2023-05-20 18:30:15 GMT</span></p>
+                </div>
+                <div id="payNowSection" class="mt-4 sm:mt-0 hidden">
+                    <button class="bg-amber-600 hover:bg-amber-700 text-white py-2 px-6 rounded-md transition">
+                        <i class="fas fa-dollar-sign mr-2"></i> Pay Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Shipping Information -->
+        <div class="tracking-card">
+            <h3 class="text-xl font-bold text-white mb-4">Shipping Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="text-gray-300 mb-1">Carrier: <span id="shippingCarrier" class="font-semibold">DHL Express</span></p>
+                    <p class="text-gray-300 mb-1">Tracking Number: <span id="trackingNumber" class="font-semibold text-amber-400">TRK9876543210</span></p>
+                    <p class="text-gray-300 mb-1">Dispatch Date: <span id="dispatchDate" class="font-semibold">2023-05-22</span></p>
+                    <p class="text-gray-300">Estimated Delivery: <span id="estimatedDelivery" class="font-semibold">2023-05-29</span></p>
+                </div>
+                <div class="flex flex-col items-center justify-center bg-gray-700 p-4 rounded-md">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=TRK9876543210" alt="Tracking QR Code" class="w-24 h-24 mb-2">
+                    <p class="text-gray-400 text-sm">Scan for direct tracking</p>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <a id="carrierTrackingLink" href="https://www.dhl.com/global-en/home/tracking.html?trackingNumber=TRK9876543210" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-md transition inline-flex items-center">
+                    <i class="fas fa-external-link-alt mr-2"></i> Track on Carrier Website
+                </a>
+            </div>
+        </div>
+
+        <!-- 4. Real-Time Tracking & Timeline -->
+        <div class="tracking-card">
+            <h3 class="text-xl font-bold text-white mb-4">Delivery Progress</h3>
+            <div class="flex justify-between items-center mb-4">
+                <p class="text-gray-300">Current Status: <span id="currentDeliveryStatus" class="font-bold text-amber-400">In Transit</span></p>
+                <p class="text-gray-400 text-sm">Last Update: <span id="lastUpdateTimestamp">2023-05-25 10:00 AM GMT</span></p>
+            </div>
+
+            <div class="timeline" id="deliveryTimeline">
+                <!-- Timeline items will be dynamically added here -->
+                <div class="timeline-item completed" data-status="Order Confirmed">
+                    <div class="timeline-circle"><i class="fas fa-check"></i></div>
+                    <div class="timeline-content">
+                        <p class="timeline-date">2023-05-20 18:30 GMT</p>
+                        <p class="timeline-title">Order Confirmed & Paid</p>
+                        <p class="timeline-description">Your order has been successfully placed and payment received.</p>
+                    </div>
+                </div>
+                <div class="timeline-item completed" data-status="Shipped">
+                    <div class="timeline-circle"><i class="fas fa-box"></i></div>
+                    <div class="timeline-content">
+                        <p class="timeline-date">2023-05-22 14:00 GMT</p>
+                        <p class="timeline-title">Item Shipped</p>
+                        <p class="timeline-description">Your item has been dispatched from the seller's location.</p>
+                    </div>
+                </div>
+                <div class="timeline-item active" data-status="In Transit">
+                    <div class="timeline-circle"><i class="fas fa-truck"></i></div>
+                    <div class="timeline-content">
+                        <p class="timeline-date">2023-05-25 10:00 GMT</p>
+                        <p class="timeline-title">In Transit - London Hub</p>
+                        <p class="timeline-description">Package is currently at the London sorting facility.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-status="Out for Delivery">
+                    <div class="timeline-circle"><i class="fas fa-person-walking-luggage"></i></div>
+                    <div class="timeline-content">
+                        <p class="timeline-date">Estimated: 2023-05-29</p>
+                        <p class="timeline-title">Out for Delivery</p>
+                        <p class="timeline-description">Your package is out for delivery today.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-status="Delivered">
+                    <div class="timeline-circle"><i class="fas fa-home"></i></div>
+                    <div class="timeline-content">
+                        <p class="timeline-date">Estimated: 2023-05-29</p>
+                        <p class="timeline-title">Delivered</p>
+                        <p class="timeline-description">Your item has been successfully delivered.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Notifications -->
+        <div class="tracking-card">
+            <h3 class="text-xl font-bold text-white mb-4">Recent Notifications</h3>
+            <div class="space-y-3">
+                <div class="flex items-start text-gray-300">
+                    <i class="fas fa-bell text-amber-400 mr-3 mt-1"></i>
+                    <div>
+                        <p class="font-semibold">Package departed from London sorting facility.</p>
+                        <p class="text-sm text-gray-400">2023-05-25 10:00 AM GMT</p>
+                    </div>
+                </div>
+                <div class="flex items-start text-gray-300">
+                    <i class="fas fa-bell text-blue-400 mr-3 mt-1"></i>
+                    <div>
+                        <p class="font-semibold">Your item has been shipped! Tracking number TRK9876543210.</p>
+                        <p class="text-sm text-gray-400">2023-05-22 02:00 PM GMT</p>
+                    </div>
+                </div>
+                <div class="flex items-start text-gray-300">
+                    <i class="fas fa-bell text-green-400 mr-3 mt-1"></i>
+                    <div>
+                        <p class="font-semibold">Payment for Order #ORD987654321 confirmed.</p>
+                        <p class="text-sm text-gray-400">2023-05-20 06:30 PM GMT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Potential Issues & Resolutions -->
+        <div class="tracking-card" id="issueSection">
+            <h3 class="text-xl font-bold text-white mb-4">Potential Issues</h3>
+            <div id="issueAlert" class="issue-alert hidden">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <p class="font-bold text-lg mb-1">Delivery Delayed!</p>
+                    <p>Your package might be delayed due to unforeseen circumstances. We are investigating the issue.</p>
+                    <p class="text-sm mt-2">Last known status: Held at customs.</p>
+                </div>
+            </div>
+            <p class="text-gray-300 mb-4">If you encounter any problems with your order, please use the options below:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <button class="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-md transition">
+                    <i class="fas fa-bug mr-2"></i> Report an Issue
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-md transition">
+                    <i class="fas fa-user-tie mr-2"></i> Contact Seller
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-md transition">
+                    <i class="fas fa-gavel mr-2"></i> Initiate Dispute
+                </button>
+            </div>
+            <p class="text-gray-400 text-sm mt-4">For immediate assistance, contact support: <span class="text-amber-400">support@antiqueauction.com</span></p>
+        </div>
+
+        <!-- 7. Additional Features -->
+        <div class="tracking-card">
+            <h3 class="text-xl font-bold text-white mb-4">More Options</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button class="bg-gray-700 hover:bg-gray-600 text-white py-3 px-4 rounded-md transition">
+                    <i class="fas fa-file-invoice mr-2"></i> Print Shipping Label
+                </button>
+                <button class="bg-gray-700 hover:bg-gray-600 text-white py-3 px-4 rounded-md transition">
+                    <i class="fas fa-comments mr-2"></i> Customer Support Chat
+                </button>
+                <button class="bg-amber-600 hover:bg-amber-700 text-white py-3 px-4 rounded-md transition">
+                    <i class="fas fa-gavel mr-2"></i> Browse More Auctions
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-md transition">
+                    <i class="fas fa-redo mr-2"></i> Reorder Similar Items
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Simulate different payment and delivery statuses for demonstration
+        const simulatePaymentStatus = "Paid"; // Options: "Paid", "Payment Pending", "Payment Failed"
+        const simulateDeliveryStatus = "In Transit"; // Options: "Order Confirmed", "Shipped", "In Transit", "Out for Delivery", "Delivered"
+        const simulateIssue = false; // Set to true to show a simulated issue
+
+        // DOM Elements
+        const paymentStatusText = document.getElementById('paymentStatusText');
+        const payNowSection = document.getElementById('payNowSection');
+        const currentDeliveryStatus = document.getElementById('currentDeliveryStatus');
+        const deliveryTimeline = document.getElementById('deliveryTimeline');
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        const issueAlert = document.getElementById('issueAlert');
+
+        // --- Update Payment Status ---
+        function updatePaymentStatus() {
+            paymentStatusText.textContent = simulatePaymentStatus;
+            paymentStatusText.classList.remove('text-green-400', 'text-orange-400', 'text-red-400'); // Clear previous colors
+
+            if (simulatePaymentStatus === "Paid") {
+                paymentStatusText.classList.add('status-paid');
+                payNowSection.classList.add('hidden');
+            } else if (simulatePaymentStatus === "Payment Pending") {
+                paymentStatusText.classList.add('status-pending');
+                payNowSection.classList.remove('hidden');
+            } else if (simulatePaymentStatus === "Payment Failed") {
+                paymentStatusText.classList.add('status-failed');
+                payNowSection.classList.remove('hidden');
+            }
+        }
+
+        // --- Update Delivery Timeline ---
+        function updateDeliveryTimeline() {
+            currentDeliveryStatus.textContent = simulateDeliveryStatus;
+            currentDeliveryStatus.className = 'font-bold'; // Reset classes
+
+            let foundActive = false;
+            timelineItems.forEach(item => {
+                const itemStatus = item.dataset.status;
+                item.classList.remove('active', 'completed');
+                item.querySelector('.timeline-circle').classList.remove('status-shipped', 'status-intransit', 'status-outfordelivery', 'status-delivered', 'status-confirmed');
+
+                if (itemStatus === simulateDeliveryStatus) {
+                    item.classList.add('active');
+                    foundActive = true;
+                    // Apply specific color for active status
+                    if (itemStatus === "Order Confirmed") currentDeliveryStatus.classList.add('status-confirmed');
+                    else if (itemStatus === "Shipped") currentDeliveryStatus.classList.add('status-shipped');
+                    else if (itemStatus === "In Transit") currentDeliveryStatus.classList.add('status-intransit');
+                    else if (itemStatus === "Out for Delivery") currentDeliveryStatus.classList.add('status-outfordelivery');
+                    else if (itemStatus === "Delivered") currentDeliveryStatus.classList.add('status-delivered');
+                } else if (!foundActive) {
+                    item.classList.add('completed');
+                    // Apply specific color for completed status
+                    if (itemStatus === "Order Confirmed") item.querySelector('.timeline-circle').classList.add('status-confirmed');
+                    else if (itemStatus === "Shipped") item.querySelector('.timeline-circle').classList.add('status-shipped');
+                    else if (itemStatus === "In Transit") item.querySelector('.timeline-circle').classList.add('status-intransit');
+                    else if (itemStatus === "Out for Delivery") item.querySelector('.timeline-circle').classList.add('status-outfordelivery');
+                    else if (itemStatus === "Delivered") item.querySelector('.timeline-circle').classList.add('status-delivered');
+                }
+            });
+        }
+
+        // --- Update Issue Alert ---
+        function updateIssueAlert() {
+            if (simulateIssue) {
+                issueAlert.classList.remove('hidden');
+            } else {
+                issueAlert.classList.add('hidden');
+            }
+        }
+
+        // Initial calls on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePaymentStatus();
+            updateDeliveryTimeline();
+            updateIssueAlert();
+        });
+
+        // Optional: Simulate real-time updates (for demo purposes)
+        // let currentTimelineIndex = 0;
+        // const deliveryStages = ["Order Confirmed", "Shipped", "In Transit", "Out for Delivery", "Delivered"];
+
+        // setInterval(() => {
+        //     currentTimelineIndex = (currentTimelineIndex + 1) % deliveryStages.length;
+        //     simulateDeliveryStatus = deliveryStages[currentTimelineIndex];
+        //     updateDeliveryTimeline();
+        //     console.log("Simulated delivery status update:", simulateDeliveryStatus);
+        // }, 5000); // Update every 5 seconds
+    </script>
+</body>
+</html>

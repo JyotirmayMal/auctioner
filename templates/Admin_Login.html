@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Antique Auction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #111827;
+            color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: linear-gradient(135deg, #111827 0%, #1f2937 50%, #374151 100%);
+        }
+        .login-container {
+            background: linear-gradient(145deg, #2d3748 0%, #1a202c 100%);
+            border: 1px solid #4a5568;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(10px);
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .input-group input {
+            padding-left: 2.5rem;
+            background-color: #374151;
+            border-color: #4b5563;
+            color: #f9fafb;
+        }
+        .input-group input:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+        .input-group .icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #dc2626;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: -0.75rem;
+            margin-bottom: 1rem;
+        }
+        .admin-badge {
+            background: linear-gradient(45deg, #dc2626, #ef4444);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        }
+        .admin-shield {
+            font-size: 3rem;
+            color: #dc2626;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 8px rgba(220, 38, 38, 0.3));
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+    <!-- Main Content - Admin Login Form -->
+    <div class="login-container">
+        <div class="text-center mb-8">
+            <div class="admin-shield">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="admin-badge">
+                <i class="fas fa-crown mr-1"></i>
+                Administrator Portal
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-2">Admin Access</h1>
+            <p class="text-gray-400">Secure login for system administrators</p>
+        </div>
+
+        <form id="adminLoginForm" class="space-y-6" method="POST" action="{{ url_for('admin.login') }}">
+            <!-- Error Message Display -->
+            <div id="loginError" class="error-message hidden text-center"></div>
+
+            <!-- Admin ID Input -->
+            <div class="input-group">
+                <label for="adminId" class="block text-gray-300 text-sm font-bold mb-2">Admin ID</label>
+                <i class="fas fa-id-badge icon"></i>
+                <input type="text" id="adminId" name="adminId" placeholder="Enter your admin ID"
+                       class="shadow appearance-none border rounded w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline" required>
+                <p id="adminIdError" class="error-message hidden"></p>
+            </div>
+
+            <!-- Password Input -->
+            <div class="input-group">
+                <label for="password" class="block text-gray-300 text-sm font-bold mb-2">Admin Password</label>
+                <i class="fas fa-key icon"></i>
+                <input type="password" id="password" name="password" placeholder="Enter secure password"
+                       class="shadow appearance-none border rounded w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline" required>
+                <p id="passwordError" class="error-message hidden"></p>
+            </div>
+
+            <!-- Two-Factor Authentication (Optional) -->
+            <div class="input-group">
+                <label for="twoFactor" class="block text-gray-300 text-sm font-bold mb-2">2FA Code (Optional)</label>
+                <i class="fas fa-mobile-alt icon"></i>
+                <input type="text" id="twoFactor" name="twoFactor" placeholder="6-digit authentication code"
+                       class="shadow appearance-none border rounded w-full py-3 px-4 leading-tight focus:outline-none focus:shadow-outline" maxlength="6">
+                <p class="text-xs text-gray-500 mt-1">Enter code from your authenticator app if enabled</p>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="bg-red-900 bg-opacity-20 border border-red-500 rounded-lg p-3">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                    <p class="text-red-300 text-sm">
+                        <strong>Security Notice:</strong> Admin access is monitored and logged. Unauthorized access attempts will be reported.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" id="loginButton"
+                    class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg w-full flex items-center justify-center transition duration-300 shadow-lg">
+                <i class="fas fa-sign-in-alt mr-2"></i>
+                <span id="buttonText">Secure Admin Login</span>
+                <div id="loader" class="loader ml-3"></div>
+            </button>
+        </form>
+
+        <!-- Admin Help -->
+        <div class="mt-6 text-center">
+            <p class="text-gray-400 text-sm">
+                Need help? Contact IT Support:
+                <a href="mailto:admin@antiqueauction.com" class="text-red-400 hover:text-red-300 hover:underline">admin@antiqueauction.com</a>
+            </p>
+        </div>
+
+        <!-- Back to User Portal -->
+        <div class="mt-4 text-center">
+            <a href="#" class="text-sm text-gray-500 hover:text-gray-400 hover:underline">
+                <i class="fas fa-arrow-left mr-1"></i>
+                Back to User Portal
+            </a>
+        </div>
+
+        <!-- System Status Indicator -->
+        <div class="mt-6 flex items-center justify-center">
+            <div class="flex items-center text-green-400 text-xs">
+                <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                System Status: Online
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

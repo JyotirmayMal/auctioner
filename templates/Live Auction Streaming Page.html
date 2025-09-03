@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Antique Auction - Bid Now!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom scrollbar for sidebar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #2d3748; /* gray-800 */
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4a5568; /* gray-600 */
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #718096; /* gray-500 */
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Navigation (re-using from Auction Home Page) -->
+    <nav class="bg-gray-900 shadow-sm py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" class="text-2xl font-bold text-white font-serif">Antique Auction</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-300 hover:text-amber-400">Home</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Auctions</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Categories</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">How It Works</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">About</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="px-4 py-2 text-gray-300 hover:text-amber-600">Login</button>
+                <button class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">Register</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow container mx-auto p-6 md:p-8 lg:p-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column: Video Stream & Current Item Details -->
+        <section class="lg:col-span-2 bg-gray-800 rounded-lg shadow-lg p-6 space-y-6">
+            <h1 class="text-3xl font-bold text-white mb-4">Live Auction: The Grand Collection</h1>
+            
+            <!-- Real-Time Video Stream -->
+            <div class="relative aspect-video bg-black rounded-lg overflow-hidden shadow-xl">
+                <!-- Placeholder for Live Video Stream -->
+                <!-- In a real application, this would be an iframe for YouTube/Vimeo, or a video element for WebRTC -->
+                <iframe 
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen 
+                    class="absolute top-0 left-0 w-full h-full">
+                </iframe>
+                <div class="absolute top-4 left-4 bg-red-600 text-white text-sm px-3 py-1 rounded-full font-semibold">LIVE</div>
+                <div id="auctioneer-announcement" class="absolute bottom-4 left-4 right-4 bg-black bg-opacity-70 text-white text-lg p-3 rounded-md text-center hidden">
+                    <!-- Auctioneer announcements will appear here -->
+                </div>
+            </div>
+
+            <!-- Current Item Details -->
+            <div class="bg-gray-900 rounded-lg p-6 shadow-md">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 id="item-title" class="text-2xl font-bold text-amber-400">Victorian Era Grandfather Clock</h2>
+                    <span id="item-number" class="text-gray-400 text-lg">Item #001</span>
+                </div>
+                <p id="item-description" class="text-gray-300 mb-4">An exquisite 19th-century grandfather clock, handcrafted from solid oak with intricate brass detailing and a Westminster chime mechanism. Fully restored and in working condition.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p class="text-gray-400 text-sm">Condition:</p>
+                        <p id="item-condition" class="text-white font-semibold">Excellent (Restored)</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Estimated Value:</p>
+                        <p id="item-estimated-value" class="text-white font-semibold">$15,000 - $20,000</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Reserve Price:</p>
+                        <p id="item-reserve-price" class="text-white font-semibold">$12,000 (Met)</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Time Remaining:</p>
+                        <p id="countdown-timer" class="text-amber-400 text-2xl font-bold">00:00:00</p>
+                    </div>
+                </div>
+
+                <!-- Item Image Thumbnails/Snippets -->
+                <div class="flex space-x-3 overflow-x-auto pb-2">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef8bd089-ded7-4252-89a9-d85eb3c2c085.png" alt="Grandfather Clock detail 1" class="w-24 h-24 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-amber-400" />
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b03087f3-14b1-4093-b1ee-727268cba191.png" alt="Grandfather Clock detail 2" class="w-24 h-24 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-amber-400" />
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de1ed3d3-2133-45b6-a37b-06d1c6c19f98.png" alt="Grandfather Clock detail 3" class="w-24 h-24 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-amber-400" />
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Column: Bidding Interface & Bid History / Sidebar -->
+        <aside class="lg:col-span-1 bg-gray-800 rounded-lg shadow-lg p-6 space-y-6 flex flex-col">
+            <!-- User Status -->
+            <div class="bg-gray-900 rounded-lg p-4 text-center">
+                <h3 class="text-xl font-bold mb-2">Your Bidding Status</h3>
+                <p id="user-status" class="text-green-400 font-semibold text-lg">Approved Bidder</p>
+                <!-- Example of other statuses: -->
+                <!-- <p id="user-status" class="text-yellow-400 font-semibold text-lg">Waiting for Approval</p> -->
+                <!-- <p id="user-status" class="text-red-400 font-semibold text-lg">Guest (View Only)</p> -->
+            </div>
+
+            <!-- Live Bidding Interface -->
+            <div class="bg-gray-900 rounded-lg p-6 shadow-md">
+                <h3 class="text-2xl font-bold text-white mb-4">Current Bid: <span id="current-bid" class="text-amber-400">$13,500</span></h3>
+                <p id="highest-bidder-info" class="text-gray-400 mb-4">You are the highest bidder!</p>
+                <!-- <p id="highest-bidder-info" class="text-gray-400 mb-4">Highest bidder: Bidder #123</p> -->
+
+                <div id="bidding-controls" class="space-y-4">
+                    <input type="number" id="custom-bid-input" placeholder="Enter custom bid ($)" class="w-full p-3 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-amber-500" min="13600" step="100">
+                    <div class="grid grid-cols-2 gap-3">
+                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="100">+$100</button>
+                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="500">+$500</button>
+                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="1000">+$1,000</button>
+                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="5000">+$5,000</button>
+                    </div>
+                    <button id="place-bid-btn" class="w-full bg-green-600 text-white py-4 rounded-md hover:bg-green-700 transition font-bold text-lg">Place Bid</button>
+                </div>
+                <p id="bidding-disabled-message" class="text-red-400 text-center mt-4 hidden">Please login and get approved to place bids.</p>
+            </div>
+
+            <!-- Bid History -->
+            <div class="bg-gray-900 rounded-lg p-6 shadow-md flex-grow flex flex-col">
+                <h3 class="text-xl font-bold text-white mb-4">Bid History</h3>
+                <div id="bid-history-list" class="space-y-2 text-sm custom-scrollbar overflow-y-auto flex-grow pr-2">
+                    <!-- Bid entries will be dynamically added here -->
+                    <p class="text-gray-300"><span class="font-semibold text-amber-300">You:</span> $13,500 <span class="text-gray-500 text-xs ml-2">Just now</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #123:</span> $13,400 <span class="text-gray-500 text-xs ml-2">5s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #078:</span> $13,000 <span class="text-gray-500 text-xs ml-2">15s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #123:</span> $12,900 <span class="text-gray-500 text-xs ml-2">20s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">You:</span> $12,800 <span class="text-gray-500 text-xs ml-2">30s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #078:</span> $12,500 <span class="text-gray-500 text-xs ml-2">45s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #005:</span> $12,200 <span class="text-gray-500 text-xs ml-2">1m ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Auctioneer:</span> Starting Bid $12,000 <span class="text-gray-500 text-xs ml-2">2m ago</span></p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Notifications & Alerts (hidden by default) -->
+    <div id="notification-area" class="fixed bottom-6 right-6 space-y-3 z-50">
+        <!-- Notifications will be dynamically added here -->
+        <!-- Example: -->
+        <!-- <div class="bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center space-x-2">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            <span>Outbid by $6,000!</span>
+        </div> -->
+    </div>
+
+    <!-- Footer (re-using from Auction Home Page) -->
+    <footer class="bg-gray-800 text-white py-12 px-6 mt-auto">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">Antique Auction</h3>
+                <p class="text-gray-400">Bringing history's treasures to discerning collectors worldwide since 1995.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Authentication Process</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Contact</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400">123 Auction House Lane</li>
+                    <li class="text-gray-400">London, UK</li>
+                    <li class="text-gray-400">+44 20 7946 0958</li>
+                    <li class="text-gray-400">info@antiqueauction.com</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Newsletter</h4>
+                <p class="text-gray-400 mb-4">Subscribe to receive updates on upcoming auctions.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Your email" class="px-4 py-2 w-full rounded-l text-gray-800 focus:outline-none">
+                    <button class="px-4 py-2 bg-amber-600 rounded-r hover:bg-amber-700 transition">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto pt-8 mt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>© 2023 Antique Auction System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Placeholder for JavaScript functionality
+        // This script will be expanded in subsequent outputs to handle dynamic updates, bidding logic, etc.
+
+        // Initial state for demonstration
+        let currentUserStatus = "Approved Bidder"; // Can be "Approved Bidder", "Waiting for Approval", "Guest (View Only)"
+        let currentBid = 13500;
+        let isHighestBidder = true;
+        let auctionEndTime = new Date().getTime() + (5 * 60 * 1000); // 5 minutes from now for demonstration
+
+        const userStatusElement = document.getElementById('user-status');
+        const biddingControls = document.getElementById('bidding-controls');
+        const biddingDisabledMessage = document.getElementById('bidding-disabled-message');
+        const currentBidElement = document.getElementById('current-bid');
+        const highestBidderInfoElement = document.getElementById('highest-bidder-info');
+        const customBidInput = document.getElementById('custom-bid-input');
+        const placeBidBtn = document.getElementById('place-bid-btn');
+        const quickBidButtons = document.querySelectorAll('.quick-bid-btn');
+        const bidHistoryList = document.getElementById('bid-history-list');
+        const countdownTimerElement = document.getElementById('countdown-timer');
+        const auctioneerAnnouncementElement = document.getElementById('auctioneer-announcement');
+        const notificationArea = document.getElementById('notification-area');
+
+        // Function to update user status and bidding interface
+        function updateBiddingInterface() {
+            userStatusElement.textContent = currentUserStatus;
+            if (currentUserStatus === "Approved Bidder") {
+                biddingControls.classList.remove('hidden');
+                biddingDisabledMessage.classList.add('hidden');
+                placeBidBtn.disabled = false;
+                customBidInput.disabled = false;
+                quickBidButtons.forEach(btn => btn.disabled = false);
+            } else {
+                biddingControls.classList.add('hidden');
+                biddingDisabledMessage.classList.remove('hidden');
+                placeBidBtn.disabled = true;
+                customBidInput.disabled = true;
+                quickBidButtons.forEach(btn => btn.disabled = true);
+            }
+        }
+
+        // Function to update current bid display
+        function updateCurrentBidDisplay() {
+            currentBidElement.textContent = `$${currentBid.toLocaleString()}`;
+            if (isHighestBidder) {
+                highestBidderInfoElement.textContent = "You are the highest bidder!";
+                highestBidderInfoElement.classList.remove('text-gray-400');
+                highestBidderInfoElement.classList.add('text-green-400');
+            } else {
+                highestBidderInfoElement.textContent = `Highest bidder: Bidder #${Math.floor(Math.random() * 900) + 100}`; // Placeholder
+                highestBidderInfoElement.classList.remove('text-green-400');
+                highestBidderInfoElement.classList.add('text-gray-400');
+            }
+            customBidInput.min = currentBid + 100; // Minimum bid is current bid + 100
+            customBidInput.value = currentBid + 100; // Suggest next bid
+        }
+
+        // Function to add a bid to history
+        function addBidToHistory(bidder, amount, isUser = false) {
+            const bidEntry = document.createElement('p');
+            bidEntry.classList.add('text-gray-300');
+            const bidderSpan = document.createElement('span');
+            bidderSpan.classList.add('font-semibold');
+            if (isUser) {
+                bidderSpan.classList.add('text-amber-300');
+                bidderSpan.textContent = 'You:';
+            } else {
+                bidderSpan.textContent = `${bidder}:`;
+            }
+            
+            const timeSpan = document.createElement('span');
+            timeSpan.classList.add('text-gray-500', 'text-xs', 'ml-2');
+            timeSpan.textContent = 'Just now'; // In real app, calculate time difference
+
+            bidEntry.appendChild(bidderSpan);
+            bidEntry.innerHTML += ` $${amount.toLocaleString()} `;
+            bidEntry.appendChild(timeSpan);
+
+            // Add to top of history
+            if (bidHistoryList.firstChild) {
+                bidHistoryList.insertBefore(bidEntry, bidHistoryList.firstChild);
+            } else {
+                bidHistoryList.appendChild(bidEntry);
+            }
+            // Scroll to top to show new bid
+            bidHistoryList.scrollTop = 0;
+        }
+
+        // Function to show a notification
+        function showNotification(message, type = 'info', duration = 5000) {
+            const notification = document.createElement('div');
+            notification.classList.add('px-4', 'py-3', 'rounded-lg', 'shadow-lg', 'flex', 'items-center', 'space-x-2', 'text-white', 'transition-all', 'duration-300', 'ease-out', 'transform', 'translate-x-full', 'opacity-0');
+
+            let bgColor = 'bg-blue-600'; // Default info
+            let iconSvg = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+
+            if (type === 'success') {
+                bgColor = 'bg-green-600';
+                iconSvg = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+            } else if (type === 'error') {
+                bgColor = 'bg-red-600';
+                iconSvg = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            } else if (type === 'warning') {
+                bgColor = 'bg-yellow-600';
+                iconSvg = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            }
+
+            notification.classList.add(bgColor);
+            notification.innerHTML = `${iconSvg}<span>${message}</span>`;
+            notificationArea.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full', 'opacity-0');
+                notification.classList.add('translate-x-0', 'opacity-100');
+            }, 100);
+
+            // Animate out and remove
+            setTimeout(() => {
+                notification.classList.remove('translate-x-0', 'opacity-100');
+                notification.classList.add('translate-x-full', 'opacity-0');
+                notification.addEventListener('transitionend', () => notification.remove());
+            }, duration);
+        }
+
+        // Function to simulate auctioneer announcements
+        function showAuctioneerAnnouncement(message, displayTime = 3000) {
+            auctioneerAnnouncementElement.textContent = message;
+            auctioneerAnnouncementElement.classList.remove('hidden');
+            setTimeout(() => {
+                auctioneerAnnouncementElement.classList.add('hidden');
+            }, displayTime);
+        }
+
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = auctionEndTime - now;
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownTimerElement.textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                countdownTimerElement.textContent = "Auction Ended";
+                showAuctioneerAnnouncement("Item Sold!", 5000);
+                placeBidBtn.disabled = true; // Disable bidding after auction ends
+                customBidInput.disabled = true;
+                quickBidButtons.forEach(btn => btn.disabled = true);
+                showNotification("This item has been sold!", "info");
+            } else if (distance < 10000 && distance > 0) { // Less than 10 seconds
+                countdownTimerElement.classList.add('text-red-500');
+                showNotification("Auction ending in 10 seconds!", "warning", 2000);
+            } else {
+                countdownTimerElement.classList.remove('text-red-500');
+            }
+        }
+
+        // Event Listeners
+        placeBidBtn.addEventListener('click', () => {
+            const bidAmount = parseInt(customBidInput.value);
+            if (isNaN(bidAmount) || bidAmount <= currentBid) {
+                showNotification("Please enter a valid bid higher than the current bid.", "error");
+                return;
+            }
+            // In a real app: send bid to server via WebSocket/AJAX
+            // For demo:
+            currentBid = bidAmount;
+            isHighestBidder = true;
+            updateCurrentBidDisplay();
+            addBidToHistory('You', bidAmount, true);
+            showNotification("Your bid has been placed successfully!", "success");
+            showAuctioneerAnnouncement(`Bid $${bidAmount.toLocaleString()} received!`);
+            // Simulate an outbid after a short delay
+            setTimeout(() => {
+                if (isHighestBidder) { // Only if still highest
+                    const newBid = currentBid + (Math.floor(Math.random() * 5) + 1) * 100; // Simulate opponent bid
+                    currentBid = newBid;
+                    isHighestBidder = false;
+                    updateCurrentBidDisplay();
+                    addBidToHistory(`Bidder #${Math.floor(Math.random() * 900) + 100}`, newBid, false);
+                    showNotification(`Outbid by $${newBid.toLocaleString()}!`, "error");
+                    showAuctioneerAnnouncement(`New bid at $${newBid.toLocaleString()}!`);
+                }
+            }, 3000);
+        });
+
+        quickBidButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const increment = parseInt(button.dataset.bidAmount);
+                const newBid = currentBid + increment;
+                customBidInput.value = newBid;
+                placeBidBtn.click(); // Trigger place bid
+            });
+        });
+
+        // Initial calls
+        updateBiddingInterface();
+        updateCurrentBidDisplay();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // Call immediately to avoid 1-second delay on load
+
+        // Simulate changing user status for testing
+        // setTimeout(() => {
+        //     currentUserStatus = "Guest (View Only)";
+        //     updateBiddingInterface();
+        //     showNotification("You are not approved to bid. View only.", "warning");
+        // }, 10000);
+    </script>
+</body>
+</html>

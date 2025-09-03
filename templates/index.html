@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antique Auction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(34,34,34,0.9) 0%, rgba(51,51,51,0.9) 100%);
+        }
+        
+        .auction-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+        }
+        
+        .auction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        .category-card {
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: scale(1.03);
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Dropdown specific styles */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #2d3748; /* gray-800 */
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 0.375rem; /* rounded-md */
+            overflow: hidden;
+            top: 100%; /* Position below the parent link */
+            left: 0;
+            margin-top: 0.5rem; /* Space between link and dropdown */
+        }
+
+        .dropdown-menu a {
+            color: #cbd5e0; /* gray-300 */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #4a5568; /* gray-700 */
+            color: #fbbf24; /* amber-400 */
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-gray-900 shadow-sm py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="{{ url_for('auctions.auctions_home') }}" class="text-2xl font-bold text-white font-serif">Antique Auction</a>
+            </div>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="{{ url_for('auctions.auctions_home') }}" class="text-gray-300 hover:text-amber-400 transition duration-300">Home</a>
+                
+                <!-- Browse Dropdown -->
+                <div class="relative dropdown">
+                    <button class="text-gray-300 hover:text-amber-400 transition duration-300 focus:outline-none flex items-center">
+                        Browse 
+                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#auctions">Auctions</a>
+                        <a href="#categories">Categories</a>
+                    </div>
+                </div>
+
+                <a href="#" class="text-gray-300 hover:text-amber-400 transition duration-300">About</a>
+                <a href="#live-auction" class="text-gray-300 hover:text-amber-400 transition duration-300">Live Auction</a>
+                <a href="#blog" class="text-gray-300 hover:text-amber-400 transition duration-300">Blog</a>
+                
+                <!-- My Account Dropdown -->
+                <div class="relative dropdown">
+                    <button class="text-gray-300 hover:text-amber-400 transition duration-300 focus:outline-none flex items-center">
+                        My Account 
+                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#user-dashboard">My Dashboard</a>
+                        <a href="#user-dashboard">Active Bids</a>
+                        <a href="#user-dashboard">Won Items</a>
+                        <a href="#user-dashboard">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="{{ url_for('auth.login') }}" class="px-4 py-2 text-gray-300 hover:text-amber-600 transition duration-300">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition duration-300">Register</a>
+                <!-- <button class="px-4 py-2 text-gray-300 hover:text-amber-600 transition duration-300">Login</button>
+                <button class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition duration-300">Register</button> -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient py-20 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+                <h1 class="text-4xl md:text-5xl font-bold text-white">Discover Rare Antiques Through Our Exclusive Auctions</h1>
+                <p class="text-gray-300 text-lg">Join thousands of collectors in finding unique pieces from around the world. Our expert-curated auctions bring history to your doorstep.</p>
+                <div class="flex space-x-4 pt-4">
+                    <button class="px-6 py-3 bg-amber-600 text-white rounded hover:bg-amber-700 transition">Browse Auctions</button>
+                    <button class="px-6 py-3 border border-gray-300 text-gray-300 rounded hover:bg-gray-700 transition">Learn More</button>
+                </div>
+            </div>
+            <div class="rounded-lg overflow-hidden shadow-xl">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a6c2e9c1-6168-44ec-8680-bcde5f9894bb.png" alt="Elegant vintage mahogany writing desk with brass fittings displayed in a well-lit auction hall" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Auctions -->
+    <section id="auctions" class="py-16 px-6 bg-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Upcoming Auctions</h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">Register today to participate in these exclusive antique auctions happening soon.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Auction Card 1 -->
+                <div class="auction-card bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+                    <div class="relative">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de1ed3d3-2133-45b6-a37b-06d1c6c19f98.png" alt="19th century French ormolu-mounted porcelain vase with intricate floral patterns" />
+                        <div class="absolute top-4 right-4 bg-amber-600 text-white px-3 py-1 rounded-full text-sm">Starting Soon</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">French Porcelain Collection</h3>
+                        <p class="text-gray-300 mb-4">Exquisite 19th century French porcelain pieces from private collections</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-gray-500">Starting Bid</p>
+                                <p class="text-lg font-bold text-amber-600">$3,200</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Ends In</p>
+                                <p class="text-lg font-bold text-white">2d 14h</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Auction Card 2 -->
+                <div class="auction-card bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+                    <div class="relative">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b03087f3-14b1-4093-b1ee-727268cba191.png" alt="Renaissance-era wooden chest with iron fittings and intricate carvings" />
+                        <div class="absolute top-4 right-4 bg-amber-600 text-white px-3 py-1 rounded-full text-sm">Live Now</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Renaissance Woodworks</h3>
+                        <p class="text-gray-300 mb-4">Italian Renaissance furniture and decorative pieces</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-gray-500">Current Bid</p>
+                                <p class="text-lg font-bold text-amber-600">$8,750</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Ends In</p>
+                                <p class="text-lg font-bold text-white">6h 23m</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Auction Card 3 -->
+                <div class="auction-card bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+                    <div class="relative">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef8bd089-ded7-4252-89a9-d85eb3c2c085.png" alt="Collection of vintage pocket watches with gold and silver cases from different eras" />
+                        <div class="absolute top-4 right-4 bg-gray-600 text-white px-3 py-1 rounded-full text-sm">Coming Up</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Timepieces Collection</h3>
+                        <p class="text-gray-300 mb-4">Rare 18th-19th century pocket watches and clocks</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-gray-500">Estimated</p>
+                                <p class="text-lg font-bold text-amber-600">$5,000+</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Starts</p>
+                                <p class="text-lg font-bold text-white">Aug 8</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="px-6 py-3 border border-gray-300 text-gray-300 rounded hover:bg-gray-700 transition">View All Auctions</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section id="categories" class="py-16 px-6 bg-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Browse Categories</h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">Explore our wide range of antique categories, each with carefully authenticated pieces.</p>
+            </div>
+            
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Category 1 -->
+                <div class="category-card bg-gray-900 rounded-lg overflow-hidden text-center p-8 cursor-pointer border border-gray-700">
+                    <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4a748201-6ae1-4f1b-995f-c14f03f77861.png" alt="Icon representing antique furniture with curved chair leg and intricate wood carving details" class="w-16 h-16 object-contain" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Furniture</h3>
+                    <p class="text-gray-300">Historic furniture pieces</p>
+                    <p class="text-sm text-gray-500 mt-2">132 items</p>
+                </div>
+                
+                <!-- Category 2 -->
+                <div class="category-card bg-gray-900 rounded-lg overflow-hidden text-center p-8 cursor-pointer border border-gray-700">
+                    <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/747c55b9-8541-475f-99ea-423b51c9cef4.png" alt="Icon representing antique porcelain and ceramics with a blue-and-white Chinese vase design" class="w-16 h-16 object-contain" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Porcelain</h3>
+                    <p class="text-gray-300">Fine china & ceramics</p>
+                    <p class="text-sm text-gray-500 mt-2">89 items</p>
+                </div>
+                
+                <!-- Category 3 -->
+                <div class="category-card bg-gray-900 rounded-lg overflow-hidden text-center p-8 cursor-pointer border border-gray-700">
+                    <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cd2839ee-4843-459b-b639-30cc546a9774.png" alt="Icon representing antique jewelry with a diamond necklace on velvet display" class="w-16 h-16 object-contain" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Jewelry</h3>
+                    <p class="text-gray-300">Period jewelry pieces</p>
+                    <p class="text-sm text-gray-500 mt-2">76 items</p>
+                </div>
+                
+                <!-- Category 4 -->
+                <div class="category-card bg-gray-900 rounded-lg overflow-hidden text-center p-8 cursor-pointer border border-gray-700">
+                    <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/416826eb-50e8-4f88-8480-8857372b268e.png" alt="Icon representing antique clocks with a grandfather clock face" class="w-16 h-16 object-contain" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Timepieces</h3>
+                    <p class="text-gray-300">Clocks & watches</p>
+                    <p class="text-sm text-gray-500 mt-2">54 items</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+    <!-- New: User Dashboard Page Section (Placeholder) -->
+    <section id="user-dashboard" class="py-16 px-6 bg-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">My Dashboard</h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">Welcome back! Here's an overview of your auction activity.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card p-6 bg-gray-800 border border-gray-700">
+                    <h3 class="text-xl font-bold text-white mb-4">Active Bids</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li><span class="font-semibold">French Porcelain:</span> Current Bid $3,500 <span class="text-amber-400">(You are High Bidder)</span></li>
+                        <li><span class="font-semibold">Renaissance Chest:</span> Current Bid $8,750 <span class="text-red-400">(Outbid)</span></li>
+                        <li><span class="font-semibold">Vintage Watch:</span> Current Bid $1,200 <span class="text-amber-400">(You are High Bidder)</span></li>
+                    </ul>
+                    <button class="mt-6 px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">View All Bids</button>
+                </div>
+                <div class="card p-6 bg-gray-800 border border-gray-700">
+                    <h3 class="text-xl font-bold text-white mb-4">Account Information</h3>
+                    <p class="text-gray-300 mb-2"><span class="font-semibold">Name:</span> Rajat Kumar</p>
+                    <p class="text-gray-300 mb-2"><span class="font-semibold">Email:</span> rajat.kumar@example.com</p>
+                    <p class="text-gray-300 mb-2"><span class="font-semibold">Member Since:</span> Jan 2024</p>
+                    <button class="mt-6 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition">Edit Profile</button>
+                </div>
+                <div class="card p-6 bg-gray-800 border border-gray-700">
+                    <h3 class="text-xl font-bold text-white mb-4">Notifications</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="text-green-400">Your bid on "Ming Vase" was successful!</li>
+                        <li class="text-red-400">You've been outbid on "Renaissance Chest".</li>
+                        <li>New auction "Ancient Artifacts" starting soon.</li>
+                    </ul>
+                    <button class="mt-6 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition">View All Notifications</button>
+                </div>
+                <div class="card p-6 bg-gray-800 border border-gray-700 lg:col-span-3">
+                    <h3 class="text-xl font-bold text-white mb-4">Won Items</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de1ed3d3-2133-45b6-a37b-06d1c6c19f98.png" alt="Won Item" class="w-full h-32 object-cover rounded mb-2">
+                            <p class="font-semibold text-white">Victorian Desk</p>
+                            <p class="text-gray-400 text-sm">Won for $1,500</p>
+                        </div>
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef8bd089-ded7-4252-89a9-d85eb3c2c085.png" alt="Won Item" class="w-full h-32 object-cover rounded mb-2">
+                            <p class="font-semibold text-white">Art Deco Lamp</p>
+                            <p class="text-gray-400 text-sm">Won for $750</p>
+                        </div>
+                    </div>
+                    <button class="mt-6 px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">View All Won Items</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New: Blog/News Page Section -->
+    <section id="blog" class="py-16 px-6 bg-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Our Blog & News</h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">Stay updated with the latest auction news, tips, and featured items.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Blog Post 1 -->
+                <div class="card bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a6c2e9c1-6168-44ec-8680-bcde5f9894bb.png" alt="Blog Image 1" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">5 Tips for Bidding on High-Value Antiques</h3>
+                        <p class="text-gray-300 text-sm mb-4">Learn strategies to secure your next prized possession in our high-stakes auctions.</p>
+                        <a href="#" class="text-amber-400 hover:underline">Read More &rarr;</a>
+                    </div>
+                </div>
+                <!-- Blog Post 2 -->
+                <div class="card bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de1ed3d3-2133-45b6-a37b-06d1c6c19f98.png" alt="Blog Image 2" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Featured Item: The Lost Royal Scepter</h3>
+                        <p class="text-gray-300 text-sm mb-4">A deep dive into the history and provenance of this incredibly rare artifact coming to auction.</p>
+                        <a href="#" class="text-amber-400 hover:underline">Read More &rarr;</a>
+                    </div>
+                </div>
+                <!-- Blog Post 3 -->
+                <div class="card bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b03087f3-14b1-4093-b1ee-727268cba191.png" alt="Blog Image 3" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Auction Market Trends: What's Hot in 2023?</h3>
+                        <p class="text-gray-300 text-sm mb-4">Our experts share insights on the antique categories seeing the most growth this year.</p>
+                        <a href="#" class="text-amber-400 hover:underline">Read More &rarr;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <button class="px-6 py-3 border border-gray-300 text-gray-300 rounded hover:bg-gray-700 transition">View All Blog Posts</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 px-6 bg-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Collector Stories</h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">What our community of antique collectors says about us.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card rounded-lg p-8 bg-gray-800 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8510782a-9b12-48d5-b810-e4843082a0cd.png" alt="Portrait of mature woman with glasses smiling" />
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Scarlett Johansen</h4>
+                            <p class="text-sm text-gray-500">Collector since 2017</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic">"Found my prized French vanity table through this platform. The authentication was thorough and shipping impeccable."</p>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card rounded-lg p-8 bg-gray-800 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7ba04117-bd9e-4af0-8336-9da810894082.png" alt="Portrait of distinguished gentleman with beard in a library setting" />
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Dr. Jonathan Pierce</h4>
+                            <p class="text-sm text-gray-500">Museum Curator</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic">"The level of detail in item descriptions rivals professional auction house catalogs. A trusted resource for rare pieces."</p>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card rounded-lg p-8 bg-gray-800 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5e5ea831-8601-4bb1-bdc2-ac7702a2a737.png" alt="Portrait of young woman with elegant style at an antique shop" />
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Sophia Chen</h4>
+                            <p class="text-sm text-gray-500">New Collector</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 italic">"As a first-time buyer, I was nervous but the team guided me through every step. Now I'm hooked on antique collecting!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-6 bg-amber-600 text-white">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-6">Start Your Antique Collection Today</h2>
+            <p class="text-xl mb-8">Join thousands of collectors in discovering rare and authentic antique pieces from around the world.</p>
+            <button class="px-8 py-4 bg-white text-amber-600 rounded-lg font-bold hover:bg-gray-100 transition">Create Free Account</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">Antique Auction</h3>
+                <p class="text-gray-400">Bringing history's treasures to discerning collectors worldwide since 1995.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Authentication Process</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Contact</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400">123 Auction House Lane</li>
+                    <li class="text-gray-400">London, UK</li>
+                    <li class="text-gray-400">+44 20 7946 0958</li>
+                    <li class="text-gray-400">info@antiqueauction.com</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Newsletter</h4>
+                <p class="text-gray-400 mb-4">Subscribe to receive updates on upcoming auctions.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Your email" class="px-4 py-2 w-full rounded-l text-gray-800 focus:outline-none">
+                    <button class="px-4 py-2 bg-amber-600 rounded-r hover:bg-amber-700 transition">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto pt-8 mt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>© 2023 Antique Auction System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple countdown timer for auction cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const countdownElements = document.querySelectorAll('.auction-card');
+            
+            countdownElements.forEach(card => {
+                const bidElement = card.querySelector('.font-bold.text-amber-600');
+                if (bidElement && bidElement.textContent.includes('$')) {
+                    // Simulate bid increment (would be replaced with real API calls)
+                    setInterval(() => {
+                        const currentBid = parseFloat(bidElement.textContent.replace(/[^0-9.]/g, ''));
+                        const newBid = currentBid * (1 + (Math.random() * 0.05));
+                        bidElement.textContent = '$' + Math.round(newBid);
+                    }, 10000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

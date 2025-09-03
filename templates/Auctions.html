@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antique Auction System - Live Auctions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(34,34,34,0.9) 0%, rgba(51,51,51,0.9) 100%);
+        }
+        
+        .auction-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+        }
+        
+        .auction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        .category-card {
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: scale(1.03);
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Custom styles for the auction page */
+        .bid-display {
+            font-size: 2.5rem; /* Slightly smaller font for current bid */
+            font-weight: bold;
+            color: #fbbf24; /* Amber color */
+        }
+
+        .bidder-id {
+            font-size: 1.1rem;
+            color: #d1d5db; /* Gray-300 */
+        }
+
+        .countdown-timer {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f5f5f5;
+        }
+
+        .auction-closed {
+            color: #ef4444; /* Red-500 */
+        }
+
+        .table-header {
+            background-color: #374151; /* Gray-700 */
+            color: #f5f5f5;
+        }
+
+        .table-row:nth-child(even) {
+            background-color: #1f2937; /* Gray-800 */
+        }
+
+        .table-row:nth-child(odd) {
+            background-color: #111827; /* Gray-900 */
+        }
+
+        .item-image-small {
+            width: 100%;
+            height: 180px; /* Fixed height for smaller images */
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-gray-900 shadow-sm py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" class="text-2xl font-bold text-white font-serif">Antique Auction</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-300 hover:text-amber-400">Home</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Auctions</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Categories</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">How It Works</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">About</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="px-4 py-2 text-gray-300 hover:text-amber-600">Login</button>
+                <button class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">Register</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Auction Content - Multiple Items -->
+    <main class="py-16 px-6 bg-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-white mb-10 text-center">Live Antique Auctions</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="auction-items-container">
+                <!-- Auction Item Card Template -->
+                <!-- This will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Bidding History Table (moved to be global for all items, or could be per-item in a modal) -->
+        <div class="max-w-7xl mx-auto mt-16 bg-gray-800 rounded-lg shadow-lg p-8">
+            <h2 class="text-3xl font-bold text-white mb-6">Global Bidding History</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider table-header rounded-tl-lg">Item</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider table-header">Bidder ID</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider table-header">Bid Amount</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider table-header rounded-tr-lg">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700" id="global-bidding-history-body">
+                        <!-- Example Bids (will be dynamically updated) -->
+                        <tr class="table-row">
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">Victorian Clock</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">Bidder #45</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-amber-400 font-semibold">$12,500</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-400">2023-10-27 14:35:01</td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">Ming Vase</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">Bidder #22</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-amber-400 font-semibold">$8,200</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-400">2023-10-27 14:34:15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Terms & Conditions Modal -->
+    <div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 rounded-lg p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+            <button id="terms-modal-close" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h2 class="text-3xl font-bold text-white mb-6">Terms & Conditions</h2>
+            <div class="text-gray-300 space-y-4 text-sm">
+                <p>Welcome to Antique Auction System. By participating in our auctions, you agree to the following terms and conditions:</p>
+                <p><span class="font-semibold">1. Bidding:</span> All bids are legally binding. Bids cannot be retracted once placed. The minimum bid increment is clearly stated for each auction. Bids must exceed the current highest bid by at least the minimum increment.</p>
+                <p><span class="font-semibold">2. Reserve Price:</span> Some items may have a confidential reserve price. The item will only be sold if the highest bid meets or exceeds this reserve price. If the reserve is not met, the item will not be sold.</p>
+                <p><span class="font-semibold">3. Auction End:</span> Auctions conclude precisely at the stated end time. Bids placed in the final minutes may extend the auction to prevent "sniping" (specific rules will be detailed per auction).</p>
+                <p><span class="font-semibold">4. Payment:</span> Successful bidders are required to complete payment within 48 hours of the auction's close. Failure to do so may result in the item being offered to the next highest bidder or relisted, and the defaulting bidder's account may be suspended.</p>
+                <p><span class="font-semibold">5. Item Condition & Authenticity:</span> While we strive for accuracy, all items are sold "as is." We provide detailed descriptions and high-resolution images. It is the bidder's responsibility to review all information and ask questions before bidding. Authenticity is guaranteed by our verified sellers, and a certificate of authenticity may be provided where applicable.</p>
+                <p><span class="font-semibold">6. Shipping & Handling:</span> Shipping costs are the responsibility of the buyer unless otherwise stated. We offer secure, insured worldwide shipping. Details regarding shipping options and costs will be provided upon auction close.</p>
+                <p><span class="font-semibold">7. Disputes:</span> Any disputes arising from an auction will be handled in accordance with our dispute resolution policy, available upon request.</p>
+                <p><span class="font-semibold">8. Privacy:</span> Your personal information is handled in accordance with our Privacy Policy.</p>
+                <p>By placing a bid, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">Antique Auction</h3>
+                <p class="text-gray-400">Bringing history's treasures to discerning collectors worldwide since 1995.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Authentication Process</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Contact</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400">123 Auction House Lane</li>
+                    <li class="text-gray-400">London, UK</li>
+                    <li class="text-gray-400">+44 20 7946 0958</li>
+                    <li class="text-gray-400">info@antiqueauction.com</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Newsletter</h4>
+                <p class="text-gray-400 mb-4">Subscribe to receive updates on upcoming auctions.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Your email" class="px-4 py-2 w-full rounded-l text-gray-800 focus:outline-none">
+                    <button class="px-4 py-2 bg-amber-600 rounded-r hover:bg-amber-700 transition">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto pt-8 mt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>© 2023 Antique Auction System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for interactivity
+        const auctionItemsContainer = document.getElementById('auction-items-container');
+        const globalBiddingHistoryBody = document.getElementById('global-bidding-history-body');
+        const termsModalTrigger = document.getElementById('terms-modal-trigger');
+        const termsModal = document.getElementById('terms-modal');
+        const termsModalClose = document.getElementById('terms-modal-close');
+
+        // Sample Auction Items Data
+        const auctionItems = {{ auction_items | tojson | safe }};
+
+        // Function to render a single auction item card
+        function renderAuctionItem(item) {
+            const card = document.createElement('div');
+            card.className = 'bg-gray-800 rounded-lg shadow-lg p-6 flex flex-col';
+            card.innerHTML = `
+                <h3 class="text-2xl font-bold text-white mb-3">${item.title}</h3>
+                <img src="${item.image}" alt="${item.title}" class="item-image-small">
+                
+                <p class="text-gray-300 text-sm mb-4 flex-grow">${item.description}</p>
+                
+                <ul class="list-disc list-inside text-gray-400 text-xs mb-4">
+                    ${item.specs.map(spec => `<li>${spec}</li>`).join('')}
+                </ul>
+
+                <div class="text-center mb-6">
+                    <h4 class="text-lg font-bold text-gray-300 mb-1">Current Bid</h4>
+                    <div class="bid-display" id="current-bid-${item.id}">$${item.currentBid.toLocaleString()}</div>
+                    <div class="bidder-id" id="highest-bidder-${item.id}">by ${item.highestBidder}</div>
+                </div>
+
+                <div class="text-center mb-6">
+                    <h4 class="text-lg font-bold text-gray-300 mb-1">Time Remaining</h4>
+                    <div class="countdown-timer" id="countdown-${item.id}"></div>
+                </div>
+
+                <form class="space-y-3 mb-6 bid-form" data-item-id="${item.id}">
+                    <div>
+                        <label for="bid-amount-${item.id}" class="block text-gray-300 text-sm font-bold mb-1">Your Bid ($)</label>
+                        <input type="number" id="bid-amount-${item.id}" name="bid-amount" min="${item.currentBid + item.minBidIncrement}" step="${item.minBidIncrement}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline bg-gray-200" placeholder="Min $${item.currentBid + item.minBidIncrement}">
+                        <p class="text-red-400 text-xs mt-1 hidden" id="bid-error-${item.id}">Bid too low!</p>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition text-sm">
+                            Place Bid
+                        </button>
+                        <label class="flex items-center text-gray-300 text-sm">
+                            <input type="checkbox" class="form-checkbox h-4 w-4 text-amber-600 rounded">
+                            <span class="ml-1">Auto-Bid</span>
+                        </label>
+                    </div>
+                </form>
+
+                <div class="bg-gray-700 rounded-lg p-4 text-sm mb-6">
+                    <h4 class="font-bold text-white mb-2">Seller: ${item.seller.name} 
+                        ${item.seller.verified ? '<span class="text-green-400 text-xs ml-1">(Verified)</span>' : ''}
+                    </h4>
+                    <p class="text-gray-400">Min. Increment: $${item.minBidIncrement}</p>
+                    <p class="text-gray-400">Reserve: Met</p>
+                </div>
+
+                <div class="flex justify-center space-x-3">
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">Watch</button>
+                    <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm">Share</button>
+                </div>
+            `;
+            auctionItemsContainer.appendChild(card);
+            return card;
+        }
+
+        // Function to update countdown for a specific item
+        function updateCountdown(item) {
+            const countdownElement = document.getElementById(`countdown-${item.id}`);
+            if (!countdownElement) return;
+
+            const now = new Date().getTime();
+            const distance = item.auctionEndTime - now;
+
+            if (distance < 0) {
+                countdownElement.textContent = 'Auction Closed';
+                countdownElement.classList.add('auction-closed');
+                const form = document.querySelector(`.bid-form[data-item-id="${item.id}"]`);
+                if (form) {
+                    form.querySelector('button[type="submit"]').disabled = true;
+                    form.querySelector('input[type="number"]').disabled = true;
+                }
+                return;
+            }
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownElement.textContent = 
+                `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+        }
+
+        // Function to add a new bid to global history
+        function addGlobalBidToHistory(itemName, bidderId, amount) {
+            const now = new Date();
+            const timestamp = now.toLocaleString('en-GB', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }).replace(',', '');
+
+            const newRow = document.createElement('tr');
+            newRow.classList.add('table-row');
+            newRow.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${itemName}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-300">${bidderId}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-amber-400 font-semibold">$${amount.toLocaleString()}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-400">${timestamp}</td>
+            `;
+            globalBiddingHistoryBody.prepend(newRow);
+        }
+
+        // Initialize and render all auction items
+        auctionItems.forEach(item => {
+            renderAuctionItem(item);
+            setInterval(() => updateCountdown(item), 1000); // Start countdown for each item
+        });
+
+        // Attach event listeners for bid forms
+        document.querySelectorAll('.bid-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const itemId = this.dataset.itemId;
+                const item = auctionItems.find(i => i.id === itemId);
+                
+                if (!item) return;
+
+                const bidAmountInput = this.querySelector(`#bid-amount-${itemId}`);
+                const bidError = this.querySelector(`#bid-error-${itemId}`);
+                const bidAmount = parseFloat(bidAmountInput.value);
+
+                if (isNaN(bidAmount) || bidAmount < (item.currentBid + item.minBidIncrement)) {
+                    bidError.classList.remove('hidden');
+                    return;
+                } else {
+                    bidError.classList.add('hidden');
+                }
+
+                // Simulate a new bid
+                const newBidderId = `Bidder #${Math.floor(Math.random() * 100) + 1}`;
+                item.currentBid = bidAmount;
+                item.highestBidder = newBidderId;
+
+                // Update display for this specific item
+                document.getElementById(`current-bid-${itemId}`).textContent = `$${item.currentBid.toLocaleString()}`;
+                document.getElementById(`highest-bidder-${itemId}`).textContent = `by ${item.highestBidder}`;
+                bidAmountInput.min = item.currentBid + item.minBidIncrement;
+                bidAmountInput.placeholder = `Min $${item.currentBid + item.minBidIncrement}`;
+                bidAmountInput.value = '';
+
+                addGlobalBidToHistory(item.title, newBidderId, item.currentBid);
+                alert(`Your bid of $${bidAmount.toLocaleString()} on ${item.title} has been placed!`);
+            });
+        });
+
+        // Terms & Conditions Modal
+        termsModalTrigger.addEventListener('click', () => {
+            termsModal.classList.remove('hidden');
+        });
+
+        termsModalClose.addEventListener('click', () => {
+            termsModal.classList.add('hidden');
+        });
+
+        // Close modal if clicked outside
+        termsModal.addEventListener('click', (e) => {
+            if (e.target === termsModal) {
+                termsModal.classList.add('hidden');
+            }
+        });
+
+        
+    </script>
+</body>
+</html>

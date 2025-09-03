@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Antique Auction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .login-container {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .input-group input {
+            padding-left: 2.5rem; /* Space for icon */
+        }
+        .input-group .icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af; /* Gray-400 */
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #fbbf24; /* Amber */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden by default */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-message {
+            color: #ef4444; /* Red-500 */
+            font-size: 0.875rem;
+            margin-top: -0.75rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center bg-gray-900">
+    <!-- Main Content - Login Form -->
+    <div class="login-container p-8 md:p-10 mx-4">
+        <div class="text-center mb-8">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a6c2e9c1-6168-44ec-8680-bcde5f9894bb.png" alt="Antique Auction Logo" class="h-24 mx-auto mb-4">
+            <h1 class="text-3xl font-bold text-white">Welcome Back!</h1>
+            <p class="text-gray-400">Login to your Antique Auction account</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6" method="POST" action="{{ url_for('auth.login') }}">>
+            <!-- Error Message Display -->
+            <div id="loginError" class="error-message hidden text-center"></div>
+
+            <!-- Username or Email Input -->
+            <div class="input-group">
+                <label for="username" class="block text-gray-300 text-sm font-bold mb-2">Username or Email</label>
+                <i class="fas fa-user icon"></i>
+                <input type="text" id="username" name="username" placeholder="your@example.com"
+                       class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline bg-gray-200" required>
+                <p id="usernameError" class="error-message hidden"></p>
+            </div>
+
+            <!-- Password Input -->
+            <div class="input-group">
+                <label for="password" class="block text-gray-300 text-sm font-bold mb-2">Password</label>
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="password" name="password" placeholder="********"
+                       class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline bg-gray-200" required>
+                <p id="passwordError" class="error-message hidden"></p>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input type="checkbox" id="rememberMe" name="rememberMe" class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded">
+                    <label for="rememberMe" class="ml-2 block text-gray-300 text-sm">Remember Me</label>
+                </div>
+                <a href="#" class="text-sm text-amber-400 hover:text-amber-500 hover:underline">Forgot Password?</a>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" id="loginButton"
+                    class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded-lg w-full flex items-center justify-center transition duration-300">
+                <span id="buttonText">Login</span>
+                <div id="loader" class="loader ml-3"></div>
+            </button>
+        </form>
+
+        <!-- Create New Account Link -->
+        <div class="mt-6 text-center">
+            <p class="text-gray-300">Don't have an account?
+                <a href="#" class="text-amber-400 hover:text-amber-500 hover:underline font-bold">Create New Account</a>
+            </p>
+        </div>
+
+       
+
+        <!-- Guest Access (Optional Enhancement) -->
+        <div class="mt-6 text-center">
+            <a href="#" class="text-sm text-gray-400 hover:text-gray-300 hover:underline">Continue as Guest (View Only)</a>
+        </div>
+    </div>
+
+    <script>
+        // document.getElementById('loginForm').addEventListener('submit', function(event) {
+        //     event.preventDefault(); // Prevent default form submission
+
+        //     const usernameInput = document.getElementById('username');
+        //     const passwordInput = document.getElementById('password');
+        //     const loginButton = document.getElementById('loginButton');
+        //     const buttonText = document.getElementById('buttonText');
+        //     const loader = document.getElementById('loader');
+        //     const loginError = document.getElementById('loginError');
+        //     const usernameError = document.getElementById('usernameError');
+        //     const passwordError = document.getElementById('passwordError');
+
+        //     // Reset previous error messages
+        //     loginError.classList.add('hidden');
+        //     usernameError.classList.add('hidden');
+        //     passwordError.classList.add('hidden');
+
+        //     let isValid = true;
+
+        //     // Basic client-side validation
+        //     if (usernameInput.value.trim() === '') {
+        //         usernameError.textContent = 'Username or Email is required.';
+        //         usernameError.classList.remove('hidden');
+        //         isValid = false;
+        //     } else if (!/\S+@\S+\.\S+/.test(usernameInput.value) && usernameInput.value.length < 3) { // Simple email regex or min length for username
+        //         usernameError.textContent = 'Please enter a valid email or username.';
+        //         usernameError.classList.remove('hidden');
+        //         isValid = false;
+        //     }
+
+        //     if (passwordInput.value.trim() === '') {
+        //         passwordError.textContent = 'Password is required.';
+        //         passwordError.classList.remove('hidden');
+        //         isValid = false;
+        //     } else if (passwordInput.value.length < 6) {
+        //         passwordError.textContent = 'Password must be at least 6 characters long.';
+        //         passwordError.classList.remove('hidden');
+        //         isValid = false;
+        //     }
+
+        //     if (!isValid) {
+        //         return; // Stop if client-side validation fails
+        //     }
+
+        //     // Show loader and disable button
+        //     buttonText.textContent = 'Logging in...';
+        //     loader.style.display = 'block';
+        //     loginButton.disabled = true;
+        //     loginButton.classList.add('opacity-70', 'cursor-not-allowed');
+
+        //     // Simulate API call for login
+        //     setTimeout(() => {
+        //         const username = usernameInput.value;
+        //         const password = passwordInput.value;
+
+        //         // Dummy authentication logic
+        //         if (username === 'user@example.com' && password === 'password123') {
+        //             // Successful login
+        //             alert('Login successful! Redirecting to dashboard...');
+        //             // In a real application, you would redirect to a dashboard or home page
+        //             // window.location.href = '/dashboard';
+        //         } else {
+        //             // Failed login
+        //             loginError.textContent = 'Incorrect username or password. Please try again.';
+        //             loginError.classList.remove('hidden');
+        //         }
+
+        //         // Hide loader and re-enable button
+        //         buttonText.textContent = 'Login';
+        //         loader.style.display = 'none';
+        //         loginButton.disabled = false;
+        //         loginButton.classList.remove('opacity-70', 'cursor-not-allowed');
+
+        //     }, 2000); // Simulate 2-second network request
+        // });
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const loginError = document.getElementById('loginError');
+    const usernameError = document.getElementById('usernameError');
+    const passwordError = document.getElementById('passwordError');
+
+    // Reset previous error messages
+    loginError.classList.add('hidden');
+    usernameError.classList.add('hidden');
+    passwordError.classList.add('hidden');
+
+    let isValid = true;
+
+    if (usernameInput.value.trim() === '') {
+        usernameError.textContent = 'Username or Email is required.';
+        usernameError.classList.remove('hidden');
+        isValid = false;
+    }
+
+    if (passwordInput.value.trim() === '') {
+        passwordError.textContent = 'Password is required.';
+        passwordError.classList.remove('hidden');
+        isValid = false;
+    }
+
+    if (isValid) {
+        // If valid, allow form to submit to the Flask backend
+        event.target.submit();
+    }
+});
+
+    </script>
+</body>
+</html>

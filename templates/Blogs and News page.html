@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Blog & News - Antique Auction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .blog-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+        }
+        .blog-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px; /* full rounded */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 600; /* font-semibold */
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .tag-announcement { background-color: #f59e0b; color: #fff; } /* amber-500 */
+        .tag-update { background-color: #3b82f6; color: #fff; } /* blue-500 */
+        .tag-featured { background-color: #10b981; color: #fff; } /* emerald-500 */
+        .tag-tip { background-color: #6366f1; color: #fff; } /* indigo-500 */
+        .tag-promo { background-color: #ef4444; color: #fff; } /* red-500 */
+        .tag-highlight { background-color: #8b5cf6; color: #fff; } /* violet-500 */
+        .tag-behind-scenes { background-color: #ec4899; color: #fff; } /* pink-500 */
+
+        /* Custom scrollbar for sidebar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #2d3748; /* gray-800 */
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4a5568; /* gray-600 */
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #718096; /* gray-500 */
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Navigation (re-using from Auction Home Page) -->
+    <nav class="bg-gray-900 shadow-sm py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" class="text-2xl font-bold text-white font-serif">Antique Auction</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-300 hover:text-amber-400">Home</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Auctions</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Categories</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">How It Works</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">About</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="px-4 py-2 text-gray-300 hover:text-amber-600">Login</button>
+                <button class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">Register</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section for Blog -->
+    <section class="bg-gray-900 py-16 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Auction Insights & Updates</h1>
+            <p class="text-gray-300 text-lg">Stay informed with the latest news, featured items, bidding tips, and more from the Antique Auction System.</p>
+            <div class="mt-8 flex justify-center">
+                <div class="relative w-full max-w-md">
+                    <input type="text" placeholder="Search blog posts..." class="w-full p-3 pl-10 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-amber-500" />
+                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Blog Content -->
+    <main class="flex-grow container mx-auto p-6 md:p-8 lg:p-10 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Blog Posts Area -->
+        <div class="lg:col-span-3 space-y-8">
+
+            <!-- Featured Post / Latest Post -->
+            <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a6c2e9c1-6168-44ec-8680-bcde5f9894bb.png" alt="Elegant vintage mahogany writing desk" class="w-full md:w-1/3 h-64 md:h-auto object-cover" />
+                <div class="p-6 flex-grow">
+                    <div class="mb-3">
+                        <span class="tag tag-featured">Featured</span>
+                        <span class="tag tag-announcement">Important</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-3">Spotlight: The Royal Victorian Desk Collection</h2>
+                    <p class="text-gray-400 text-sm mb-4">By John Doe | October 26, 2023</p>
+                    <p class="text-gray-300 mb-4">Get an exclusive preview of the magnificent Victorian mahogany writing desk and accompanying pieces, set to be auctioned next month. Discover its history, craftsmanship, and estimated value...</p>
+                    <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read More &rarr;</a>
+                </div>
+            </article>
+
+            <!-- Announcements & Updates Section -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">Announcements & Updates</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-announcement">Important</span>
+                            <span class="tag tag-update">System Update</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Scheduled Maintenance: Enhanced Security Features</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Admin | October 25, 2023</p>
+                        <p class="text-gray-300 mb-4">We will be performing scheduled maintenance on November 1st, 2023, from 2:00 AM to 4:00 AM GMT to implement new security enhancements. The platform may experience brief interruptions...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read More &rarr;</a>
+                    </article>
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-announcement">Auction Update</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Time Extension for "Renaissance Woodworks" Auction</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Auction Team | October 24, 2023</p>
+                        <p class="text-gray-300 mb-4">Due to popular demand, the "Renaissance Woodworks" auction has been extended by 24 hours. New end time: October 27, 2023, 8:00 PM GMT. Don't miss your chance...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read More &rarr;</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Featured Items & Spotlight Posts -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">Featured Items & Spotlights</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de1ed3d3-2133-45b6-a37b-06d1c6c19f98.png" alt="French Porcelain Vase" class="w-full h-48 object-cover" />
+                        <div class="p-6">
+                            <div class="mb-3">
+                                <span class="tag tag-featured">Featured</span>
+                                <span class="tag tag-announcement">Rare Find</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">The Lost French Porcelain Vase</h3>
+                            <p class="text-gray-400 text-sm mb-3">Starting Price: $3,200 | Auction Date: Nov 5, 2023</p>
+                            <p class="text-gray-300 mb-4">A stunning 19th-century French ormolu-mounted porcelain vase, believed to be part of a royal collection. Its intricate floral patterns and vibrant colors are a testament to its era...</p>
+                            <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">View Listing &rarr;</a>
+                        </div>
+                    </article>
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef8bd089-ded7-4252-89a9-d85eb3c2c085.png" alt="Vintage Pocket Watches" class="w-full h-48 object-cover" />
+                        <div class="p-6">
+                            <div class="mb-3">
+                                <span class="tag tag-featured">Collector's Pick</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Timepieces of Distinction: A Collector's Dream</h3>
+                            <p class="text-gray-400 text-sm mb-3">Estimated: $5,000+ | Auction Date: Nov 15, 2023</p>
+                            <p class="text-gray-300 mb-4">Explore a curated collection of rare 18th and 19th-century pocket watches and clocks. Each piece tells a unique story of precision and artistry...</p>
+                            <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">View Collection &rarr;</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Promotions and Discounts -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">Promotions & Discounts</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-promo">Limited Time</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Early Bird Discount: 5% Off Buyer's Premium!</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Marketing Team | October 20, 2023</p>
+                        <p class="text-gray-300 mb-4">Register and place your first bid in the "European Antiques" auction by November 10th to receive a 5% discount on your buyer's premium. Terms and conditions apply...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Learn More &rarr;</a>
+                    </article>
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-promo">Special Offer</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Free Shipping on Select Furniture Pieces!</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Logistics Dept. | October 18, 2023</p>
+                        <p class="text-gray-300 mb-4">For a limited period, enjoy complimentary worldwide shipping on all furniture items sold in the "Grand Estate Sale" auction. Offer valid until November 30th...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">View Eligible Items &rarr;</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Bidding Tips & Strategies -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">Bidding Tips & Strategies</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-tip">Guide</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">How to Bid Like a Pro: Advanced Strategies</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Auction Expert | October 15, 2023</p>
+                        <p class="text-gray-300 mb-4">Master the art of auction bidding with our expert tips, including setting limits, understanding bid increments, and when to make your move...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read Article &rarr;</a>
+                    </article>
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-tip">Beginner</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">5 Things to Know Before Your First Auction</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Support Team | October 12, 2023</p>
+                        <p class="text-gray-300 mb-4">New to online auctions? This guide covers essential steps from registration to winning your first item, ensuring a smooth experience...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read Guide &rarr;</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Engagement and FAQ Posts -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">Engagement & FAQ</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-tip">FAQ</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Understanding Buyer's Premium & Taxes</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Finance Dept. | October 10, 2023</p>
+                        <p class="text-gray-300 mb-4">A clear explanation of additional costs associated with winning an auction, including buyer's premium, sales tax, and shipping fees...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read More &rarr;</a>
+                    </article>
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-behind-scenes">Community</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Your Questions Answered: Live Q&A Recap</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Community Manager | October 8, 2023</p>
+                        <p class="text-gray-300 mb-4">A summary of our recent live Q&A session, addressing common concerns about bidding, shipping, and item authentication. Submit your own questions for next time!</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">View Recap &rarr;</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Post-Auction Highlights -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">Post-Auction Highlights</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b03087f3-14b1-4093-b1ee-727268cba191.png" alt="Renaissance Wooden Chest" class="w-full h-48 object-cover" />
+                        <div class="p-6">
+                            <div class="mb-3">
+                                <span class="tag tag-highlight">Recap</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">"Renaissance Woodworks" Auction: Record-Breaking Sales!</h3>
+                            <p class="text-gray-400 text-sm mb-3">By Auction Team | October 27, 2023</p>
+                            <p class="text-gray-300 mb-4">A look back at the incredible success of our recent Renaissance Woodworks auction, featuring top-selling items and impressive bid summaries. The 16th-century chest sold for $9,500!</p>
+                            <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read Full Recap &rarr;</a>
+                        </div>
+                    </article>
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-highlight">Statistics</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Q3 2023 Auction Performance Report</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Data Analytics | October 1, 2023</p>
+                        <p class="text-gray-300 mb-4">Dive into the numbers: total items sold, average bid prices, and geographical distribution of our bidders for the third quarter of 2023...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">View Report &rarr;</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Building Trust and Authority -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">Building Trust & Authority</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-behind-scenes">Behind the Scenes</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Meet Our Experts: The Authentication Process</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Expert Team | September 28, 2023</p>
+                        <p class="text-gray-300 mb-4">Learn about the rigorous multi-point authentication process every item undergoes before it's listed on our platform, ensuring authenticity and value...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Discover More &rarr;</a>
+                    </article>
+                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                        <div class="mb-3">
+                            <span class="tag tag-behind-scenes">Interview</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Seller Spotlight: Interview with a Long-Time Collector</h3>
+                        <p class="text-gray-400 text-sm mb-3">By Editorial Team | September 25, 2023</p>
+                        <p class="text-gray-300 mb-4">We sit down with renowned antique collector, Ms. Eleanor Vance, to discuss her journey, her favorite pieces, and why she chooses our platform...</p>
+                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read Interview &rarr;</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Pagination -->
+            <div class="flex justify-center items-center space-x-4 mt-10">
+                <button class="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition disabled:opacity-50" disabled>&larr; Previous</button>
+                <span class="text-gray-300">Page 1 of 5</span>
+                <button class="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition">Next &rarr;</button>
+            </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="lg:col-span-1 space-y-8">
+            <!-- Categories & Tags Filter -->
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Categories</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-300 hover:text-amber-400">Announcements (5)</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-amber-400">Featured Items (8)</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-amber-400">Promotions (3)</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-amber-400">Bidding Tips (12)</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-amber-400">FAQ (7)</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-amber-400">Post-Auction Highlights (4)</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-amber-400">Behind the Scenes (6)</a></li>
+                </ul>
+                <h3 class="text-xl font-bold text-white mt-6 mb-4">Popular Tags</h3>
+                <div class="flex flex-wrap">
+                    <span class="tag tag-announcement cursor-pointer hover:opacity-80">Important</span>
+                    <span class="tag tag-featured cursor-pointer hover:opacity-80">Rare Find</span>
+                    <span class="tag tag-tip cursor-pointer hover:opacity-80">Guide</span>
+                    <span class="tag tag-promo cursor-pointer hover:opacity-80">Limited Time</span>
+                    <span class="tag tag-highlight cursor-pointer hover:opacity-80">Recap</span>
+                    <span class="tag tag-behind-scenes cursor-pointer hover:opacity-80">Interview</span>
+                    <span class="tag tag-update cursor-pointer hover:opacity-80">System Update</span>
+                </div>
+            </div>
+
+            <!-- Latest Posts -->
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Latest Posts</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a6c2e9c1-6168-44ec-8680-bcde5f9894bb.png" alt="Latest Post Image" class="w-20 h-20 object-cover rounded-md" />
+                        <div>
+                            <a href="#" class="text-gray-200 hover:text-amber-400 font-semibold">The Royal Victorian Desk Collection</a>
+                            <p class="text-gray-400 text-sm">October 26, 2023</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de1ed3d3-2133-45b6-a37b-06d1c6c19f98.png" alt="Latest Post Image" class="w-20 h-20 object-cover rounded-md" />
+                        <div>
+                            <a href="#" class="text-gray-200 hover:text-amber-400 font-semibold">Scheduled Maintenance: Enhanced Security</a>
+                            <p class="text-gray-400 text-sm">October 25, 2023</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b03087f3-14b1-4093-b1ee-727268cba191.png" alt="Latest Post Image" class="w-20 h-20 object-cover rounded-md" />
+                        <div>
+                            <a href="#" class="text-gray-200 hover:text-amber-400 font-semibold">Time Extension for "Renaissance Woodworks"</a>
+                            <p class="text-gray-400 text-sm">October 24, 2023</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter Signup -->
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+                <h3 class="text-xl font-bold text-white mb-4">Stay Updated!</h3>
+                <p class="text-gray-300 mb-4">Subscribe to our newsletter for exclusive news and auction alerts.</p>
+                <div class="flex flex-col space-y-3">
+                    <input type="email" placeholder="Your email address" class="p-3 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-amber-500" />
+                    <button class="px-4 py-3 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition font-semibold">Subscribe</button>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer (re-using from Auction Home Page) -->
+    <footer class="bg-gray-800 text-white py-12 px-6 mt-auto">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">Antique Auction</h3>
+                <p class="text-gray-400">Bringing history's treasures to discerning collectors worldwide since 1995.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Authentication Process</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Contact</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400">123 Auction House Lane</li>
+                    <li class="text-gray-400">London, UK</li>
+                    <li class="text-gray-400">+44 20 7946 0958</li>
+                    <li class="text-gray-400">info@antiqueauction.com</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Newsletter</h4>
+                <p class="text-gray-400 mb-4">Subscribe to receive updates on upcoming auctions.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Your email" class="px-4 py-2 w-full rounded-l text-gray-800 focus:outline-none">
+                    <button class="px-4 py-2 bg-amber-600 rounded-r hover:bg-amber-700 transition">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto pt-8 mt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>© 2023 Antique Auction System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Basic JavaScript for dynamic features (e.g., search, filtering)
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.querySelector('input[placeholder="Search blog posts..."]');
+            const blogPosts = document.querySelectorAll('article.blog-card'); // All blog post cards
+
+            searchInput.addEventListener('keyup', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+                blogPosts.forEach(post => {
+                    const title = post.querySelector('h2, h3').textContent.toLowerCase();
+                    const description = post.querySelector('p:not(.text-sm)').textContent.toLowerCase();
+                    const tags = Array.from(post.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+
+                    if (title.includes(searchTerm) || description.includes(searchTerm) || tags.some(tag => tag.includes(searchTerm))) {
+                        post.style.display = 'flex'; // or 'block' depending on card layout
+                    } else {
+                        post.style.display = 'none';
+                    }
+                });
+            });
+
+            // Placeholder for category/tag filtering logic
+            const categoryLinks = document.querySelectorAll('aside ul a');
+            const tagSpans = document.querySelectorAll('aside .tag');
+
+            const filterPosts = (filterType, filterValue) => {
+                blogPosts.forEach(post => {
+                    let showPost = false;
+                    if (filterType === 'category') {
+                        // For simplicity, assuming category is part of the post's tags or a data attribute
+                        // In a real app, posts would have data attributes like data-category="Announcements"
+                        const postTags = Array.from(post.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                        if (filterValue === 'all' || postTags.some(tag => tag.includes(filterValue.toLowerCase().replace(/\s/g, '')))) {
+                            showPost = true;
+                        }
+                    } else if (filterType === 'tag') {
+                        const postTags = Array.from(post.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                        if (postTags.includes(filterValue.toLowerCase())) {
+                            showPost = true;
+                        }
+                    } else { // No filter, show all
+                        showPost = true;
+                    }
+                    post.style.display = showPost ? (post.classList.contains('flex') ? 'flex' : 'block') : 'none';
+                });
+            };
+
+            categoryLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const category = link.textContent.split('(')[0].trim(); // e.g., "Announcements"
+                    filterPosts('category', category);
+                    // Highlight active category (optional)
+                    categoryLinks.forEach(l => l.classList.remove('text-amber-400'));
+                    link.classList.add('text-amber-400');
+                });
+            });
+
+            tagSpans.forEach(tag => {
+                tag.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tagName = tag.textContent.trim();
+                    filterPosts('tag', tagName);
+                    // Highlight active tag (optional)
+                    tagSpans.forEach(t => t.classList.remove('ring-2', 'ring-amber-400')); // Example highlight
+                    tag.classList.add('ring-2', 'ring-amber-400');
+                });
+            });
+
+            // Initial filter to show all posts
+            filterPosts('all', '');
+        });
+    </script>
+</body>
+</html>

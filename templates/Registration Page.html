@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Antique Auction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', 'Times New Roman', Times, serif;
+            color: #fbbf24; /* Amber-400 */
+        }
+        .registration-container {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 2.5rem;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            color: #f5f5f5;
+            font-size: 0.875rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="email"],
+        .input-group input[type="tel"],
+        .input-group input[type="date"],
+        .input-group input[type="password"],
+        .input-group select,
+        .input-group textarea {
+            background-color: #3a3a3a;
+            color: #f5f5f5;
+            border: 1px solid #4a4a4a;
+            border-radius: 0.375rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+            outline: none;
+        }
+        .error-message {
+            color: #ef4444; /* Red-500 */
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        .file-upload-box {
+            border: 2px dashed #4a4a4a;
+            border-radius: 0.375rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .file-upload-box:hover {
+            border-color: #fbbf24;
+        }
+        .file-upload-box input[type="file"] {
+            display: none;
+        }
+        .otp-input-group, .password-input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .otp-input-group input, .password-input-group input {
+            flex-grow: 1;
+        }
+        .otp-input-group button, .password-input-group button {
+            flex-shrink: 0;
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #2a2a2a;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #f5f5f5;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        #signatureCanvas {
+            border: 1px solid #4a4a4a;
+            background-color: #3a3a3a;
+            cursor: crosshair;
+            touch-action: none; /* Prevent scrolling on touch devices */
+        }
+    </style>
+</head>
+<body class="py-16 px-4 bg-gray-900">
+    <div class="registration-container mx-auto max-w-4xl">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">Create Your Account</h1>
+            <p class="text-gray-400">Join our community to participate in exclusive antique auctions.</p>
+        </div>
+
+        <form id="registrationForm" class="space-y-8" method="POST" action="/auth/register">
+            <!-- User Type Selection -->
+            <div class="input-group">
+                <label class="text-white text-lg font-bold mb-2">Account Type:</label>
+                <div class="flex flex-wrap gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="userType" value="individual" class="form-radio text-amber-600" checked>
+                        <span class="ml-2 text-gray-300">Individual</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="userType" value="company" class="form-radio text-amber-600">
+                        <span class="ml-2 text-gray-300">Company</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 1. Personal Information Section -->
+            <section>
+                <h2 class="text-2xl font-bold text-amber-400 mb-4">Personal Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="input-group">
+                        <label for="firstName">First Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                        <p class="error-message hidden" id="firstNameError"></p>
+                    </div>
+                    <div class="input-group">
+                        <label for="lastName">Last Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+                        <p class="error-message hidden" id="lastNameError"></p>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="streetAddress">Street Address <span class="text-red-500">*</span></label>
+                    <input type="text" id="streetAddress" name="streetAddress" placeholder="123 Auction House Lane" required>
+                    <p class="error-message hidden" id="streetAddressError"></p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="input-group">
+                        <label for="city">City <span class="text-red-500">*</span></label>
+                        <input type="text" id="city" name="city" placeholder="London" required>
+                        <p class="error-message hidden" id="cityError"></p>
+                    </div>
+                    <div class="input-group">
+                        <label for="state">State/Province <span class="text-red-500">*</span></label>
+                        <input type="text" id="state" name="state" placeholder="Greater London" required>
+                        <p class="error-message hidden" id="stateError"></p>
+                    </div>
+                    <div class="input-group">
+                        <label for="postalCode">Postal Code <span class="text-red-500">*</span></label>
+                        <input type="text" id="postalCode" name="postalCode" placeholder="SW1A 0AA" required>
+                        <p class="error-message hidden" id="postalCodeError"></p>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="country">Country <span class="text-red-500">*</span></label>
+                    <select id="country" name="country" required>
+                        <option value="">Select Country</option>
+                        <!-- Countries will be dynamically inserted here by JavaScript -->
+                    </select>
+                    <p class="error-message hidden" id="countryError"></p>
+                </div>
+                <div class="input-group">
+                    <label for="dob">Date of Birth <span class="text-red-500">*</span></label>
+                    <input type="date" id="dob" name="dob" required>
+                    <p class="error-message hidden" id="dobError"></p>
+                </div>
+                <div class="input-group">
+                    <label for="nationalId">National ID or Government-issued Document (Optional)</label>
+                    <div class="file-upload-box" onclick="document.getElementById('nationalId').click()">
+                        <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                        <p class="text-gray-400">Drag & Drop or Click to Upload (JPG, PNG, PDF)</p>
+                        <input type="file" id="nationalId" name="nationalId" accept=".jpg,.jpeg,.png,.pdf">
+                        <p class="text-gray-400 text-sm mt-2" id="nationalIdFileName"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Contact Information -->
+            <section>
+                <h2 class="text-2xl font-bold text-amber-400 mb-4">Contact Information</h2>
+                <div class="input-group">
+                    <label for="email">Email Address <span class="text-red-500">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="your@example.com" required>
+                    <p class="error-message hidden" id="emailError"></p>
+                </div>
+                <div class="input-group">
+                    <label for="mobileNumber">Mobile Phone Number <span class="text-red-500">*</span></label>
+                    <div class="otp-input-group">
+                        <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="+1 (555) 123-4567" required>
+                        <button type="button" id="sendOtpButton" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition">Send OTP</button>
+                    </div>
+                    <p class="error-message hidden" id="mobileNumberError"></p>
+                </div>
+                <div class="input-group hidden" id="otpVerificationGroup">
+                    <label for="otp">Enter OTP <span class="text-red-500">*</span></label>
+                    <div class="otp-input-group">
+                        <input type="text" id="otp" name="otp" placeholder="XXXXXX" maxlength="6">
+                        <button type="button" id="verifyOtpButton" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition">Verify OTP</button>
+                    </div>
+                    <p class="error-message hidden" id="otpError"></p>
+                </div>
+                <div class="input-group">
+                    <label for="altContactNumber">Alternate Contact Number (Optional)</label>
+                    <input type="tel" id="altContactNumber" name="altContactNumber" placeholder="+1 (555) 987-6543">
+                </div>
+            </section>
+
+            <!-- 3. Account Security -->
+            <section>
+                <h2 class="text-2xl font-bold text-amber-400 mb-4">Account Security</h2>
+                <div class="input-group">
+                    <label for="password">Password <span class="text-red-500">*</span></label>
+                    <div class="password-input-group relative">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required minlength="8">
+                        <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <p class="error-message hidden" id="passwordError"></p>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">Confirm Password <span class="text-red-500">*</span></label>
+                    <div class="password-input-group relative">
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                        <button type="button" id="toggleConfirmPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <p class="error-message hidden" id="confirmPasswordError"></p>
+                </div>
+            </section>
+
+            <!-- 4. Company Information (Conditional) -->
+            <!-- <section id="companyInfoSection" class="hidden">
+                <h2 class="text-2xl font-bold text-amber-400 mb-4">Company Information</h2>
+                <div class="input-group">
+                    <label for="companyName">Company Name <span class="text-red-500">*</span></label>
+                    <input type="text" id="companyName" name="companyName" placeholder="Antique Auction Corp." required>
+                    <p class="error-message hidden" id="companyNameError"></p>
+                </div>
+                <div class="input-group">
+                    <label for="taxId">Registration/Tax ID Number <span class="text-red-500">*</span></label>
+                    <input type="text" id="taxId" name="taxId" placeholder="ABC12345XYZ" required>
+                    <p class="error-message hidden" id="taxIdError"></p>
+                </div>
+                <div class="input-group">
+                    <label for="companyAddress">Company Address <span class="text-red-500">*</span></label>
+                    <input type="text" id="companyAddress" name="companyAddress" placeholder="456 Business Park, City, Country" required>
+                    <p class="error-message hidden" id="companyAddressError"></p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="input-group">
+                        <label for="authContactName">Authorized Contact Person Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="authContactName" name="authContactName" placeholder="Jane Doe" required>
+                        <p class="error-message hidden" id="authContactNameError"></p>
+                    </div>
+                    <div class="input-group">
+                        <label for="authContactRole">Authorized Contact Person Role <span class="text-red-500">*</span></label>
+                        <input type="text" id="authContactRole" name="authContactRole" placeholder="CEO / Director" required>
+                        <p class="error-message hidden" id="authContactRoleError"></p>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="businessProof">Upload Business Registration Proof (Optional)</label>
+                    <div class="file-upload-box" onclick="document.getElementById('businessProof').click()">
+                        <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                        <p class="text-gray-400">Drag & Drop or Click to Upload (PDF, JPG, PNG)</p>
+                        <input type="file" id="businessProof" name="businessProof" accept=".pdf,.jpg,.jpeg,.png">
+                        <p class="text-gray-400 text-sm mt-2" id="businessProofFileName"></p>
+                    </div>
+                </div>
+            </section> -->
+
+            <!-- 5. Digital Signature Upload -->
+            <!-- <section>
+                <h2 class="text-2xl font-bold text-amber-400 mb-4">Digital Signature</h2>
+                <div class="input-group">
+                    <label class="text-white text-lg font-bold mb-2">Upload or Draw Your Signature:</label>
+                    <div class="flex flex-wrap gap-4 mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="signatureMethod" value="upload" class="form-radio text-amber-600" checked>
+                            <span class="ml-2 text-gray-300">Upload File</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="signatureMethod" value="draw" class="form-radio text-amber-600">
+                            <span class="ml-2 text-gray-300">Draw Signature</span>
+                        </label>
+                    </div>
+
+                    <div id="signatureUploadSection">
+                        <div class="file-upload-box" onclick="document.getElementById('signatureFile').click()">
+                            <i class="fas fa-signature text-gray-400 text-3xl mb-2"></i>
+                            <p class="text-gray-400">Drag & Drop or Click to Upload Signature (JPG, PNG, PDF)</p>
+                            <input type="file" id="signatureFile" name="signatureFile" accept=".jpg,.jpeg,.png,.pdf">
+                            <p class="text-gray-400 text-sm mt-2" id="signatureFileName"></p>
+                        </div>
+                    </div>
+
+                    <div id="signatureDrawSection" class="hidden">
+                        <canvas id="signatureCanvas" width="400" height="150" class="w-full"></canvas>
+                        <div class="flex gap-2 mt-2">
+                            <button type="button" id="clearSignature" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md transition">Clear</button>
+                            <button type="button" id="saveSignature" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition">Save Drawn Signature</button>
+                        </div>
+                        <p class="error-message hidden" id="signatureError"></p>
+                    </div>
+                </div>
+            </section> -->
+
+            <!-- 6. Earnest Money Deposit (EMD) -->
+            <!-- <section>
+                <h2 class="text-2xl font-bold text-amber-400 mb-4">Earnest Money Deposit (EMD)</h2>
+                <p class="text-gray-300 mb-4">
+                    A refundable Earnest Money Deposit (EMD) is required to ensure serious participation in our auctions. This amount will be held and can be refunded as per our policy.
+                </p>
+                <div class="input-group">
+                    <label for="emdAmount">EMD Amount <span class="text-red-500">*</span></label>
+                    <input type="text" id="emdAmount" name="emdAmount" value="$500.00" readonly class="bg-gray-600 cursor-not-allowed">
+                </div>
+                <button type="button" id="proceedToEmdPayment" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                    Proceed to EMD Payment
+                </button>
+                <p class="text-gray-400 text-sm mt-4">
+                    <i class="fas fa-info-circle mr-1"></i> Please review our <a href="#" class="text-amber-400 hover:underline" id="emdPolicyLink">EMD Refund/Cancellation Policy</a> before proceeding.
+                </p>
+                <p class="error-message hidden" id="emdError"></p>
+            </section> -->
+
+            <!-- 7. Verification Mechanisms (CAPTCHA) -->
+            <section>
+                <h2 class="text-2xl font-bold text-amber-400 mb-4">Security Verification</h2>
+                <div class="input-group">
+                    <label for="captchaInput">Please enter the text below <span class="text-red-500">*</span></label>
+                    <div class="flex items-center gap-4">
+                        <span id="captchaDisplay" class="bg-gray-600 text-white text-xl font-bold px-4 py-2 rounded-md select-none"></span>
+                        <button type="button" id="refreshCaptcha" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-3 rounded-md transition"><i class="fas fa-sync-alt"></i></button>
+                        <input type="text" id="captchaInput" name="captchaInput" placeholder="Enter CAPTCHA" class="flex-grow" required>
+                    </div>
+                    <p class="error-message hidden" id="captchaError"></p>
+                </div>
+            </section>
+
+            <!-- 8. Terms and Conditions -->
+            <section>
+                <div class="input-group flex items-center">
+                    <input type="checkbox" id="agreeTerms" name="agreeTerms" class="form-checkbox text-amber-600 h-5 w-5" required>
+                    <label for="agreeTerms" class="ml-2 text-gray-300">I agree to the <a href="#" class="text-amber-400 hover:underline" id="termsLink">Terms and Conditions</a> <span class="text-red-500">*</span></label>
+                </div>
+                <p class="error-message hidden" id="termsError"></p>
+            </section>
+
+            <!-- 9. Submit Button -->
+            <div class="text-center">
+                <button type="submit" id="completeRegistration" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition duration-300">
+                    Complete Registration
+                </button>
+            </div>
+            <div class="text-center mt-6">
+                <p class="text-gray-400">Already have an account? <a href="#" class="text-amber-400 hover:underline">Login here</a></p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 class="text-2xl font-bold text-white mb-4">Terms and Conditions</h2>
+            <div class="text-gray-300 text-sm leading-relaxed" style="max-height: 60vh; overflow-y: auto;">
+                <p class="mb-2">Welcome to Antique Auction System. By accessing or using our platform, you agree to be bound by these Terms and Conditions ("Terms"). Please read them carefully.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">1. Acceptance of Terms</h3>
+                <p class="mb-2">By registering for an account, placing a bid, or otherwise using our services, you acknowledge that you have read, understood, and agree to be bound by these Terms, as well as our Privacy Policy and any other policies referenced herein.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">2. Eligibility</h3>
+                <p class="mb-2">You must be at least 18 years old and capable of forming a legally binding contract to use our services. We reserve the right to refuse service to anyone at our discretion.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">3. Registration and Account Security</h3>
+                <p class="mb-2">You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete. You are responsible for safeguarding your password and for any activities or actions under your account.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">4. Bidding and Auction Rules</h3>
+                <p class="mb-2">All bids are legally binding. Once a bid is placed, it cannot be retracted. The highest bidder at the close of the auction, subject to any reserve prices, will be the winning bidder. We reserve the right to cancel or postpone auctions at our discretion.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">5. Earnest Money Deposit (EMD)</h3>
+                <p class="mb-2">A refundable Earnest Money Deposit (EMD) may be required to participate in certain auctions. The EMD is intended to ensure serious participation. The EMD will be refunded within [X] business days if you do not win an auction or if you withdraw your registration in accordance with our EMD Policy. Failure to complete a purchase after winning an auction may result in forfeiture of your EMD.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">6. Payment and Delivery</h3>
+                <p class="mb-2">Payment for won items must be made within [X] days of auction close. We accept various payment methods. Delivery options and associated costs will be specified for each item. International buyers are responsible for customs duties and taxes.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">7. Intellectual Property</h3>
+                <p class="mb-2">All content on the platform, including text, graphics, logos, and images, is our property or the property of our licensors and is protected by intellectual property laws.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">8. Disclaimers and Limitation of Liability</h3>
+                <p class="mb-2">Our services are provided "as is" without warranties of any kind. We are not responsible for any errors, omissions, or inaccuracies in item descriptions. Our liability is limited to the maximum extent permitted by law.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">9. Governing Law</h3>
+                <p class="mb-2">These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.</p>
+                <h3 class="font-bold text-white mt-4 mb-2">10. Changes to Terms</h3>
+                <p class="mb-2">We reserve the right to modify these Terms at any time. Your continued use of the platform after any such changes constitutes your acceptance of the new Terms.</p>
+                <p class="mt-4">For any questions regarding these Terms, please contact us at <a href="mailto:legal@antiqueauction.com" class="text-amber-400 hover:underline">legal@antiqueauction.com</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Helper function to show/hide error messages
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+
+        function hideError(elementId) {
+            document.getElementById(elementId).classList.add('hidden');
+        }
+
+        // Form elements
+        const registrationForm = document.getElementById('registrationForm');
+        const userTypeRadios = document.querySelectorAll('input[name="userType"]');
+        // const companyInfoSection = document.getElementById('companyInfoSection');
+        // const nationalIdInput = document.getElementById('nationalId');
+        // const nationalIdFileName = document.getElementById('nationalIdFileName');
+        // const businessProofInput = document.getElementById('businessProof');
+        // const businessProofFileName = document.getElementById('businessProofFileName');
+        // const signatureMethodRadios = document.querySelectorAll('input[name="signatureMethod"]');
+        // const signatureUploadSection = document.getElementById('signatureUploadSection');
+        // const signatureDrawSection = document.getElementById('signatureDrawSection');
+        // const signatureFile = document.getElementById('signatureFile');
+        // const signatureFileName = document.getElementById('signatureFileName');
+        // const signatureCanvas = document.getElementById('signatureCanvas');
+        // const clearSignatureButton = document.getElementById('clearSignature');
+        // const saveSignatureButton = document.getElementById('saveSignature');
+        const signatureError = document.getElementById('signatureError');
+        const sendOtpButton = document.getElementById('sendOtpButton');
+        const otpVerificationGroup = document.getElementById('otpVerificationGroup');
+        const verifyOtpButton = document.getElementById('verifyOtpButton');
+        const otpInput = document.getElementById('otp');
+        const captchaDisplay = document.getElementById('captchaDisplay');
+        const refreshCaptchaButton = document.getElementById('refreshCaptcha');
+        const captchaInput = document.getElementById('captchaInput');
+        const agreeTermsCheckbox = document.getElementById('agreeTerms');
+        const termsLink = document.getElementById('termsLink');
+        const termsModal = document.getElementById('termsModal');
+        const closeModalButton = document.querySelector('#termsModal .close-button');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const togglePasswordButton = document.getElementById('togglePassword');
+        const toggleConfirmPasswordButton = document.getElementById('toggleConfirmPassword');
+        // const proceedToEmdPaymentButton = document.getElementById('proceedToEmdPayment');
+        // const emdError = document.getElementById('emdError');
+        const countrySelect = document.getElementById('country'); // Get country select element
+        const dobInput = document.getElementById('dob'); // Get DOB input element
+
+
+        let drawnSignatureDataURL = null; // To store drawn signature
+        let currentCaptcha = '';
+        let otpSent = false;
+        let otpVerified = false;
+        let emdPaid = false; // New flag for EMD payment
+
+        // --- Country List Data ---
+        const countries = [
+            { name: "Afghanistan", code: "AF" }, { name: "Albania", code: "AL" }, { name: "Algeria", code: "DZ" },
+            { name: "Andorra", code: "AD" }, { name: "Angola", code: "AO" }, { name: "Antigua and Barbuda", code: "AG" },
+            { name: "Argentina", code: "AR" }, { name: "Armenia", code: "AM" }, { name: "Australia", code: "AU" },
+            { name: "Austria", code: "AT" }, { name: "Azerbaijan", code: "AZ" }, { name: "Bahamas", code: "BS" },
+            { name: "Bahrain", code: "BH" }, { name: "Bangladesh", code: "BD" }, { name: "Barbados", code: "BB" },
+            { name: "Belarus", code: "BY" }, { name: "Belgium", code: "BE" }, { name: "Belize", code: "BZ" },
+            { name: "Benin", code: "BJ" }, { name: "Bhutan", code: "BT" }, { name: "Bolivia", code: "BO" },
+            { name: "Bosnia and Herzegovina", code: "BA" }, { name: "Botswana", code: "BW" }, { name: "Brazil", code: "BR" },
+            { name: "Brunei Darussalam", code: "BN" }, { name: "Bulgaria", code: "BG" }, { name: "Burkina Faso", code: "BF" },
+            { name: "Burundi", code: "BI" }, { name: "Cambodia", code: "KH" }, { name: "Cameroon", code: "CM" },
+            { name: "Canada", code: "CA" }, { name: "Cape Verde", code: "CV" }, { name: "Central African Republic", code: "CF" },
+            { name: "Chad", code: "TD" }, { name: "Chile", code: "CL" }, { name: "China", code: "CN" },
+            { name: "Colombia", code: "CO" }, { name: "Comoros", code: "KM" }, { name: "Congo (Brazzaville)", code: "CG" },
+            { name: "Congo (Kinshasa)", code: "CD" }, { name: "Costa Rica", code: "CR" }, { name: "Côte d'Ivoire", code: "CI" },
+            { name: "Croatia", code: "HR" }, { name: "Cuba", code: "CU" }, { name: "Cyprus", code: "CY" },
+            { name: "Czech Republic", code: "CZ" }, { name: "Denmark", code: "DK" }, { name: "Djibouti", code: "DJ" },
+            { name: "Dominica", code: "DM" }, { name: "Dominican Republic", code: "DO" }, { name: "Ecuador", code: "EC" },
+            { name: "Egypt", code: "EG" }, { name: "El Salvador", code: "SV" }, { name: "Equatorial Guinea", code: "GQ" },
+            { name: "Eritrea", code: "ER" }, { name: "Estonia", code: "EE" }, { name: "Eswatini", code: "SZ" },
+            { name: "Ethiopia", code: "ET" }, { name: "Fiji", code: "FJ" }, { name: "Finland", code: "FI" },
+            { name: "France", code: "FR" }, { name: "Gabon", code: "GA" }, { name: "Gambia", code: "GM" },
+            { name: "Georgia", code: "GE" }, { name: "Germany", code: "DE" }, { name: "Ghana", code: "GH" },
+            { name: "Greece", code: "GR" }, { name: "Grenada", code: "GD" }, { name: "Guatemala", code: "GT" },
+            { name: "Guinea", code: "GN" }, { name: "Guinea-Bissau", code: "GW" }, { name: "Guyana", code: "GY" },
+            { name: "Haiti", code: "HT" }, { name: "Honduras", code: "HN" }, { name: "Hungary", code: "HU" },
+            { name: "Iceland", code: "IS" }, { name: "India", code: "IN" }, { name: "Indonesia", code: "ID" },
+            { name: "Iran", code: "IR" }, { name: "Iraq", code: "IQ" }, { name: "Ireland", code: "IE" },
+            { name: "Israel", code: "IL" }, { name: "Italy", code: "IT" }, { name: "Jamaica", code: "JM" },
+            { name: "Japan", code: "JP" }, { name: "Jordan", code: "JO" }, { name: "Kazakhstan", code: "KZ" },
+            { name: "Kenya", code: "KE" }, { name: "Kiribati", code: "KI" }, { name: "Korea (North)", code: "KP" },
+            { name: "Korea (South)", code: "KR" }, { name: "Kuwait", code: "KW" }, { name: "Kyrgyzstan", code: "KG" },
+            { name: "Laos", code: "LA" }, { name: "Latvia", code: "LV" }, { name: "Lebanon", code: "LB" },
+            { name: "Lesotho", code: "LS" }, { name: "Liberia", code: "LR" }, { name: "Libya", code: "LY" },
+            { name: "Liechtenstein", code: "LI" }, { name: "Lithuania", code: "LT" }, { name: "Luxembourg", code: "LU" },
+            { name: "Madagascar", code: "MG" }, { name: "Malawi", code: "MW" }, { name: "Malaysia", code: "MY" },
+            { name: "Maldives", code: "MV" }, { name: "Mali", code: "ML" }, { name: "Malta", code: "MT" },
+            { name: "Marshall Islands", code: "MH" }, { name: "Mauritania", code: "MR" }, { name: "Mauritius", code: "MU" },
+            { name: "Mexico", code: "MX" }, { name: "Micronesia", code: "FM" }, { name: "Moldova", code: "MD" },
+            { name: "Monaco", code: "MC" }, { name: "Mongolia", code: "MN" }, { name: "Montenegro", code: "ME" },
+            { name: "Morocco", code: "MA" }, { name: "Mozambique", code: "MZ" }, { name: "Myanmar", code: "MM" },
+            { name: "Namibia", code: "NA" }, { name: "Nauru", code: "NR" }, { name: "Nepal", code: "NP" },
+            { name: "Netherlands", code: "NL" }, { name: "New Zealand", code: "NZ" }, { name: "Nicaragua", code: "NI" },
+            { name: "Niger", code: "NE" }, { name: "Nigeria", code: "NG" }, { name: "North Macedonia", code: "MK" },
+            { name: "Norway", code: "NO" }, { name: "Oman", code: "OM" }, { name: "Pakistan", code: "PK" },
+            { name: "Palau", code: "PW" }, { name: "Palestine", code: "PS" }, { name: "Panama", code: "PA" },
+            { name: "Papua New Guinea", code: "PG" }, { name: "Paraguay", code: "PY" }, { name: "Peru", code: "PE" },
+            { name: "Philippines", code: "PH" }, { name: "Poland", code: "PL" }, { name: "Portugal", code: "PT" },
+            { name: "Qatar", code: "QA" }, { name: "Romania", code: "RO" }, { name: "Russia", code: "RU" },
+            { name: "Rwanda", code: "RW" }, { name: "Saint Kitts and Nevis", code: "KN" }, { name: "Saint Lucia", code: "LC" },
+            { name: "Saint Vincent and the Grenadines", code: "VC" }, { name: "Samoa", code: "WS" }, { name: "San Marino", code: "SM" },
+            { name: "Sao Tome and Principe", code: "ST" }, { name: "Saudi Arabia", code: "SA" }, { name: "Senegal", code: "SN" },
+            { name: "Serbia", code: "RS" }, { name: "Seychelles", code: "SC" }, { name: "Sierra Leone", code: "SL" },
+            { name: "Singapore", code: "SG" }, { name: "Slovakia", code: "SK" }, { name: "Slovenia", code: "SI" },
+            { name: "Solomon Islands", code: "SB" }, { name: "Somalia", code: "SO" }, { name: "South Africa", code: "ZA" },
+            { name: "South Sudan", code: "SS" }, { name: "Spain", code: "ES" }, { name: "Sri Lanka", code: "LK" },
+            { name: "Sudan", code: "SD" }, { name: "Suriname", code: "SR" }, { name: "Sweden", code: "SE" },
+            { name: "Switzerland", code: "CH" }, { name: "Syria", code: "SY" }, { name: "Taiwan", code: "TW" },
+            { name: "Tajikistan", code: "TJ" }, { name: "Tanzania", code: "TZ" }, { name: "Thailand", code: "TH" },
+            { name: "Timor-Leste", code: "TL" }, { name: "Togo", code: "TG" }, { name: "Tonga", code: "TO" },
+            { name: "Trinidad and Tobago", code: "TT" }, { name: "Tunisia", code: "TN" }, { name: "Turkey", code: "TR" },
+            { name: "Turkmenistan", code: "TM" }, { name: "Tuvalu", code: "TV" }, { name: "Uganda", code: "UG" },
+            { name: "Ukraine", code: "UA" }, { name: "United Arab Emirates", code: "AE" }, { name: "United Kingdom", code: "GB" },
+            { name: "United States", code: "US" }, { name: "Uruguay", code: "UY" }, { name: "Uzbekistan", code: "UZ" },
+            { name: "Vanuatu", code: "VU" }, { name: "Vatican City", code: "VA" }, { name: "Venezuela", code: "VE" },
+            { name: "Vietnam", code: "VN" }, { name: "Yemen", code: "YE" }, { name: "Zambia", code: "ZM" },
+            { name: "Zimbabwe", code: "ZW" }
+        ];
+
+        // --- Input Event Listeners for instant error clearing ---
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', (event) => {
+                const errorId = event.target.id + 'Error';
+                if (document.getElementById(errorId)) {
+                    hideError(errorId);
+                }
+            });
+        });
+        otpInput.addEventListener('input', () => hideError('otpError'));
+        agreeTermsCheckbox.addEventListener('change', () => hideError('termsError'));
+
+
+        // --- Populate Countries Dropdown ---
+        function populateCountries() {
+            countrySelect.innerHTML = '<option value="">Select Country</option>';
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country.code;
+                option.textContent = country.name;
+                countrySelect.appendChild(option);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', populateCountries);
+
+
+        // --- User Type Toggle ---
+        // userTypeRadios.forEach(radio => {
+        //     radio.addEventListener('change', (event) => {
+        //         if (event.target.value === 'company') {
+        //             companyInfoSection.classList.remove('hidden');
+        //             companyInfoSection.querySelectorAll('input[required]').forEach(input => input.setAttribute('data-required-company', 'true'));
+        //         } else {
+        //             companyInfoSection.classList.add('hidden');
+        //             companyInfoSection.querySelectorAll('input[data-required-company]').forEach(input => input.removeAttribute('data-required-company'));
+        //         }
+        //     });
+        // });
+
+        // --- File Upload Name Display ---
+        // nationalIdInput.addEventListener('change', (event) => {
+        //     nationalIdFileName.textContent = event.target.files.length > 0 ? event.target.files[0].name : '';
+        // });
+        // businessProofInput.addEventListener('change', (event) => {
+        //     businessProofFileName.textContent = event.target.files.length > 0 ? event.target.files[0].name : '';
+        // });
+        // signatureFile.addEventListener('change', (event) => {
+        //     signatureFileName.textContent = event.target.files.length > 0 ? event.target.files[0].name : '';
+        //     hideError('signatureError');
+        // });
+
+        // --- Digital Signature Method Toggle ---
+        // signatureMethodRadios.forEach(radio => {
+        //     radio.addEventListener('change', (event) => {
+        //         if (event.target.value === 'upload') {
+        //             signatureUploadSection.classList.remove('hidden');
+        //             signatureDrawSection.classList.add('hidden');
+        //             drawnSignatureDataURL = null; // Clear drawn signature if switching
+        //             hideError('signatureError');
+        //         } else {
+        //             signatureUploadSection.classList.add('hidden');
+        //             signatureDrawSection.classList.remove('hidden');
+        //             initSignatureCanvas(); // Only initialize once
+        //             hideError('signatureError');
+        //         }
+        //     });
+        // });
+
+        // --- Signature Canvas Drawing Logic ---
+        // let ctx = null;
+        // let drawing = false;
+        // let canvasInitialized = false;
+
+        // function initSignatureCanvas() {
+        //     if (canvasInitialized) return; // Prevent multiple initializations
+        //     ctx = signatureCanvas.getContext('2d');
+        //     ctx.lineWidth = 2;
+        //     ctx.lineCap = 'round';
+        //     ctx.strokeStyle = '#f5f5f5'; // White color for signature
+
+        //     signatureCanvas.addEventListener('mousedown', startDrawing);
+        //     signatureCanvas.addEventListener('mouseup', stopDrawing);
+        //     signatureCanvas.addEventListener('mousemove', draw);
+        //     signatureCanvas.addEventListener('mouseout', stopDrawing);
+        //     signatureCanvas.addEventListener('touchstart', startDrawing);
+        //     signatureCanvas.addEventListener('touchend', stopDrawing);
+        //     signatureCanvas.addEventListener('touchmove', draw);
+
+        //     clearCanvas();
+        //     canvasInitialized = true;
+        // }
+
+        // function getEventPos(event) {
+        //     const rect = signatureCanvas.getBoundingClientRect();
+        //     if (event.touches && event.touches.length > 0) {
+        //         return {
+        //             x: event.touches[0].clientX - rect.left,
+        //             y: event.touches[0].clientY - rect.top
+        //         };
+        //     }
+        //     return {
+        //         x: event.clientX - rect.left,
+        //         y: event.clientY - rect.top
+        //     };
+        // }
+
+        // function startDrawing(event) {
+        //     drawing = true;
+        //     ctx.beginPath();
+        //     const pos = getEventPos(event);
+        //     ctx.moveTo(pos.x, pos.y);
+        //     event.preventDefault();
+        // }
+
+        // function draw(event) {
+        //     if (!drawing) return;
+        //     const pos = getEventPos(event);
+        //     ctx.lineTo(pos.x, pos.y);
+        //     ctx.stroke();
+        //     event.preventDefault();
+        // }
+
+        // function stopDrawing() {
+        //     drawing = false;
+        // }
+
+        // function clearCanvas() {
+        //     ctx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+        //     drawnSignatureDataURL = null;
+        // }
+
+        // clearSignatureButton.addEventListener('click', clearCanvas);
+
+        // saveSignatureButton.addEventListener('click', () => {
+        //     if (isCanvasBlank(signatureCanvas)) {
+        //         showError('signatureError', 'Please draw your signature before saving.');
+        //         drawnSignatureDataURL = null;
+        //     } else {
+        //         drawnSignatureDataURL = signatureCanvas.toDataURL('image/png');
+        //         hideError('signatureError');
+        //         alert('Signature saved!');
+        //     }
+        // });
+
+        // function isCanvasBlank(canvas) {
+        //     const blank = document.createElement('canvas');
+        //     blank.width = canvas.width;
+        //     blank.height = canvas.height;
+        //     return canvas.toDataURL() === blank.toDataURL();
+        // }
+
+        // if (document.querySelector('input[name="signatureMethod"]:checked').value === 'draw') {
+        //     initSignatureCanvas();
+        // }
+
+
+        // --- OTP Verification ---
+        sendOtpButton.addEventListener('click', () => {
+            const mobileNumber = document.getElementById('mobileNumber').value.trim();
+            if (!mobileNumber) {
+                showError('mobileNumberError', 'Mobile number is required to send OTP.');
+                return;
+            }
+            if (!/^\+?[0-9\s\-()]{7,20}$/.test(mobileNumber)) {
+                showError('mobileNumberError', 'Please enter a valid mobile number.');
+                return;
+            }
+            hideError('mobileNumberError');
+
+            sendOtpButton.disabled = true;
+            sendOtpButton.textContent = 'Sending...';
+            otpSent = false;
+            otpVerified = false;
+            otpInput.value = '';
+            otpVerificationGroup.classList.remove('hidden');
+
+            setTimeout(() => {
+                alert('OTP sent to ' + mobileNumber + '. (Dummy OTP: 123456)');
+                sendOtpButton.textContent = 'Resend OTP';
+                sendOtpButton.disabled = false;
+                otpSent = true;
+            }, 2000);
+        });
+
+        verifyOtpButton.addEventListener('click', () => {
+            const otp = otpInput.value.trim();
+            if (!otp) {
+                showError('otpError', 'Please enter the OTP.');
+                return;
+            }
+            if (otp.length !== 6 || !/^\d+$/.test(otp)) {
+                showError('otpError', 'OTP must be 6 digits.');
+                return;
+            }
+            hideError('otpError');
+
+            verifyOtpButton.disabled = true;
+            verifyOtpButton.textContent = 'Verifying...';
+
+            setTimeout(() => {
+                if (otp === '123456') {
+                    alert('OTP Verified Successfully!');
+                    otpVerified = true;
+                    verifyOtpButton.textContent = 'Verified!';
+                    verifyOtpButton.classList.remove('bg-green-600');
+                    verifyOtpButton.classList.add('bg-gray-500');
+                    otpInput.disabled = true;
+                    sendOtpButton.disabled = true;
+                } else {
+                    showError('otpError', 'Invalid OTP. Please try again.');
+                    otpVerified = false;
+                    verifyOtpButton.textContent = 'Verify OTP';
+                }
+                verifyOtpButton.disabled = false;
+            }, 1500);
+        });
+
+        // --- Password Visibility Toggle ---
+        togglePasswordButton.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePasswordButton.querySelector('i').classList.toggle('fa-eye');
+            togglePasswordButton.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        toggleConfirmPasswordButton.addEventListener('click', () => {
+            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordInput.setAttribute('type', type);
+            toggleConfirmPasswordButton.querySelector('i').classList.toggle('fa-eye');
+            toggleConfirmPasswordButton.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+
+        // --- CAPTCHA Logic ---
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            currentCaptcha = captcha;
+            captchaDisplay.textContent = captcha;
+        }
+        generateCaptcha();
+
+        refreshCaptchaButton.addEventListener('click', generateCaptcha);
+
+        // --- EMD Payment Simulation ---
+        // proceedToEmdPaymentButton.addEventListener('click', () => {
+        //     emdPaid = true;
+        //     hideError('emdError');
+        //     proceedToEmdPaymentButton.textContent = 'Payment Completed!';
+        //     proceedToEmdPaymentButton.classList.remove('bg-green-600');
+        //     proceedToEmdPaymentButton.classList.add('bg-gray-500');
+        //     proceedToEmdPaymentButton.disabled = true;
+        //     alert('EMD Payment Simulated Successfully!');
+        // });
+
+
+        // --- Terms and Conditions Modal ---
+        termsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            termsModal.style.display = 'flex';
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            termsModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === termsModal) {
+                termsModal.style.display = 'none';
+            }
+        });
+
+        // --- Form Submission and Validation ---
+        registrationForm.addEventListener('submit', function(event) {
+            // event.preventDefault();
+
+            let formIsValid = true;
+
+            document.querySelectorAll('.error-message').forEach(el => el.classList.add('hidden'));
+
+
+            // --- Personal Information Validation ---
+            const requiredFields = [
+                { id: 'firstName', name: 'First Name' },
+                { id: 'lastName', name: 'Last Name' },
+                { id: 'streetAddress', name: 'Street Address' },
+                { id: 'city', name: 'City' },
+                { id: 'state', name: 'State/Province' },
+                { id: 'postalCode', name: 'Postal Code' },
+                { id: 'country', name: 'Country' },
+                { id: 'dob', name: 'Date of Birth' }
+            ];
+
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field.id);
+                if (!input.value.trim()) {
+                    showError(`${field.id}Error`, `${field.name} is required.`);
+                    formIsValid = false;
+                }
+            });
+
+            // Date of Birth validation (future date and age check)
+            if (dobInput.value) {
+                const today = new Date();
+                const birthDate = new Date(dobInput.value);
+                const minAgeDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+                if (birthDate > today) {
+                    showError('dobError', 'Date of Birth cannot be in the future.');
+                    formIsValid = false;
+                } else if (birthDate > minAgeDate) {
+                    showError('dobError', 'You must be at least 18 years old to register.');
+                    formIsValid = false;
+                }
+            }
+
+
+            // --- Contact Information Validation ---
+            const emailInput = document.getElementById('email');
+            if (!emailInput.value.trim()) {
+                showError('emailError', 'Email Address is required.');
+                formIsValid = false;
+            } else if (!/^\S+@\S+\.\S+$/.test(emailInput.value)) {
+                showError('emailError', 'Please enter a valid email address.');
+                formIsValid = false;
+            }
+
+            const mobileNumberInput = document.getElementById('mobileNumber');
+            if (!mobileNumberInput.value.trim()) {
+                showError('mobileNumberError', 'Mobile Phone Number is required.');
+                formIsValid = false;
+            } else if (!otpVerified) {
+                showError('mobileNumberError', 'Please verify your mobile number with OTP.');
+                formIsValid = false;
+            }
+
+            // --- Account Security Validation ---
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (!password.trim()) {
+                showError('passwordError', 'Password is required.');
+                formIsValid = false;
+            } else if (password.length < 8) {
+                showError('passwordError', 'Password must be at least 8 characters long.');
+                formIsValid = false;
+            }
+
+            if (!confirmPassword.trim()) {
+                showError('confirmPasswordError', 'Confirm Password is required.');
+                formIsValid = false;
+            } else if (password !== confirmPassword) {
+                showError('confirmPasswordError', 'Passwords do not match.');
+                formIsValid = false;
+            }
+
+
+            // --- Company Information Validation (if visible) ---
+            // const selectedUserType = document.querySelector('input[name="userType"]:checked').value;
+            // if (selectedUserType === 'company') {
+            //     const companyRequiredFields = [
+            //         { id: 'companyName', name: 'Company Name' },
+            //         { id: 'taxId', name: 'Registration/Tax ID Number' },
+            //         { id: 'companyAddress', name: 'Company Address' },
+            //         { id: 'authContactName', name: 'Authorized Contact Person Name' },
+            //         { id: 'authContactRole', name: 'Authorized Contact Person Role' }
+            //     ];
+            //     companyRequiredFields.forEach(field => {
+            //         const input = document.getElementById(field.id);
+            //         if (!input.value.trim()) {
+            //             showError(`${field.id}Error`, `${field.name} is required for company registration.`);
+            //             formIsValid = false;
+            //         }
+            //     });
+            // }
+
+            // --- Digital Signature Validation ---
+            // const selectedSignatureMethod = document.querySelector('input[name="signatureMethod"]:checked').value;
+            // if (selectedSignatureMethod === 'upload') {
+            //     if (signatureFile.files.length === 0) {
+            //         showError('signatureError', 'Please upload your digital signature file.');
+            //         formIsValid = false;
+            //     }
+            // } else if (selectedSignatureMethod === 'draw') {
+            //     if (!drawnSignatureDataURL) {
+            //         showError('signatureError', 'Please draw and save your digital signature.');
+            //         formIsValid = false;
+            //     }
+            // }
+
+            // --- EMD Payment Validation ---
+            // if (!emdPaid) {
+            //     showError('emdError', 'EMD payment is required to complete registration.');
+            //     formIsValid = false;
+            // }
+
+            // --- CAPTCHA Validation ---
+            if (captchaInput.value.trim().toLowerCase() !== currentCaptcha.toLowerCase()) {
+                showError('captchaError', 'Incorrect CAPTCHA. Please try again.');
+                generateCaptcha();
+                formIsValid = false;
+            }
+
+            // --- Terms and Conditions Validation ---
+            if (!agreeTermsCheckbox.checked) {
+                showError('termsError', 'You must agree to the Terms and Conditions.');
+                formIsValid = false;
+            }
+
+            if (formIsValid) {
+            // Show success toast instead of alert
+            alert('Registration Successful! Redirecting to login page...');
+
+            // Submit form
+            registrationForm.submit();
+
+            // After form submit → redirect
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 1500);
+
+            // Reset states only after redirect
+            registrationForm.reset();
+            generateCaptcha();
+
+            otpVerificationGroup.classList.add('hidden');
+            otpSent = false;
+            otpVerified = false;
+
+            sendOtpButton.textContent = 'Send OTP';
+            sendOtpButton.disabled = false;
+
+            verifyOtpButton.textContent = 'Verify OTP';
+            verifyOtpButton.classList.remove('bg-gray-500');
+            verifyOtpButton.classList.add('bg-green-600');
+
+            otpInput.disabled = false;
+            document.querySelector('input[name="userType"][value="individual"]').checked = true;
+
+            } else {
+                alert('Please correct the errors in the form.');
+            }
+
+        });
+
+        if (document.querySelector('input[name="signatureMethod"]:checked').value === 'draw') {
+            initSignatureCanvas();
+        }
+    </script>
+</body>
+</html>

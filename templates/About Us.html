@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Antique Auction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        .section-container {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+        }
+        .team-member-card {
+            background-color: #3a3a3a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .team-member-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem auto;
+            border: 3px solid #fbbf24;
+        }
+        .icon-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .icon-feature i {
+            color: #fbbf24;
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            width: 30px; /* Fixed width for alignment */
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-gray-900 shadow-sm py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" class="text-2xl font-bold text-white font-serif">Antique Auction</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-300 hover:text-amber-400">Home</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Auctions</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">Categories</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400">How It Works</a>
+                <a href="#" class="text-gray-300 hover:text-amber-400 active">About</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="px-4 py-2 text-gray-300 hover:text-amber-600">Login</button>
+                <button class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">Register</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-gray-900 to-gray-700 py-20 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl font-bold text-white mb-6">About Antique Auction System</h1>
+            <p class="text-gray-300 text-xl leading-relaxed">
+                Your trusted gateway to the world of rare and authentic antiques.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content - About Us Sections -->
+    <main class="py-16 px-6 bg-gray-800">
+        <div class="max-w-7xl mx-auto">
+
+            <!-- 1. Company Information -->
+            <section class="section-container">
+                <h2 class="text-4xl font-bold text-white mb-6 text-center">Our Story</h2>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-2">Company Name & Legal Structure</h3>
+                    <p class="text-gray-300">
+                        <strong>Antique Auction System Ltd.</strong> is a registered limited company, established under the laws of the United Kingdom.
+                    </p>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-2">Mission Statement</h3>
+                    <p class="text-gray-300 italic">
+                        "To connect discerning collectors with the world's most exquisite and authenticated antique treasures, fostering a secure, transparent, and vibrant marketplace for history's finest pieces."
+                    </p>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-2">History & Background</h3>
+                    <p class="text-gray-300 mb-4">
+                        Founded in <strong>1995</strong> by a group of passionate antique dealers and tech innovators, Antique Auction System began as a small online forum for enthusiasts to trade rare collectibles. Recognizing the growing demand for a trustworthy and accessible platform for high-value antiques, we officially launched our full-fledged auction system in 1998.
+                    </p>
+                    <p class="text-gray-300">
+                        Over the decades, we've grown to become a leading name in online antique auctions, facilitating thousands of successful transactions and helping countless collectors find their dream pieces. Key milestones include introducing our proprietary authentication process in 2005, launching our mobile app in 2012, and expanding our global reach to over 100 countries by 2020.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-amber-400 mb-4 text-center">Meet Our Team</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Team Member 1 -->
+                        <div class="team-member-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8510782a-9b12-48d5-b810-e4843082a0cd.png" alt="Eleanor Whitmore">
+                            <h4 class="text-xl font-bold text-white">Eleanor Whitmore</h4>
+                            <p class="text-amber-400">CEO & Co-Founder</p>
+                            <p class="text-gray-400 text-sm mt-2">
+                                A lifelong antique collector and technology enthusiast, Eleanor envisioned a platform that combined the thrill of auctions with unparalleled trust and accessibility.
+                            </p>
+                        </div>
+                        <!-- Team Member 2 -->
+                        <div class="team-member-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7ba04117-bd9e-4af0-8336-9da810894082.png" alt="Dr. Jonathan Pierce">
+                            <h4 class="text-xl font-bold text-white">Dr. Jonathan Pierce</h4>
+                            <p class="text-amber-400">Head of Curation & Authentication</p>
+                            <p class="text-gray-400 text-sm mt-2">
+                                With a Ph.D. in Art History and decades of experience as a museum curator, Dr. Pierce leads our team of experts in verifying every item's authenticity.
+                            </p>
+                        </div>
+                        <!-- Team Member 3 -->
+                        <div class="team-member-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5e5ea831-8601-4bb1-bdc2-ac7702a2a737.png" alt="Sophia Chen">
+                            <h4 class="text-xl font-bold text-white">Sophia Chen</h4>
+                            <p class="text-amber-400">Chief Technology Officer</p>
+                            <p class="text-gray-400 text-sm mt-2">
+                                Sophia is the architect behind our robust and user-friendly auction platform, ensuring a seamless and secure experience for all our users.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Auction Platform Details -->
+            <section class="section-container">
+                <h2 class="text-4xl font-bold text-white mb-6 text-center">Our Platform</h2>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-3">Types of Auctions</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Timed Auctions (Ascending Bid)</h4>
+                            <p class="text-gray-300">
+                                Our most common format, where items are open for bidding for a set period (e.g., 7 days). Bidders place increasingly higher bids until the timer expires, with the highest bid winning.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Live Auctions</h4>
+                            <p class="text-gray-300">
+                                Experience the excitement of real-time bidding with a live auctioneer. These events are scheduled, and bids are placed in quick succession, often with video streaming.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Sealed Bid Auctions (Coming Soon)</h4>
+                            <p class="text-gray-300">
+                                Bidders submit their best and final offer in secret. The highest bid wins, but bidders do not know what others have offered until the auction closes.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Buy Now (Fixed Price)</h4>
+                            <p class="text-gray-300">
+                                For select items, users have the option to purchase immediately at a fixed price, bypassing the bidding process.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-3">Items & Services Offered</h3>
+                    <p class="text-gray-300 mb-4">
+                        We specialize in a wide array of authenticated antique and vintage items, meticulously curated by our team of experts.
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-gray-300">
+                        <div class="icon-feature"><i class="fas fa-chair"></i> Furniture</div>
+                        <div class="icon-feature"><i class="fas fa-palette"></i> Art & Sculptures</div>
+                        <div class="icon-feature"><i class="fas fa-gem"></i> Jewelry</div>
+                        <div class="icon-feature"><i class="fas fa-clock"></i> Timepieces</div>
+                        <div class="icon-feature"><i class="fas fa-mug-hot"></i> Porcelain & Ceramics</div>
+                        <div class="icon-feature"><i class="fas fa-book-open"></i> Rare Books & Manuscripts</div>
+                        <div class="icon-feature"><i class="fas fa-coins"></i> Collectibles & Memorabilia</div>
+                        <div class="icon-feature"><i class="fas fa-car"></i> Vintage Vehicles (Select)</div>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-4">
+                        *Notable Past Sale: A rare 18th-century French Ormolu-mounted porcelain vase sold for $125,000 in 2022.
+                    </p>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-3">Unique Platform Features</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="icon-feature"><i class="fas fa-chart-line"></i> Real-time Bidding Interface</div>
+                        <div class="icon-feature"><i class="fas fa-robot"></i> Smart Auto-Bidding (Proxy Bidding)</div>
+                        <div class="icon-feature"><i class="fas fa-mobile-alt"></i> Fully Mobile-Friendly Design & App</div>
+                        <div class="icon-feature"><i class="fas fa-heart"></i> Personalized Watchlist Functionality</div>
+                        <div class="icon-feature"><i class="fas fa-magnifying-glass-chart"></i> Expert Curation & Verification</div>
+                        <div class="icon-feature"><i class="fas fa-globe"></i> Global Shipping & Logistics Support</div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-3">Security Measures</h3>
+                    <p class="text-gray-300 mb-4">
+                        Your security is our top priority. We employ industry-leading measures to protect your data and transactions.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <li><strong>SSL Encryption:</strong> All data transmitted on our platform is secured with 256-bit SSL encryption.</li>
+                        <li><strong>Secure Payment Gateways:</strong> We partner with PCI DSS compliant payment processors to handle all financial transactions.</li>
+                        <li><strong>KYC Verification:</strong> For high-value transactions, we implement Know Your Customer (KYC) protocols to prevent fraud.</li>
+                        <li><strong>Fraud Detection Systems:</strong> Advanced algorithms continuously monitor for suspicious activity.</li>
+                        <li><strong>Escrow Services:</strong> Optional escrow for high-value items provides an independent third-party to hold funds until both buyer and seller are satisfied.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-amber-400 mb-3">User Support</h3>
+                    <p class="text-gray-300 mb-4">
+                        Our dedicated support team is here to assist you every step of the way.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <li><strong>Email Support:</strong> <a href="mailto:support@antiqueauction.com" class="text-amber-400 hover:underline">support@antiqueauction.com</a> (Response within 24 hours)</li>
+                        <li><strong>Live Chat:</strong> Available Monday - Friday, 9:00 AM - 5:00 PM GMT (Access via website).</li>
+                        <li><strong>Comprehensive FAQ Section:</strong> Find answers to common questions <a href="#" class="text-amber-400 hover:underline">here</a>.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 3. Commitment to Users -->
+            <section class="section-container">
+                <h2 class="text-4xl font-bold text-white mb-6 text-center">Our Commitment to You</h2>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-3">Transparency & Fairness</h3>
+                    <p class="text-gray-300 mb-4">
+                        We are committed to maintaining a transparent and fair auction environment for all participants.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <li><strong>Unbiased Operations:</strong> Our platform operates with automated systems to ensure impartiality in bidding and auction closing.</li>
+                        <li><strong>Bidding Integrity:</strong> Strict policies are in place to prevent shill bidding, bid manipulation, and other unfair practices.</li>
+                        <li><strong>Clear Rules:</strong> All auction rules, fees, and terms are clearly communicated upfront.</li>
+                    </ul>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-3">User Protection</h3>
+                    <p class="text-gray-300 mb-4">
+                        We strive to create a safe community where users can bid and sell with confidence.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <li><strong>Anti-Scam Measures:</strong> Robust systems and manual reviews are in place to detect and prevent fraudulent listings or user behavior.</li>
+                        <li><strong>Dispute Resolution:</strong> In the rare event of a dispute, our dedicated team provides mediation and resolution services to ensure a fair outcome for both parties.</li>
+                        <li><strong>Buyer & Seller Ratings:</strong> A transparent rating system helps users assess the reliability of other participants.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-amber-400 mb-3">Community Guidelines & Terms</h3>
+                    <p class="text-gray-300 mb-4">
+                        To foster a positive and respectful community, we ask all users to adhere to our guidelines.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <li><strong>Respectful Conduct:</strong> All interactions on the platform should be professional and respectful.</li>
+                        <li><strong>User Etiquette:</strong> Guidelines for communication, bidding, and listing items.</li>
+                        <li><strong>Account Suspension:</strong> Policies regarding violations of terms and conditions, including temporary or permanent account suspension.</li>
+                        <li><strong>Official Policies:</strong> For complete details, please review our <a href="#" class="text-amber-400 hover:underline">Terms & Conditions</a> and <a href="#" class="text-amber-400 hover:underline">Privacy Policy</a>.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 4. Contact Information -->
+            <section class="section-container">
+                <h2 class="text-4xl font-bold text-white mb-6 text-center">Contact Us</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-amber-400 mb-3">General Inquiries</h3>
+                        <p class="text-gray-300 mb-2">
+                            For general questions about our platform or services:
+                        </p>
+                        <p class="text-gray-300 icon-feature"><i class="fas fa-envelope"></i> <a href="mailto:info@antiqueauction.com" class="text-gray-300 hover:text-amber-400">info@antiqueauction.com</a></p>
+                        <p class="text-gray-300 mt-4">
+                            Alternatively, use our <a href="#" class="text-amber-400 hover:underline">online inquiry form</a>.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-amber-400 mb-3">Support & Assistance</h3>
+                        <p class="text-gray-300 mb-2">
+                            For technical support, bidding issues, or transaction inquiries:
+                        </p>
+                        <p class="text-gray-300 icon-feature"><i class="fas fa-headset"></i> <a href="mailto:support@antiqueauction.com" class="text-gray-300 hover:text-amber-400">support@antiqueauction.com</a></p>
+                        <p class="text-gray-300 icon-feature"><i class="fas fa-comments"></i> <a href="#" class="text-gray-300 hover:text-amber-400">Start Live Chat</a></p>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-3">Our Office</h3>
+                    <p class="text-gray-300 icon-feature justify-center"><i class="fas fa-map-marker-alt"></i> 123 Auction House Lane, London, UK, SW1A 0AA</p>
+                    <p class="text-gray-300 icon-feature justify-center"><i class="fas fa-phone"></i> +44 20 7946 0958</p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-6 bg-amber-600 text-white text-center">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold mb-6">Join Our Community Today!</h2>
+            <p class="text-xl mb-8">Become part of a global network of antique enthusiasts and discover timeless treasures.</p>
+            <button class="px-8 py-4 bg-white text-amber-600 rounded-lg font-bold hover:bg-gray-100 transition">Create Free Account</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">Antique Auction</h3>
+                <p class="text-gray-400">Bringing history's treasures to discerning collectors worldwide since 1995.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Authentication Process</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Contact</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400">123 Auction House Lane</li>
+                    <li class="text-gray-400">London, UK</li>
+                    <li class="text-400">+44 20 7946 0958</li>
+                    <li class="text-gray-400">info@antiqueauction.com</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Newsletter</h4>
+                <p class="text-gray-400 mb-4">Subscribe to receive updates on upcoming auctions.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Your email" class="px-4 py-2 w-full rounded-l text-gray-800 focus:outline-none">
+                    <button class="px-4 py-2 bg-amber-600 rounded-r hover:bg-amber-700 transition">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto pt-8 mt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>© 2023 Antique Auction System. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
