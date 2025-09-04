@@ -89,8 +89,21 @@
             <p class="text-gray-300 text-lg">Stay informed with the latest news, featured items, bidding tips, and more from the Antique Auction System.</p>
             <div class="mt-8 flex justify-center">
                 <div class="relative w-full max-w-md">
-                    <input type="text" placeholder="Search blog posts..." class="w-full p-3 pl-10 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-amber-500" />
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <form method="get" action="{{ url_for('blog.blog_home') }}" class="relative w-full max-w-md">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            placeholder="Search blog posts..." 
+                            value="{{ request.args.get('q', '') }}"
+                            class="w-full p-3 pl-10 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-amber-500"
+                        />
+                        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" 
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24" 
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </form>
                 </div>
             </div>
         </div>
@@ -102,34 +115,50 @@
         <div class="lg:col-span-3 space-y-8">
 
             <!-- Featured Post / Latest Post -->
+            {% for post in posts %}
             <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row">
-                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a6c2e9c1-6168-44ec-8680-bcde5f9894bb.png" alt="Elegant vintage mahogany writing desk" class="w-full md:w-1/3 h-64 md:h-auto object-cover" />
+                {% if post.image %}
+                <img src="{{ post.image }}" alt="{{ post.title }}" 
+                    class="w-full md:w-1/3 h-64 md:h-auto object-cover" />
+                {% endif %}
                 <div class="p-6 flex-grow">
                     <div class="mb-3">
-                        <span class="tag tag-featured">Featured</span>
-                        <span class="tag tag-announcement">Important</span>
+                        <span class="tag tag-featured">{{ post.category }}</span>
                     </div>
-                    <h2 class="text-3xl font-bold text-white mb-3">Spotlight: The Royal Victorian Desk Collection</h2>
-                    <p class="text-gray-400 text-sm mb-4">By John Doe | October 26, 2023</p>
-                    <p class="text-gray-300 mb-4">Get an exclusive preview of the magnificent Victorian mahogany writing desk and accompanying pieces, set to be auctioned next month. Discover its history, craftsmanship, and estimated value...</p>
-                    <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read More &rarr;</a>
+                    <h2 class="text-3xl font-bold text-white mb-3">{{ post.title }}</h2>
+                    <p class="text-gray-400 text-sm mb-4">
+                        By {{ post.author }} | {{ post.created_at.strftime('%B %d, %Y') }}
+                    </p>
+                    <p class="text-gray-300 mb-4">
+                        {{ post.content[:200] }}...   <!-- short preview -->
+                    </p>
+                    <a href="{{ url_for('blog.blog_post', post_id=post.id) }}" 
+                        class="text-amber-400 hover:text-amber-500 font-semibold">
+                        Read More &rarr;
+                    </a>
                 </div>
             </article>
+            {% endfor %}
 
             <!-- Announcements & Updates Section -->
             <section>
                 <h2 class="text-2xl font-bold text-white mb-6">Announcements & Updates</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
-                        <div class="mb-3">
-                            <span class="tag tag-announcement">Important</span>
-                            <span class="tag tag-update">System Update</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Scheduled Maintenance: Enhanced Security Features</h3>
-                        <p class="text-gray-400 text-sm mb-3">By Admin | October 25, 2023</p>
-                        <p class="text-gray-300 mb-4">We will be performing scheduled maintenance on November 1st, 2023, from 2:00 AM to 4:00 AM GMT to implement new security enhancements. The platform may experience brief interruptions...</p>
-                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Read More &rarr;</a>
-                    </article>
+                    {% for post in announcements %}
+                        <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
+                            <div class="mb-3">
+                                <span class="tag tag-announcement">Important</span>
+                                <span class="tag tag-update">System Update</span>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-2">{{ post.title }}</h3>
+                            <p class="text-gray-400 text-sm mb-3">By {{ post.author }} | {{ post.created_at }}</p>
+                            <p class="text-gray-300 text-sm mb-4">{{ post.content[:150] }}...</p>
+                            <a href="{{ url_for('blog.blog_post', post_id=post.id) }}" class="text-amber-400 hover:text-amber-500 font-semibold">Read More &rarr;</a>
+                        </article>
+                        {% else %}
+                            <p class="text-gray-400">No spotlights yet.</p>
+                    {% endfor %}
+
                     <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
                         <div class="mb-3">
                             <span class="tag tag-announcement">Auction Update</span>
@@ -178,15 +207,20 @@
             <section>
                 <h2 class="text-2xl font-bold text-white mb-6">Promotions & Discounts</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for post in promotions %}
                     <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
                         <div class="mb-3">
                             <span class="tag tag-promo">Limited Time</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-2">Early Bird Discount: 5% Off Buyer's Premium!</h3>
-                        <p class="text-gray-400 text-sm mb-3">By Marketing Team | October 20, 2023</p>
-                        <p class="text-gray-300 mb-4">Register and place your first bid in the "European Antiques" auction by November 10th to receive a 5% discount on your buyer's premium. Terms and conditions apply...</p>
-                        <a href="#" class="text-amber-400 hover:text-amber-500 font-semibold">Learn More &rarr;</a>
+                        <h3 class="text-xl font-bold text-white mb-2">{{ post.title }}</h3>
+                        <p class="text-gray-400 text-sm mb-3">By {{ post.author }} | {{ post.created_at }}</p>
+                        <p class="text-gray-300 mb-4">{{ post.content[:150] }}...</p>
+                        <a href="{{ url_for('blog.blog_post', post_id=post.id) }}" class="text-amber-400 hover:text-amber-500 font-semibold">Learn More &rarr;</a>
                     </article>
+                    {% else %}
+                        <p class="text-gray-400">No promotions yet.</p>
+                    {% endfor %}
                     <article class="blog-card bg-gray-800 rounded-lg overflow-hidden shadow-lg p-6">
                         <div class="mb-3">
                             <span class="tag tag-promo">Special Offer</span>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ post.title }} — Blog</title>
+
+  <!-- Open Graph / SEO (optional) -->
+  <meta property="og:title" content="{{ post.title }}" />
+  <meta property="og:description" content="By {{ post.author }} • {{ post.created_at.strftime('%B %d, %Y') }}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{ request.url if request else '' }}" />
+  <meta property="og:image" content="{{ post.cover_url if post.cover_url else '' }}" />
+
+  <style>
+    :root{
+      --bg: #0b0c0f;        /* page background */
+      --card: #111317;      /* card surface */
+      --text: #eaeef3;      /* primary text */
+      --muted: #a7b0be;     /* secondary text */
+      --link: #7aa2ff;      /* links */
+      --accent: #6ee7b7;    /* subtle accent */
+      --border: #1b1f27;    /* hairlines */
+      --code-bg: #0f1217;   /* code blocks */
+      --shadow: 0 20px 40px rgba(0,0,0,0.35);
+    }
+    @media (prefers-color-scheme: light) {
+      :root{
+        --bg:#f7f8fb; --card:#ffffff; --text:#0e1217; --muted:#5a6472; --link:#3558ff; --accent:#10b981; --border:#e8ecf2; --code-bg:#f4f7fb; --shadow:0 16px 32px rgba(17,24,39,0.08);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0; background: var(--bg); color: var(--text);
+      font: 16px/1.7 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      letter-spacing: 0.2px;
+    }
+    a{ color: var(--link); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{ max-width: 860px; margin: 0 auto; padding: 48px 20px 96px; }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)) padding-box, var(--card);
+      border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow);
+      padding: 40px 28px;
+    }
+
+    header.site{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 20px; gap:16px; }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:0.3px; }
+    .brand .dot{ width:10px; height:10px; border-radius:999px; background: var(--accent); box-shadow: 0 0 0 6px color-mix(in oklab, var(--accent), transparent 75%); }
+
+    .post-title{ font-size: clamp(30px, 5vw, 46px); line-height:1.15; margin: 12px 0 8px; font-weight: 800; }
+    .post-meta{ color: var(--muted); font-size: 15px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .post-meta .sep{ opacity: 0.5; }
+
+    .cover{ margin: 22px -8px 10px; }
+    .cover img{ width:100%; height:auto; border-radius: 16px; display:block; border:1px solid var(--border); }
+
+    .content{ margin-top: 10px; font-size: 18px; }
+    .content p{ margin: 16px 0; }
+    .content h2{ font-size: 28px; line-height:1.25; margin: 28px 0 10px; }
+    .content h3{ font-size: 22px; line-height:1.3; margin: 22px 0 8px; }
+    .content h4{ font-size: 18px; margin: 18px 0 6px; }
+    .content img{ max-width:100%; height:auto; border-radius: 12px; border:1px solid var(--border); }
+    .content ul, .content ol{ padding-left: 22px; margin: 14px 0; }
+    .content blockquote{
+      margin: 18px 0; padding: 16px 18px; background: var(--code-bg); border-left: 4px solid var(--accent); border-radius: 12px;
+    }
+    .content pre{ background: var(--code-bg); padding: 16px; border-radius: 12px; overflow:auto; border:1px solid var(--border); }
+    .content code{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 0.95em; }
+    .content table{ width:100%; border-collapse: collapse; margin: 18px 0; }
+    .content th, .content td{ border:1px solid var(--border); padding: 10px 12px; text-align:left; }
+
+    .post-footer{ margin-top: 26px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; color: var(--muted); font-size: 15px; }
+    .tag{ display:inline-block; padding:6px 10px; border:1px solid var(--border); border-radius:999px; }
+
+    hr{ border:none; border-top:1px solid var(--border); margin: 22px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <div class="brand"><span class="dot"></span><span>My Blog</span></div>
+      <nav class="nav" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="post-meta sep">/</span>
+        <a href="/blog">Blog</a>
+      </nav>
+    </header>
+
+    <article class="card" itemscope itemtype="https://schema.org/BlogPosting">
+      <!-- Title -->
+      <h1 class="post-title" itemprop="headline">{{ post.title }}</h1>
+
+      <!-- Byline -->
+      <div class="post-meta">
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+          By <span itemprop="name">{{ post.author }}</span>
+        </span>
+        <span class="sep">•</span>
+        <time itemprop="datePublished" datetime="{{ post.created_at.isoformat() if post.created_at else '' }}">
+          {{ post.created_at.strftime('%B %d, %Y') }}
+        </time>
+      </div>
+
+      <!-- Optional Cover Image -->
+      {% if post.cover_url %}
+      <div class="cover">
+        <img src="{{ post.cover_url }}" alt="Cover image for {{ post.title }}" itemprop="image"/>
+      </div>
+      {% endif %}
+
+      <hr />
+
+      <!-- Content -->
+      <section class="content" itemprop="articleBody">
+        {{ post.content | safe }}
+      </section>
+
+      <hr />
+
+      <!-- Footer (optional tags & share) -->
+      <footer class="post-footer">
+        <div class="tags">
+          {% if post.tags %}
+            {% for tag in post.tags %}<span class="tag">#{{ tag }}</span>{% endfor %}
+          {% endif %}
+        </div>
+        <a href="https://api.whatsapp.com/send?text={{ post.title|urlencode }}%20{{ request.url|urlencode if request else '' }}">
+            Share on WhatsApp
+        </a>
+
+      </footer>
+    </article>
+  </div>
+
+  <!-- JSON-LD for rich results -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": {{ post.title|tojson }},
+      "author": {"@type": "Person", "name": {{ post.author|tojson }}},
+      "datePublished": "{{ post.created_at.isoformat() if post.created_at else '' }}",
+      "image": {{ (post.cover_url or '')|tojson }},
+      "articleBody": {{ (post.excerpt or '')|tojson }}
+    }
+  </script>
+</body>
+</html>

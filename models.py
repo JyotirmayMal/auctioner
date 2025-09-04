@@ -1,5 +1,6 @@
 from extensions import db
 from datetime import datetime
+from enum import Enum
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -23,6 +24,9 @@ class User(db.Model):
 
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+
+    def __repr__(self):
+        return f'<User {self.username}>'
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -60,3 +64,14 @@ class AuctionItem(db.Model):
     seller_name = db.Column(db.String(255), nullable=False)
     seller_verified = db.Column(db.Boolean, default=False)
     seller_avatar = db.Column(db.String(255), default="https://via.placeholder.com/60")
+
+class BlogPost(db.Model):
+    __tablename__ = "blog_posts"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    author = db.Column(db.String(100), default="Admin")
+    category = db.Column(db.String(100), default="General")  # e.g., Announcement, Update, FAQ
+    image = db.Column(db.String(500), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.now)

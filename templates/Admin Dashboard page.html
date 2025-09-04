@@ -89,6 +89,12 @@
                         </a>
                     </li>
                     <li class="mb-2">
+                        <a href="#news">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            BLogs & News Management
+                        </a>
+                    </li>
+                    <li class="mb-2">
                         <a href="#payments">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V9m0 3v2m0 3.5V21M12 3v1.5m0 3V7"></path></svg>
                             Payment Management
@@ -165,7 +171,7 @@
                     <div class="card p-6">
                         <div class="flex justify-between items-center mb-4">
                             <input type="text" placeholder="Search users..." class="p-2 border rounded w-1/3">
-                            <button class="btn-primary">Add New User</button>
+                            <button class="btn-primary" onclick="toggleUserModal(true)" >Add New User</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table>
@@ -181,23 +187,24 @@
                                 </thead>
                                 <tbody>
                                     {% for user in users %}
-                                    <tr>
-                                        <td>{{ user.id }}</td>
-                                        <td>{{ user.first_name }} {{ user.last_name }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <td>{{ user.role | capitalize }}</td>
-                                        <td class="{{ 'text-green-600' if user.role != 'blocked' else 'text-red-600' }}">
-                                            {{ 'Active' if user.role != 'blocked' else 'Blocked' }}
-                                        </td>
-                                        <td>
-                                            <button class="text-blue-500 hover:underline mr-2">Edit</button>
-                                            {% if user.role == 'blocked' %}
-                                                <button class="text-green-600 hover:underline">Activate</button>
-                                            {% else %}
-                                                <button class="text-red-500 hover:underline">Block</button>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
+                                        <tr data-user-id="{{ user.id }}">
+                                            <td>{{ user.id }}</td>
+                                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>{{ user.role | capitalize }}</td>
+                                            <td class="{{ 'text-green-600' if user.role != 'blocked' else 'text-red-600' }}">
+                                                {{ 'Active' if user.role != 'blocked' else 'Blocked' }}
+                                            </td>
+                                            <td>
+                                                <button class="text-blue-500 hover:underline mr-2" onclick="editUser({{ user.id }})">Edit</button>
+                                                {% if user.role == 'blocked' %}
+                                                    <button class="text-green-600 hover:underline" onclick="toggleUserStatus({{ user.id }}, 'activate')">Activate</button>
+                                                {% else %}
+                                                    <button class="text-red-500 hover:underline" onclick="toggleUserStatus({{ user.id }}, 'block')">Block</button>
+                                                {% endif %}
+                                                <button class="text-red-600 hover:underline ml-2" onclick="deleteUser({{ user.id }})">Delete</button>
+                                            </td>
+                                        </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -205,13 +212,107 @@
                     </div>
                 </section>
 
+                <!-- Add/Edit User Modal -->
+                <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+                    <div class="bg-white rounded-lg shadow-lg w-1/2 max-w-2xl p-6 max-h-screen overflow-y-auto">
+                        <h2 id="userModalTitle" class="text-xl font-bold mb-4">Add New User</h2>
+                        <form id="userForm" method="POST">
+                            <div class="grid grid-cols-2 gap-4">
+                                <!-- Personal Information -->
+                                <div class="col-span-2">
+                                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Personal Information</h3>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">First Name</label>
+                                    <input type="text" name="first_name" id="first_name" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">Last Name</label>
+                                    <input type="text" name="last_name" id="last_name" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">Email</label>
+                                    <input type="email" name="email" id="email" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">Phone Number</label>
+                                    <input type="tel" name="phone_number" id="phone_number" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">Date of Birth</label>
+                                    <input type="date" name="date_of_birth" id="date_of_birth" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">Role</label>
+                                    <select name="role" id="role" class="w-full border rounded p-2" required>
+                                        <option value="">Select Role</option>
+                                        <option value="bidder">Bidder</option>
+                                        <option value="seller">Seller</option>
+                                        <option value="employee">Employee</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Address Information -->
+                                <div class="col-span-2 mt-4">
+                                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Address Information</h3>
+                                </div>
+                                
+                                <div class="col-span-2 mb-3">
+                                    <label class="block text-sm font-bold mb-1">Street Address</label>
+                                    <input type="text" name="street_address" id="street_address" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">City</label>
+                                    <input type="text" name="city" id="city" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">State/Province</label>
+                                    <input type="text" name="state_province" id="state_province" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">Postal Code</label>
+                                    <input type="text" name="postal_code" id="postal_code" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="block text-sm font-bold mb-1">Country</label>
+                                    <input type="text" name="country" id="country" class="w-full border rounded p-2" required>
+                                </div>
+                                
+                                <!-- Password (only for new users) -->
+                                <div class="col-span-2" id="passwordSection">
+                                    <div class="mb-3">
+                                        <label class="block text-sm font-bold mb-1">Password</label>
+                                        <input type="password" name="password" id="password" class="w-full border rounded p-2" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end mt-6">
+                                <button type="button" onclick="toggleUserModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save User</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Listings Management Section -->
                 <section id="listings" class="content-section hidden">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">Listings Management</h2>
                     <div class="card p-6">
                         <div class="flex justify-between items-center mb-4">
                             <input type="text" placeholder="Search listings..." class="p-2 border rounded w-1/3">
-                            <button class="btn-primary">Create New Listing</button>
+                            <button class="btn-primary" onclick="toggleModal(true)" >Create New Listing</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table>
@@ -285,6 +386,109 @@
                     <div class="flex justify-end">
                         <button type="button" onclick="toggleModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded">Cancel</button>
                         <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Save</button>
+                    </div>
+                    </form>
+                </div>
+                </div>
+                <!-- News & Blogs Management Section -->
+                <section id="news" class="content-section hidden">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">News & Blogs Management</h2>
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-4">
+                    <input type="text" placeholder="Search posts..." class="p-2 border rounded w-1/3">
+                    <button class="btn-primary" onclick="toggleBlogModal(true)">Create New Post</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Author</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for post in posts %}
+                        <tr>
+                            <td>{{ post.id }}</td>
+                            <td>{{ post.title }}</td>
+                            <td>{{ post.category }}</td>
+                            <td>{{ post.author }}</td>
+                            <td>{{ post.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                            <button class="text-blue-500 hover:underline mr-2"
+                                    onclick="openEditBlogModal({{ post.id }}, '{{ post.title }}', '{{ post.category }}', '{{ post.author }}', `{{ post.content }}`)">
+                                Edit
+                            </button>
+                            <form method="POST" action="{{ url_for('admin.delete_blog', post_id=post.id) }}" style="display:inline;">
+                                <button type="submit" class="text-red-500 hover:underline">Delete</button>
+                            </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </section>
+
+                <!-- Create Blog Modal -->
+                <div id="createBlogModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+                <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
+                    <h2 class="text-xl font-bold mb-4">Add New Blog Post</h2>
+                    <form method="POST" action="{{ url_for('admin.add_blog') }}">
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold">Title</label>
+                        <input type="text" name="title" class="w-full border rounded p-2" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold">Category</label>
+                        <input type="text" name="category" class="w-full border rounded p-2" placeholder="Announcement, Update, FAQ">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold">Author</label>
+                        <input type="text" name="author" class="w-full border rounded p-2" value="Admin">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold">Content</label>
+                        <textarea name="content" class="w-full border rounded p-2" required></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" onclick="toggleBlogModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Save</button>
+                    </div>
+                    </form>
+                </div>
+                </div>
+
+                <!-- Edit Blog Modal -->
+                <div id="editBlogModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+                <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
+                    <h2 class="text-xl font-bold mb-4">Edit Blog Post</h2>
+                    <form method="POST" id="editBlogForm">
+                    <input type="hidden" name="post_id" id="editPostId">
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold">Title</label>
+                        <input type="text" name="title" id="editTitle" class="w-full border rounded p-2" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold">Category</label>
+                        <input type="text" name="category" id="editCategory" class="w-full border rounded p-2">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold">Author</label>
+                        <input type="text" name="author" id="editAuthor" class="w-full border rounded p-2">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold">Content</label>
+                        <textarea name="content" id="editContent" class="w-full border rounded p-2"></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" onclick="toggleEditBlogModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Update</button>
                     </div>
                     </form>
                 </div>
@@ -602,6 +806,195 @@
             }
         }
         document.querySelector(".btn-primary").addEventListener("click", () => toggleModal(true));
+
+        //User Management Section
+        document.addEventListener('DOMContentLoaded', function() {
+        const userModal = document.getElementById("userModal");
+        const userForm = document.getElementById("userForm");
+        const userModalTitle = document.getElementById("userModalTitle");
+        const passwordSection = document.getElementById("passwordSection");
+        
+        let isEditing = false;
+        let editingUserId = null;
+
+        // Add event listener for the Add New User button
+        const addUserBtn = document.getElementById("addUserBtn");
+        if (addUserBtn) {
+            addUserBtn.addEventListener('click', function() {
+                console.log("Add User button clicked via event listener");
+                toggleUserModal(true);
+            });
+        }
+
+        // Toggle User Modal
+        window.toggleUserModal = function(show, editing = false, userId = null) {
+            if (show) {
+                userModal.classList.remove("hidden");
+                userModal.classList.add("flex");
+                
+                if (editing) {
+                    isEditing = true;
+                    editingUserId = userId;
+                    userModalTitle.textContent = "Edit User";
+                    userForm.action = `/admin/edit_user/${userId}`;
+                    passwordSection.style.display = "none"; // Hide password field when editing
+                    document.getElementById("password").required = false;
+                } else {
+                    isEditing = false;
+                    editingUserId = null;
+                    userModalTitle.textContent = "Add New User";
+                    userForm.action = "{{ url_for('admin.add_user') }}";
+                    passwordSection.style.display = "block";
+                    document.getElementById("password").required = true;
+                    userForm.reset();
+                }
+            } else {
+                userModal.classList.add("hidden");
+                userModal.classList.remove("flex");
+                userForm.reset();
+            }
+        };
+
+        // Edit User Function
+        window.editUser = function(userId) {
+            // Fetch user data and populate form
+            fetch(`/admin/get_user/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const user = data.user;
+                        
+                        // Populate form fields
+                        document.getElementById("first_name").value = user.first_name;
+                        document.getElementById("last_name").value = user.last_name;
+                        document.getElementById("email").value = user.email;
+                        document.getElementById("phone_number").value = user.phone_number;
+                        document.getElementById("date_of_birth").value = user.date_of_birth;
+                        document.getElementById("role").value = user.role;
+                        document.getElementById("street_address").value = user.street_address;
+                        document.getElementById("city").value = user.city;
+                        document.getElementById("state_province").value = user.state_province;
+                        document.getElementById("postal_code").value = user.postal_code;
+                        document.getElementById("country").value = user.country;
+                        
+                        toggleUserModal(true, true, userId);
+                    } else {
+                        alert("Error fetching user data: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Error fetching user data");
+                });
+        };
+
+        // Toggle User Status (Block/Activate)
+        window.toggleUserStatus = function(userId, action) {
+            const confirmMessage = action === 'block' ? 
+                "Are you sure you want to block this user?" : 
+                "Are you sure you want to activate this user?";
+                
+            if (confirm(confirmMessage)) {
+                fetch(`/admin/toggle_user_status/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: action })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload(); // Refresh the page to show updated status
+                    } else {
+                        alert("Error updating user status: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Error updating user status");
+                });
+            }
+        };
+
+        // Delete User Function
+        window.deleteUser = function(userId) {
+            if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
+                fetch(`/admin/delete_user/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the row from the table
+                        const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+                        if (row) {
+                            row.remove();
+                        }
+                        alert("User deleted successfully");
+                    } else {
+                        alert("Error deleting user: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Error deleting user");
+                });
+            }
+        };
+
+        // Handle form submission
+        userForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(userForm);
+            const url = isEditing ? `/admin/edit_user/${editingUserId}` : '/admin/add_user';
+            const method = 'POST';
+
+            fetch(url, {
+                method: method,
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(isEditing ? "User updated successfully!" : "User added successfully!");
+                    location.reload(); // Refresh the page to show the new/updated user
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Error submitting form");
+            });
+        });
+    });
+
+    //Blogs & News Management Section
+    function toggleBlogModal(show) {
+        document.getElementById('createBlogModal').classList.toggle('hidden', !show);
+        document.getElementById('createBlogModal').classList.toggle('flex', show);
+    }
+
+    function toggleEditBlogModal(show) {
+        document.getElementById('editBlogModal').classList.toggle('hidden', !show);
+        document.getElementById('editBlogModal').classList.toggle('flex', show);
+    }
+
+    function openEditBlogModal(id, title, category, author, content) {
+        document.getElementById('editPostId').value = id;
+        document.getElementById('editTitle').value = title;
+        document.getElementById('editCategory').value = category;
+        document.getElementById('editAuthor').value = author;
+        document.getElementById('editContent').value = content;
+        document.getElementById('editBlogForm').action = `/admin/edit_blog/${id}`;
+        toggleEditBlogModal(true);
+    }
+
     </script>
 </body>
 </html>
