@@ -60,10 +60,19 @@ class AuctionItem(db.Model):
     current_bid = db.Column(db.Float, default=0.0)
     highest_bidder = db.Column(db.String(100), nullable=True)
     min_bid_increment = db.Column(db.Integer, default=10)
-    auction_end_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    auction_end_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
     seller_name = db.Column(db.String(255), nullable=False)
     seller_verified = db.Column(db.Boolean, default=False)
     seller_avatar = db.Column(db.String(255), default="https://via.placeholder.com/60")
+    # Track highest bidder
+    highest_bidder = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    buyer_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+
+    is_sold = db.Column(db.Boolean, default=False)
+
+    # Relationships
+    highest_bidder_user = db.relationship("User", foreign_keys=[highest_bidder], backref="winning_items", lazy=True)
+    buyer = db.relationship("User", foreign_keys=[buyer_id], backref="purchased_items", lazy=True)
 
 class BlogPost(db.Model):
     __tablename__ = "blog_posts"
@@ -75,3 +84,34 @@ class BlogPost(db.Model):
     category = db.Column(db.String(100), default="General")  # e.g., Announcement, Update, FAQ
     image = db.Column(db.String(500), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now)
+
+class Bid(db.Model):
+    __tablename__ = "bids"
+
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey("auction_items.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    bid_amount = db.Column(db.Float, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships
+    user = db.relationship("User", backref="bids")
+    item = db.relationship("AuctionItem", backref="bids")
+
+
+class Payment(db.Model):
+    __tablename__ = "payments"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey("auction_items.id"), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(20), default="pending")  # pending / successful / failed
+    razorpay_order_id = db.Column(db.String(100), nullable=True)
+    razorpay_payment_id = db.Column(db.String(100), nullable=True)
+    razorpay_signature = db.Column(db.String(200), nullable=True)
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+
+    # Relationships
+    user = db.relationship("User", backref="payments")
+    item = db.relationship("AuctionItem", backref="payments")

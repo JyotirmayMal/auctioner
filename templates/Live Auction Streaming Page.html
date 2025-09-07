@@ -50,9 +50,15 @@
                 <a href="#" class="text-gray-300 hover:text-amber-400">About</a>
             </div>
             <div class="flex items-center space-x-4">
-                <button class="px-4 py-2 text-gray-300 hover:text-amber-600">Login</button>
-                <button class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">Register</button>
+                {% if session.get("user_id") %}
+                    <span class="text-gray-300">Welcome, {{ session.get("first_name", "User") }}</span>
+                    <a href="{{ url_for('auth.logout') }}" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="px-4 py-2 text-gray-300 hover:text-amber-600">Login</a>
+                    <a href="{{ url_for('auth.register') }}" class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition">Register</a>
+                {% endif %}
             </div>
+
         </div>
     </nav>
 
@@ -67,7 +73,7 @@
                 <!-- Placeholder for Live Video Stream -->
                 <!-- In a real application, this would be an iframe for YouTube/Vimeo, or a video element for WebRTC -->
                 <iframe 
-                    src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1" 
+                    src="https://www.youtube.com/embed/XO8wew38VM8?autoplay=1&mute=1" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen 
@@ -82,10 +88,10 @@
             <!-- Current Item Details -->
             <div class="bg-gray-900 rounded-lg p-6 shadow-md">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 id="item-title" class="text-2xl font-bold text-amber-400">Victorian Era Grandfather Clock</h2>
+                    <h2 id="item-title" class="text-2xl font-bold text-amber-400">{{ item.title }}</h2>
                     <span id="item-number" class="text-gray-400 text-lg">Item #001</span>
                 </div>
-                <p id="item-description" class="text-gray-300 mb-4">An exquisite 19th-century grandfather clock, handcrafted from solid oak with intricate brass detailing and a Westminster chime mechanism. Fully restored and in working condition.</p>
+                <p id="item-description" class="text-gray-300 mb-4">{{ item.description }}</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
@@ -94,11 +100,11 @@
                     </div>
                     <div>
                         <p class="text-gray-400 text-sm">Estimated Value:</p>
-                        <p id="item-estimated-value" class="text-white font-semibold">$15,000 - $20,000</p>
+                        <p id="item-estimated-value" class="text-white font-semibold">${{ est_min }} - ${{ est_max }}</p>
                     </div>
                     <div>
                         <p class="text-gray-400 text-sm">Reserve Price:</p>
-                        <p id="item-reserve-price" class="text-white font-semibold">$12,000 (Met)</p>
+                        <p id="item-reserve-price" class="text-white font-semibold">${{ item.current_bid }} (Met)</p>
                     </div>
                     <div>
                         <p class="text-gray-400 text-sm">Time Remaining:</p>
@@ -217,14 +223,11 @@
     </footer>
 
     <script>
-        // Placeholder for JavaScript functionality
-        // This script will be expanded in subsequent outputs to handle dynamic updates, bidding logic, etc.
-
-        // Initial state for demonstration
+        const itemId = {{ item.id }};
+        let currentBid = {{ item.current_bid }};
+        let isHighestBidder = false;
         let currentUserStatus = "Approved Bidder"; // Can be "Approved Bidder", "Waiting for Approval", "Guest (View Only)"
-        let currentBid = 13500;
-        let isHighestBidder = true;
-        let auctionEndTime = new Date().getTime() + (5 * 60 * 1000); // 5 minutes from now for demonstration
+        let auctionEndTime = new Date().getTime() + (0.5 * 60 * 1000); // 30 seconds from now for demonstration
 
         const userStatusElement = document.getElementById('user-status');
         const biddingControls = document.getElementById('bidding-controls');
@@ -366,45 +369,62 @@
                 clearInterval(countdownInterval);
                 countdownTimerElement.textContent = "Auction Ended";
                 showAuctioneerAnnouncement("Item Sold!", 5000);
-                placeBidBtn.disabled = true; // Disable bidding after auction ends
                 customBidInput.disabled = true;
                 quickBidButtons.forEach(btn => btn.disabled = true);
-                showNotification("This item has been sold!", "info");
-            } else if (distance < 10000 && distance > 0) { // Less than 10 seconds
-                countdownTimerElement.classList.add('text-red-500');
-                showNotification("Auction ending in 10 seconds!", "warning", 2000);
-            } else {
-                countdownTimerElement.classList.remove('text-red-500');
+
+                if (isHighestBidder) {
+                    placeBidBtn.textContent = "Place Order";
+                    placeBidBtn.disabled = false;
+                    showNotification("🎉 You won! Proceed to checkout.", "success");
+                } else {
+                    placeBidBtn.disabled = true;
+                    showNotification("Auction ended. Better luck next time!", "info");
+                }
             }
         }
 
         // Event Listeners
-        placeBidBtn.addEventListener('click', () => {
+        // FIXED: Updated fetch URL to match Flask blueprint prefix
+        placeBidBtn.addEventListener('click', async () => {
+            if (placeBidBtn.textContent === "Place Order") {
+                // Redirect to checkout - using payments blueprint prefix
+                window.location.href = `/payments/checkout/${itemId}?amount=${currentBid}`;
+                return;
+            }
+
             const bidAmount = parseInt(customBidInput.value);
             if (isNaN(bidAmount) || bidAmount <= currentBid) {
                 showNotification("Please enter a valid bid higher than the current bid.", "error");
                 return;
             }
-            // In a real app: send bid to server via WebSocket/AJAX
-            // For demo:
-            currentBid = bidAmount;
-            isHighestBidder = true;
-            updateCurrentBidDisplay();
-            addBidToHistory('You', bidAmount, true);
-            showNotification("Your bid has been placed successfully!", "success");
-            showAuctioneerAnnouncement(`Bid $${bidAmount.toLocaleString()} received!`);
-            // Simulate an outbid after a short delay
-            setTimeout(() => {
-                if (isHighestBidder) { // Only if still highest
-                    const newBid = currentBid + (Math.floor(Math.random() * 5) + 1) * 100; // Simulate opponent bid
-                    currentBid = newBid;
-                    isHighestBidder = false;
-                    updateCurrentBidDisplay();
-                    addBidToHistory(`Bidder #${Math.floor(Math.random() * 900) + 100}`, newBid, false);
-                    showNotification(`Outbid by $${newBid.toLocaleString()}!`, "error");
-                    showAuctioneerAnnouncement(`New bid at $${newBid.toLocaleString()}!`);
+
+            try {
+                // FIXED: Updated to use auctions blueprint prefix
+                const response = await fetch(`/auctions/bid/${itemId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({ bid_amount: bidAmount }),
+                });
+
+                const data = await response.json();
+                if (!data.success) {
+                    showNotification(data.message, "error");
+                    return;
                 }
-            }, 3000);
+
+                currentBid = data.bid_amount;
+                isHighestBidder = true;
+                updateCurrentBidDisplay();
+                addBidToHistory('You', currentBid, true);
+                showNotification("Your bid has been placed successfully!", "success");
+                showAuctioneerAnnouncement(`Bid $${currentBid.toLocaleString()} received!`);
+            } catch (error) {
+                console.error("Bid error:", error);
+                showNotification("Something went wrong. Please try again.", "error");
+            }
         });
 
         quickBidButtons.forEach(button => {
@@ -416,18 +436,11 @@
             });
         });
 
-        // Initial calls
+        // Initialize
         updateBiddingInterface();
         updateCurrentBidDisplay();
+        updateCountdown();
         const countdownInterval = setInterval(updateCountdown, 1000);
-        updateCountdown(); // Call immediately to avoid 1-second delay on load
-
-        // Simulate changing user status for testing
-        // setTimeout(() => {
-        //     currentUserStatus = "Guest (View Only)";
-        //     updateBiddingInterface();
-        //     showNotification("You are not approved to bid. View only.", "warning");
-        // }, 10000);
     </script>
 </body>
 </html>

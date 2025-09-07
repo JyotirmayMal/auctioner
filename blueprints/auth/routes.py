@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from models import User
+from models import AuctionItem, User
 from extensions import db
 import uuid
 
@@ -110,9 +110,12 @@ def dashboard():
     user = User.query.get(session["user_id"])
     print("🟢 Session in dashboard:", dict(session))
 
+    bought_items = AuctionItem.query.filter_by(buyer_id=user.id).all()
+
     return render_template(
         "Users DashBoard Page.html",
-        user=user
+        user=user,
+        bought_items=bought_items
     )
 
 @auth_bp.route("/logout")

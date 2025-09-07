@@ -96,17 +96,29 @@
                     <div class="dashboard-card">
                         <h2 class="text-2xl font-bold text-amber-400 mb-4">Auction Overview</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Auction Card 1 (Live) -->
-                            <div class="bg-gray-700 rounded-lg p-4 flex items-center space-x-4">
-                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de1ed3d3-2133-45b6-a37b-06d1c6c19f98.png" alt="French Porcelain" class="w-24 h-24 object-cover rounded-md">
-                                <div>
-                                    <h3 class="text-lg font-bold text-white">French Porcelain Vase</h3>
-                                    <p class="text-gray-400 text-sm">Ends: 2d 14h</p>
-                                    <p class="text-gray-300">Current Bid: <span class="font-bold text-amber-400">$3,200</span></p>
-                                    <span class="text-sm font-semibold status-live">Live</span>
-                                    <button class="mt-2 bg-amber-600 hover:bg-amber-700 text-white text-sm py-1 px-3 rounded-md">Continue Bidding</button>
+                            {% for item in items %}
+                                <div class="bg-gray-700 rounded-lg p-4 flex items-center space-x-4">
+                                    <img src="{{ item.image }}" alt="{{ item.title }}" class="w-24 h-24 object-cover rounded-md">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-white">{{ item.title }}</h3>
+                                        <p class="text-gray-400 text-sm">Ends: {{ item.auction_end_time.strftime('%b %d, %H:%M') }}</p>
+                                        <p class="text-gray-300">
+                                            Current Bid: <span class="font-bold text-amber-400">${{ item.current_bid }}</span>
+                                        </p>
+                                        
+                                        {% if item.auction_end_time > now %}
+                                            <span class="text-sm font-semibold status-live">Live</span>
+                                            <a href="{{ url_for('auctions.live_stream', item_id=item.id) }}" 
+                                            class="mt-2 inline-block bg-amber-600 hover:bg-amber-700 text-white text-sm py-1 px-3 rounded-md">
+                                            Continue Bidding
+                                            </a>
+                                        {% else %}
+                                            <span class="text-sm font-semibold status-closed">Closed</span>
+                                            <button class="mt-2 bg-gray-600 text-white text-sm py-1 px-3 rounded-md" disabled>Closed</button>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
+                            {% endfor %}
                             <!-- Auction Card 2 (Upcoming) -->
                             <div class="bg-gray-700 rounded-lg p-4 flex items-center space-x-4">
                                 <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef8bd089-ded7-4252-89a9-d85eb3c2c085.png" alt="Timepieces" class="w-24 h-24 object-cover rounded-md">
@@ -238,15 +250,20 @@
                         <div id="wonAuctionsContent" class="tab-content hidden">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Won Auction Item 1 -->
+                                 {% for item in bought_items %}
                                 <div class="bg-gray-700 rounded-lg p-4 flex items-center space-x-4">
                                     <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b03087f3-14b1-4093-b1ee-727268cba191.png" alt="Renaissance Chest" class="w-24 h-24 object-cover rounded-md">
                                     <div>
-                                        <h3 class="text-lg font-bold text-white">Renaissance Chest</h3>
-                                        <p class="text-gray-400 text-sm">Winning Bid: <span class="font-bold text-amber-400">$8,750</span></p>
+                                        <h3 class="text-lg font-bold text-white">{{ item.title }}</h3>
+                                        <p class="text-gray-400 text-sm">Winning Bid: <span class="font-bold text-amber-400">${{ item.current_bid }}</span></p>
                                         <p class="text-gray-400 text-sm">Payment Status: <span class="text-green-500">Paid</span></p>
                                         <p class="text-gray-400 text-sm">Shipping: <span class="text-blue-400">In Transit (Tracking: #12345)</span></p>
+                                        <p class="text-gray-400 text-sm">Auction Ended: {{ item.auction_end_time.strftime('%B %d, %Y') }}</p>
                                         <button class="mt-2 bg-green-600 hover:bg-green-700 text-white text-sm py-1 px-3 rounded-md">Download Invoice</button>
                                     </div>
+                                    {% else %}
+                                        <p class="text-gray-400">No purchases yet.</p>
+                                {% endfor %}
                                 </div>
                             </div>
                         </div>
