@@ -40,12 +40,19 @@ def auctions_home():
 
 @auctions_bp.route("/live/<int:item_id>")
 def live_stream(item_id):
+
+    if "user_id" not in session:
+        flash("Please log in to continue.", "error")
+        return redirect(url_for("auth.login"))
+    
+    user = User.query.get(session["user_id"])
     item = AuctionItem.query.get_or_404(item_id)
     estimated_min = round(item.current_bid * 1.21, 2)
     estimated_max = round(item.current_bid * 2.57, 2)
     return render_template(
         "Live Auction Streaming Page.html",
         item=item,
+        user=user,
         est_min=estimated_min,
         est_max=estimated_max
     )

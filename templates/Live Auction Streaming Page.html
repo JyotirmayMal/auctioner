@@ -73,7 +73,7 @@
                 <!-- Placeholder for Live Video Stream -->
                 <!-- In a real application, this would be an iframe for YouTube/Vimeo, or a video element for WebRTC -->
                 <iframe 
-                    src="https://www.youtube.com/embed/XO8wew38VM8?autoplay=1&mute=1" 
+                    src="https://www.youtube.com/embed/QyktFwyCgWY?start=00&end=08&loop=1&autoplay=1&mute=1" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen 
@@ -100,11 +100,11 @@
                     </div>
                     <div>
                         <p class="text-gray-400 text-sm">Estimated Value:</p>
-                        <p id="item-estimated-value" class="text-white font-semibold">${{ est_min }} - ${{ est_max }}</p>
+                        <p id="item-estimated-value" class="text-white font-semibold">₹{{ est_min }} - ₹{{ est_max }}</p>
                     </div>
                     <div>
                         <p class="text-gray-400 text-sm">Reserve Price:</p>
-                        <p id="item-reserve-price" class="text-white font-semibold">${{ item.current_bid }} (Met)</p>
+                        <p id="item-reserve-price" class="text-white font-semibold">₹{{ item.current_bid }} (Met)</p>
                     </div>
                     <div>
                         <p class="text-gray-400 text-sm">Time Remaining:</p>
@@ -134,17 +134,17 @@
 
             <!-- Live Bidding Interface -->
             <div class="bg-gray-900 rounded-lg p-6 shadow-md">
-                <h3 class="text-2xl font-bold text-white mb-4">Current Bid: <span id="current-bid" class="text-amber-400">$13,500</span></h3>
+                <h3 class="text-2xl font-bold text-white mb-4">Current Bid: <span id="current-bid" class="text-amber-400">₹13,500</span></h3>
                 <p id="highest-bidder-info" class="text-gray-400 mb-4">You are the highest bidder!</p>
                 <!-- <p id="highest-bidder-info" class="text-gray-400 mb-4">Highest bidder: Bidder #123</p> -->
 
                 <div id="bidding-controls" class="space-y-4">
-                    <input type="number" id="custom-bid-input" placeholder="Enter custom bid ($)" class="w-full p-3 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-amber-500" min="13600" step="100">
+                    <input type="number" id="custom-bid-input" placeholder="Enter custom bid (₹)" class="w-full p-3 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-amber-500" min="13600" step="100">
                     <div class="grid grid-cols-2 gap-3">
-                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="100">+$100</button>
-                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="500">+$500</button>
-                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="1000">+$1,000</button>
-                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="5000">+$5,000</button>
+                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="100">+₹100</button>
+                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="500">+₹500</button>
+                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="1000">+₹1,000</button>
+                        <button class="quick-bid-btn bg-amber-600 text-white py-3 rounded-md hover:bg-amber-700 transition font-semibold" data-bid-amount="5000">+₹5,000</button>
                     </div>
                     <button id="place-bid-btn" class="w-full bg-green-600 text-white py-4 rounded-md hover:bg-green-700 transition font-bold text-lg">Place Bid</button>
                 </div>
@@ -156,14 +156,14 @@
                 <h3 class="text-xl font-bold text-white mb-4">Bid History</h3>
                 <div id="bid-history-list" class="space-y-2 text-sm custom-scrollbar overflow-y-auto flex-grow pr-2">
                     <!-- Bid entries will be dynamically added here -->
-                    <p class="text-gray-300"><span class="font-semibold text-amber-300">You:</span> $13,500 <span class="text-gray-500 text-xs ml-2">Just now</span></p>
-                    <p class="text-gray-300"><span class="font-semibold">Bidder #123:</span> $13,400 <span class="text-gray-500 text-xs ml-2">5s ago</span></p>
-                    <p class="text-gray-300"><span class="font-semibold">Bidder #078:</span> $13,000 <span class="text-gray-500 text-xs ml-2">15s ago</span></p>
-                    <p class="text-gray-300"><span class="font-semibold">Bidder #123:</span> $12,900 <span class="text-gray-500 text-xs ml-2">20s ago</span></p>
-                    <p class="text-gray-300"><span class="font-semibold">You:</span> $12,800 <span class="text-gray-500 text-xs ml-2">30s ago</span></p>
-                    <p class="text-gray-300"><span class="font-semibold">Bidder #078:</span> $12,500 <span class="text-gray-500 text-xs ml-2">45s ago</span></p>
-                    <p class="text-gray-300"><span class="font-semibold">Bidder #005:</span> $12,200 <span class="text-gray-500 text-xs ml-2">1m ago</span></p>
-                    <p class="text-gray-300"><span class="font-semibold">Auctioneer:</span> Starting Bid $12,000 <span class="text-gray-500 text-xs ml-2">2m ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold text-amber-300">You:</span> ₹13,500 <span class="text-gray-500 text-xs ml-2">Just now</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #123:</span> ₹13,400 <span class="text-gray-500 text-xs ml-2">5s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #078:</span> ₹13,000 <span class="text-gray-500 text-xs ml-2">15s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #123:</span> ₹12,900 <span class="text-gray-500 text-xs ml-2">20s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">You:</span> ₹12,800 <span class="text-gray-500 text-xs ml-2">30s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #078:</span> ₹12,500 <span class="text-gray-500 text-xs ml-2">45s ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Bidder #005:</span> ₹12,200 <span class="text-gray-500 text-xs ml-2">1m ago</span></p>
+                    <p class="text-gray-300"><span class="font-semibold">Auctioneer:</span> Starting Bid ₹12,000 <span class="text-gray-500 text-xs ml-2">2m ago</span></p>
                 </div>
             </div>
         </aside>
@@ -227,7 +227,7 @@
         let currentBid = {{ item.current_bid }};
         let isHighestBidder = false;
         let currentUserStatus = "Approved Bidder"; // Can be "Approved Bidder", "Waiting for Approval", "Guest (View Only)"
-        let auctionEndTime = new Date().getTime() + (0.5 * 60 * 1000); // 30 seconds from now for demonstration
+        let auctionEndTime = new Date().getTime() + (0.1 * 60 * 1000);
 
         const userStatusElement = document.getElementById('user-status');
         const biddingControls = document.getElementById('bidding-controls');
@@ -262,7 +262,7 @@
 
         // Function to update current bid display
         function updateCurrentBidDisplay() {
-            currentBidElement.textContent = `$${currentBid.toLocaleString()}`;
+            currentBidElement.textContent = `₹${currentBid.toLocaleString()}`;
             if (isHighestBidder) {
                 highestBidderInfoElement.textContent = "You are the highest bidder!";
                 highestBidderInfoElement.classList.remove('text-gray-400');
@@ -294,7 +294,7 @@
             timeSpan.textContent = 'Just now'; // In real app, calculate time difference
 
             bidEntry.appendChild(bidderSpan);
-            bidEntry.innerHTML += ` $${amount.toLocaleString()} `;
+            bidEntry.innerHTML += ` ₹${amount.toLocaleString()} `;
             bidEntry.appendChild(timeSpan);
 
             // Add to top of history
@@ -420,7 +420,7 @@
                 updateCurrentBidDisplay();
                 addBidToHistory('You', currentBid, true);
                 showNotification("Your bid has been placed successfully!", "success");
-                showAuctioneerAnnouncement(`Bid $${currentBid.toLocaleString()} received!`);
+                showAuctioneerAnnouncement(`Bid ₹${currentBid.toLocaleString()} received!`);
             } catch (error) {
                 console.error("Bid error:", error);
                 showNotification("Something went wrong. Please try again.", "error");

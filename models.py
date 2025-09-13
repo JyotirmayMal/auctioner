@@ -11,7 +11,7 @@ class User(db.Model):
     phone_number = db.Column(db.String(20), unique=True, nullable=False)
 
     password_hash = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.String(20), nullable=False, default="customer")  # admin, customer, guest, employee
+    role = db.Column(db.String(20), nullable=False)  # admin, customer, guest, employee
 
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
@@ -34,20 +34,6 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
-class Company(db.Model):
-    __tablename__ = 'companies'
-    company_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    company_name = db.Column(db.String(255), nullable=False)
-    tax_id_number = db.Column(db.String(50), nullable=False, unique=True)
-    company_address = db.Column(db.String(255), nullable=False)
-    auth_contact_name = db.Column(db.String(200), nullable=False)
-    auth_contact_role = db.Column(db.String(100), nullable=False)
-    business_registration_proof_path = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    def __repr__(self):
-        return f'<Company {self.company_name}>'
 
 class AuctionItem(db.Model):
     __tablename__ = "auction_items"

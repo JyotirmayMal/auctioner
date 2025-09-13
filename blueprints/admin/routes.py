@@ -3,7 +3,7 @@ from flask import Blueprint, flash, jsonify, redirect, render_template, request,
 from sqlalchemy import or_
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from models import BlogPost, User, AuctionItem
+from models import BlogPost, Payment, User, AuctionItem
 from extensions import db
 
 admin_bp = Blueprint("admin", __name__, template_folder="../../templates")
@@ -51,11 +51,16 @@ def dashboard():
 
     users = User.query.filter(User.role != "admin").all()
     items = AuctionItem.query.all()
+    payments = Payment.query.order_by(Payment.timestamp.desc()).all()
+    posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
+    
 
     return render_template(
         "Admin Dashboard page.html",
         users=users,
         items=items,
+        payments=payments,
+        posts=posts,
         now=datetime.now(),
         admin_name=session.get("first_name")
     )
@@ -281,3 +286,16 @@ def delete_blog(post_id):
     db.session.commit()
     flash("Blog post deleted successfully!", "success")
     return redirect(url_for("admin.blogs"))
+
+@admin_bp.route("/payments", methods=["GET"])
+def payments():
+    if "user_id" not in session or session.get("role") != "admin":
+        flash("Please log in as admin.", "danger")
+        return redirect(url_for("admin.login"))
+
+    payments = Payment.query.order_by(Payment.timestamp.desc()).all()
+    return render_template(
+        "Admin Dashboard page.html",
+        payments=payments,
+        admin_name=session.get("first_name")
+    )

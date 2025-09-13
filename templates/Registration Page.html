@@ -147,15 +147,16 @@
                 <label class="text-white text-lg font-bold mb-2">Account Type:</label>
                 <div class="flex flex-wrap gap-4">
                     <label class="inline-flex items-center">
-                        <input type="radio" name="userType" value="individual" class="form-radio text-amber-600" checked>
-                        <span class="ml-2 text-gray-300">Individual</span>
+                        <input type="radio" name="userType" value="bidder" class="form-radio text-amber-600" checked>
+                        <span class="ml-2 text-gray-300">Bidder</span>
                     </label>
                     <label class="inline-flex items-center">
-                        <input type="radio" name="userType" value="company" class="form-radio text-amber-600">
-                        <span class="ml-2 text-gray-300">Company</span>
+                        <input type="radio" name="userType" value="seller" class="form-radio text-amber-600">
+                        <span class="ml-2 text-gray-300">Seller</span>
                     </label>
                 </div>
             </div>
+
 
             <!-- 1. Personal Information Section -->
             <section>
@@ -273,101 +274,6 @@
                 </div>
             </section>
 
-            <!-- 4. Company Information (Conditional) -->
-            <!-- <section id="companyInfoSection" class="hidden">
-                <h2 class="text-2xl font-bold text-amber-400 mb-4">Company Information</h2>
-                <div class="input-group">
-                    <label for="companyName">Company Name <span class="text-red-500">*</span></label>
-                    <input type="text" id="companyName" name="companyName" placeholder="Antique Auction Corp." required>
-                    <p class="error-message hidden" id="companyNameError"></p>
-                </div>
-                <div class="input-group">
-                    <label for="taxId">Registration/Tax ID Number <span class="text-red-500">*</span></label>
-                    <input type="text" id="taxId" name="taxId" placeholder="ABC12345XYZ" required>
-                    <p class="error-message hidden" id="taxIdError"></p>
-                </div>
-                <div class="input-group">
-                    <label for="companyAddress">Company Address <span class="text-red-500">*</span></label>
-                    <input type="text" id="companyAddress" name="companyAddress" placeholder="456 Business Park, City, Country" required>
-                    <p class="error-message hidden" id="companyAddressError"></p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="input-group">
-                        <label for="authContactName">Authorized Contact Person Name <span class="text-red-500">*</span></label>
-                        <input type="text" id="authContactName" name="authContactName" placeholder="Jane Doe" required>
-                        <p class="error-message hidden" id="authContactNameError"></p>
-                    </div>
-                    <div class="input-group">
-                        <label for="authContactRole">Authorized Contact Person Role <span class="text-red-500">*</span></label>
-                        <input type="text" id="authContactRole" name="authContactRole" placeholder="CEO / Director" required>
-                        <p class="error-message hidden" id="authContactRoleError"></p>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="businessProof">Upload Business Registration Proof (Optional)</label>
-                    <div class="file-upload-box" onclick="document.getElementById('businessProof').click()">
-                        <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
-                        <p class="text-gray-400">Drag & Drop or Click to Upload (PDF, JPG, PNG)</p>
-                        <input type="file" id="businessProof" name="businessProof" accept=".pdf,.jpg,.jpeg,.png">
-                        <p class="text-gray-400 text-sm mt-2" id="businessProofFileName"></p>
-                    </div>
-                </div>
-            </section> -->
-
-            <!-- 5. Digital Signature Upload -->
-            <!-- <section>
-                <h2 class="text-2xl font-bold text-amber-400 mb-4">Digital Signature</h2>
-                <div class="input-group">
-                    <label class="text-white text-lg font-bold mb-2">Upload or Draw Your Signature:</label>
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="signatureMethod" value="upload" class="form-radio text-amber-600" checked>
-                            <span class="ml-2 text-gray-300">Upload File</span>
-                        </label>
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="signatureMethod" value="draw" class="form-radio text-amber-600">
-                            <span class="ml-2 text-gray-300">Draw Signature</span>
-                        </label>
-                    </div>
-
-                    <div id="signatureUploadSection">
-                        <div class="file-upload-box" onclick="document.getElementById('signatureFile').click()">
-                            <i class="fas fa-signature text-gray-400 text-3xl mb-2"></i>
-                            <p class="text-gray-400">Drag & Drop or Click to Upload Signature (JPG, PNG, PDF)</p>
-                            <input type="file" id="signatureFile" name="signatureFile" accept=".jpg,.jpeg,.png,.pdf">
-                            <p class="text-gray-400 text-sm mt-2" id="signatureFileName"></p>
-                        </div>
-                    </div>
-
-                    <div id="signatureDrawSection" class="hidden">
-                        <canvas id="signatureCanvas" width="400" height="150" class="w-full"></canvas>
-                        <div class="flex gap-2 mt-2">
-                            <button type="button" id="clearSignature" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md transition">Clear</button>
-                            <button type="button" id="saveSignature" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition">Save Drawn Signature</button>
-                        </div>
-                        <p class="error-message hidden" id="signatureError"></p>
-                    </div>
-                </div>
-            </section> -->
-
-            <!-- 6. Earnest Money Deposit (EMD) -->
-            <!-- <section>
-                <h2 class="text-2xl font-bold text-amber-400 mb-4">Earnest Money Deposit (EMD)</h2>
-                <p class="text-gray-300 mb-4">
-                    A refundable Earnest Money Deposit (EMD) is required to ensure serious participation in our auctions. This amount will be held and can be refunded as per our policy.
-                </p>
-                <div class="input-group">
-                    <label for="emdAmount">EMD Amount <span class="text-red-500">*</span></label>
-                    <input type="text" id="emdAmount" name="emdAmount" value="$500.00" readonly class="bg-gray-600 cursor-not-allowed">
-                </div>
-                <button type="button" id="proceedToEmdPayment" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition">
-                    Proceed to EMD Payment
-                </button>
-                <p class="text-gray-400 text-sm mt-4">
-                    <i class="fas fa-info-circle mr-1"></i> Please review our <a href="#" class="text-amber-400 hover:underline" id="emdPolicyLink">EMD Refund/Cancellation Policy</a> before proceeding.
-                </p>
-                <p class="error-message hidden" id="emdError"></p>
-            </section> -->
 
             <!-- 7. Verification Mechanisms (CAPTCHA) -->
             <section>
@@ -451,19 +357,6 @@
         // Form elements
         const registrationForm = document.getElementById('registrationForm');
         const userTypeRadios = document.querySelectorAll('input[name="userType"]');
-        // const companyInfoSection = document.getElementById('companyInfoSection');
-        // const nationalIdInput = document.getElementById('nationalId');
-        // const nationalIdFileName = document.getElementById('nationalIdFileName');
-        // const businessProofInput = document.getElementById('businessProof');
-        // const businessProofFileName = document.getElementById('businessProofFileName');
-        // const signatureMethodRadios = document.querySelectorAll('input[name="signatureMethod"]');
-        // const signatureUploadSection = document.getElementById('signatureUploadSection');
-        // const signatureDrawSection = document.getElementById('signatureDrawSection');
-        // const signatureFile = document.getElementById('signatureFile');
-        // const signatureFileName = document.getElementById('signatureFileName');
-        // const signatureCanvas = document.getElementById('signatureCanvas');
-        // const clearSignatureButton = document.getElementById('clearSignature');
-        // const saveSignatureButton = document.getElementById('saveSignature');
         const signatureError = document.getElementById('signatureError');
         const sendOtpButton = document.getElementById('sendOtpButton');
         const otpVerificationGroup = document.getElementById('otpVerificationGroup');
@@ -480,8 +373,6 @@
         const confirmPasswordInput = document.getElementById('confirmPassword');
         const togglePasswordButton = document.getElementById('togglePassword');
         const toggleConfirmPasswordButton = document.getElementById('toggleConfirmPassword');
-        // const proceedToEmdPaymentButton = document.getElementById('proceedToEmdPayment');
-        // const emdError = document.getElementById('emdError');
         const countrySelect = document.getElementById('country'); // Get country select element
         const dobInput = document.getElementById('dob'); // Get DOB input element
 
@@ -589,135 +480,6 @@
         document.addEventListener('DOMContentLoaded', populateCountries);
 
 
-        // --- User Type Toggle ---
-        // userTypeRadios.forEach(radio => {
-        //     radio.addEventListener('change', (event) => {
-        //         if (event.target.value === 'company') {
-        //             companyInfoSection.classList.remove('hidden');
-        //             companyInfoSection.querySelectorAll('input[required]').forEach(input => input.setAttribute('data-required-company', 'true'));
-        //         } else {
-        //             companyInfoSection.classList.add('hidden');
-        //             companyInfoSection.querySelectorAll('input[data-required-company]').forEach(input => input.removeAttribute('data-required-company'));
-        //         }
-        //     });
-        // });
-
-        // --- File Upload Name Display ---
-        // nationalIdInput.addEventListener('change', (event) => {
-        //     nationalIdFileName.textContent = event.target.files.length > 0 ? event.target.files[0].name : '';
-        // });
-        // businessProofInput.addEventListener('change', (event) => {
-        //     businessProofFileName.textContent = event.target.files.length > 0 ? event.target.files[0].name : '';
-        // });
-        // signatureFile.addEventListener('change', (event) => {
-        //     signatureFileName.textContent = event.target.files.length > 0 ? event.target.files[0].name : '';
-        //     hideError('signatureError');
-        // });
-
-        // --- Digital Signature Method Toggle ---
-        // signatureMethodRadios.forEach(radio => {
-        //     radio.addEventListener('change', (event) => {
-        //         if (event.target.value === 'upload') {
-        //             signatureUploadSection.classList.remove('hidden');
-        //             signatureDrawSection.classList.add('hidden');
-        //             drawnSignatureDataURL = null; // Clear drawn signature if switching
-        //             hideError('signatureError');
-        //         } else {
-        //             signatureUploadSection.classList.add('hidden');
-        //             signatureDrawSection.classList.remove('hidden');
-        //             initSignatureCanvas(); // Only initialize once
-        //             hideError('signatureError');
-        //         }
-        //     });
-        // });
-
-        // --- Signature Canvas Drawing Logic ---
-        // let ctx = null;
-        // let drawing = false;
-        // let canvasInitialized = false;
-
-        // function initSignatureCanvas() {
-        //     if (canvasInitialized) return; // Prevent multiple initializations
-        //     ctx = signatureCanvas.getContext('2d');
-        //     ctx.lineWidth = 2;
-        //     ctx.lineCap = 'round';
-        //     ctx.strokeStyle = '#f5f5f5'; // White color for signature
-
-        //     signatureCanvas.addEventListener('mousedown', startDrawing);
-        //     signatureCanvas.addEventListener('mouseup', stopDrawing);
-        //     signatureCanvas.addEventListener('mousemove', draw);
-        //     signatureCanvas.addEventListener('mouseout', stopDrawing);
-        //     signatureCanvas.addEventListener('touchstart', startDrawing);
-        //     signatureCanvas.addEventListener('touchend', stopDrawing);
-        //     signatureCanvas.addEventListener('touchmove', draw);
-
-        //     clearCanvas();
-        //     canvasInitialized = true;
-        // }
-
-        // function getEventPos(event) {
-        //     const rect = signatureCanvas.getBoundingClientRect();
-        //     if (event.touches && event.touches.length > 0) {
-        //         return {
-        //             x: event.touches[0].clientX - rect.left,
-        //             y: event.touches[0].clientY - rect.top
-        //         };
-        //     }
-        //     return {
-        //         x: event.clientX - rect.left,
-        //         y: event.clientY - rect.top
-        //     };
-        // }
-
-        // function startDrawing(event) {
-        //     drawing = true;
-        //     ctx.beginPath();
-        //     const pos = getEventPos(event);
-        //     ctx.moveTo(pos.x, pos.y);
-        //     event.preventDefault();
-        // }
-
-        // function draw(event) {
-        //     if (!drawing) return;
-        //     const pos = getEventPos(event);
-        //     ctx.lineTo(pos.x, pos.y);
-        //     ctx.stroke();
-        //     event.preventDefault();
-        // }
-
-        // function stopDrawing() {
-        //     drawing = false;
-        // }
-
-        // function clearCanvas() {
-        //     ctx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
-        //     drawnSignatureDataURL = null;
-        // }
-
-        // clearSignatureButton.addEventListener('click', clearCanvas);
-
-        // saveSignatureButton.addEventListener('click', () => {
-        //     if (isCanvasBlank(signatureCanvas)) {
-        //         showError('signatureError', 'Please draw your signature before saving.');
-        //         drawnSignatureDataURL = null;
-        //     } else {
-        //         drawnSignatureDataURL = signatureCanvas.toDataURL('image/png');
-        //         hideError('signatureError');
-        //         alert('Signature saved!');
-        //     }
-        // });
-
-        // function isCanvasBlank(canvas) {
-        //     const blank = document.createElement('canvas');
-        //     blank.width = canvas.width;
-        //     blank.height = canvas.height;
-        //     return canvas.toDataURL() === blank.toDataURL();
-        // }
-
-        // if (document.querySelector('input[name="signatureMethod"]:checked').value === 'draw') {
-        //     initSignatureCanvas();
-        // }
-
 
         // --- OTP Verification ---
         sendOtpButton.addEventListener('click', () => {
@@ -810,17 +572,6 @@
 
         refreshCaptchaButton.addEventListener('click', generateCaptcha);
 
-        // --- EMD Payment Simulation ---
-        // proceedToEmdPaymentButton.addEventListener('click', () => {
-        //     emdPaid = true;
-        //     hideError('emdError');
-        //     proceedToEmdPaymentButton.textContent = 'Payment Completed!';
-        //     proceedToEmdPaymentButton.classList.remove('bg-green-600');
-        //     proceedToEmdPaymentButton.classList.add('bg-gray-500');
-        //     proceedToEmdPaymentButton.disabled = true;
-        //     alert('EMD Payment Simulated Successfully!');
-        // });
-
 
         // --- Terms and Conditions Modal ---
         termsLink.addEventListener('click', (e) => {
@@ -840,180 +591,136 @@
 
         // --- Form Submission and Validation ---
         registrationForm.addEventListener('submit', function(event) {
-            // event.preventDefault();
+    let formIsValid = true;
+    let firstErrorField = null;
 
-            let formIsValid = true;
+    // Clear all previous error messages
+    document.querySelectorAll('.error-message').forEach(el => el.classList.add('hidden'));
 
-            document.querySelectorAll('.error-message').forEach(el => el.classList.add('hidden'));
+    // --- Personal Information Validation ---
+    const requiredFields = [
+        { id: 'firstName', name: 'First Name' },
+        { id: 'lastName', name: 'Last Name' },
+        { id: 'streetAddress', name: 'Street Address' },
+        { id: 'city', name: 'City' },
+        { id: 'state', name: 'State/Province' },
+        { id: 'postalCode', name: 'Postal Code' },
+        { id: 'country', name: 'Country' },
+        { id: 'dob', name: 'Date of Birth' }
+    ];
 
-
-            // --- Personal Information Validation ---
-            const requiredFields = [
-                { id: 'firstName', name: 'First Name' },
-                { id: 'lastName', name: 'Last Name' },
-                { id: 'streetAddress', name: 'Street Address' },
-                { id: 'city', name: 'City' },
-                { id: 'state', name: 'State/Province' },
-                { id: 'postalCode', name: 'Postal Code' },
-                { id: 'country', name: 'Country' },
-                { id: 'dob', name: 'Date of Birth' }
-            ];
-
-            requiredFields.forEach(field => {
-                const input = document.getElementById(field.id);
-                if (!input.value.trim()) {
-                    showError(`${field.id}Error`, `${field.name} is required.`);
-                    formIsValid = false;
-                }
-            });
-
-            // Date of Birth validation (future date and age check)
-            if (dobInput.value) {
-                const today = new Date();
-                const birthDate = new Date(dobInput.value);
-                const minAgeDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-
-                if (birthDate > today) {
-                    showError('dobError', 'Date of Birth cannot be in the future.');
-                    formIsValid = false;
-                } else if (birthDate > minAgeDate) {
-                    showError('dobError', 'You must be at least 18 years old to register.');
-                    formIsValid = false;
-                }
-            }
-
-
-            // --- Contact Information Validation ---
-            const emailInput = document.getElementById('email');
-            if (!emailInput.value.trim()) {
-                showError('emailError', 'Email Address is required.');
-                formIsValid = false;
-            } else if (!/^\S+@\S+\.\S+$/.test(emailInput.value)) {
-                showError('emailError', 'Please enter a valid email address.');
-                formIsValid = false;
-            }
-
-            const mobileNumberInput = document.getElementById('mobileNumber');
-            if (!mobileNumberInput.value.trim()) {
-                showError('mobileNumberError', 'Mobile Phone Number is required.');
-                formIsValid = false;
-            } else if (!otpVerified) {
-                showError('mobileNumberError', 'Please verify your mobile number with OTP.');
-                formIsValid = false;
-            }
-
-            // --- Account Security Validation ---
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-
-            if (!password.trim()) {
-                showError('passwordError', 'Password is required.');
-                formIsValid = false;
-            } else if (password.length < 8) {
-                showError('passwordError', 'Password must be at least 8 characters long.');
-                formIsValid = false;
-            }
-
-            if (!confirmPassword.trim()) {
-                showError('confirmPasswordError', 'Confirm Password is required.');
-                formIsValid = false;
-            } else if (password !== confirmPassword) {
-                showError('confirmPasswordError', 'Passwords do not match.');
-                formIsValid = false;
-            }
-
-
-            // --- Company Information Validation (if visible) ---
-            // const selectedUserType = document.querySelector('input[name="userType"]:checked').value;
-            // if (selectedUserType === 'company') {
-            //     const companyRequiredFields = [
-            //         { id: 'companyName', name: 'Company Name' },
-            //         { id: 'taxId', name: 'Registration/Tax ID Number' },
-            //         { id: 'companyAddress', name: 'Company Address' },
-            //         { id: 'authContactName', name: 'Authorized Contact Person Name' },
-            //         { id: 'authContactRole', name: 'Authorized Contact Person Role' }
-            //     ];
-            //     companyRequiredFields.forEach(field => {
-            //         const input = document.getElementById(field.id);
-            //         if (!input.value.trim()) {
-            //             showError(`${field.id}Error`, `${field.name} is required for company registration.`);
-            //             formIsValid = false;
-            //         }
-            //     });
-            // }
-
-            // --- Digital Signature Validation ---
-            // const selectedSignatureMethod = document.querySelector('input[name="signatureMethod"]:checked').value;
-            // if (selectedSignatureMethod === 'upload') {
-            //     if (signatureFile.files.length === 0) {
-            //         showError('signatureError', 'Please upload your digital signature file.');
-            //         formIsValid = false;
-            //     }
-            // } else if (selectedSignatureMethod === 'draw') {
-            //     if (!drawnSignatureDataURL) {
-            //         showError('signatureError', 'Please draw and save your digital signature.');
-            //         formIsValid = false;
-            //     }
-            // }
-
-            // --- EMD Payment Validation ---
-            // if (!emdPaid) {
-            //     showError('emdError', 'EMD payment is required to complete registration.');
-            //     formIsValid = false;
-            // }
-
-            // --- CAPTCHA Validation ---
-            if (captchaInput.value.trim().toLowerCase() !== currentCaptcha.toLowerCase()) {
-                showError('captchaError', 'Incorrect CAPTCHA. Please try again.');
-                generateCaptcha();
-                formIsValid = false;
-            }
-
-            // --- Terms and Conditions Validation ---
-            if (!agreeTermsCheckbox.checked) {
-                showError('termsError', 'You must agree to the Terms and Conditions.');
-                formIsValid = false;
-            }
-
-            if (formIsValid) {
-            // Show success toast instead of alert
-            alert('Registration Successful! Redirecting to login page...');
-
-            // Submit form
-            registrationForm.submit();
-
-            // After form submit → redirect
-            setTimeout(() => {
-                window.location.href = '/login';
-            }, 1500);
-
-            // Reset states only after redirect
-            registrationForm.reset();
-            generateCaptcha();
-
-            otpVerificationGroup.classList.add('hidden');
-            otpSent = false;
-            otpVerified = false;
-
-            sendOtpButton.textContent = 'Send OTP';
-            sendOtpButton.disabled = false;
-
-            verifyOtpButton.textContent = 'Verify OTP';
-            verifyOtpButton.classList.remove('bg-gray-500');
-            verifyOtpButton.classList.add('bg-green-600');
-
-            otpInput.disabled = false;
-            document.querySelector('input[name="userType"][value="individual"]').checked = true;
-
-            } else {
-                alert('Please correct the errors in the form.');
-            }
-
-        });
-
-        if (document.querySelector('input[name="signatureMethod"]:checked').value === 'draw') {
-            initSignatureCanvas();
+    requiredFields.forEach(field => {
+        const input = document.getElementById(field.id);
+        if (!input.value.trim()) {
+            showError(`${field.id}Error`, `${field.name} is required.`);
+            if (!firstErrorField) firstErrorField = input;
+            formIsValid = false;
         }
+    });
+
+    // Date of Birth validation (future date and age check)
+    if (dobInput.value) {
+        const today = new Date();
+        const birthDate = new Date(dobInput.value);
+        const minAgeDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+        if (birthDate > today) {
+            showError('dobError', 'Date of Birth cannot be in the future.');
+            if (!firstErrorField) firstErrorField = dobInput;
+            formIsValid = false;
+        } else if (birthDate > minAgeDate) {
+            showError('dobError', 'You must be at least 18 years old to register.');
+            if (!firstErrorField) firstErrorField = dobInput;
+            formIsValid = false;
+        }
+    }
+
+    // --- Contact Information Validation ---
+    const emailInput = document.getElementById('email');
+    if (!emailInput.value.trim()) {
+        showError('emailError', 'Email Address is required.');
+        if (!firstErrorField) firstErrorField = emailInput;
+        formIsValid = false;
+    } else if (!/^\S+@\S+\.\S+$/.test(emailInput.value)) {
+        showError('emailError', 'Please enter a valid email address.');
+        if (!firstErrorField) firstErrorField = emailInput;
+        formIsValid = false;
+    }
+
+    const mobileNumberInput = document.getElementById('mobileNumber');
+    if (!mobileNumberInput.value.trim()) {
+        showError('mobileNumberError', 'Mobile Phone Number is required.');
+        if (!firstErrorField) firstErrorField = mobileNumberInput;
+        formIsValid = false;
+    } else if (!otpVerified) {
+        showError('mobileNumberError', 'Please verify your mobile number with OTP.');
+        if (!firstErrorField) firstErrorField = mobileNumberInput;
+        formIsValid = false;
+    }
+
+    // --- Account Security Validation ---
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (!password.trim()) {
+        showError('passwordError', 'Password is required.');
+        if (!firstErrorField) firstErrorField = passwordInput;
+        formIsValid = false;
+    } else if (password.length < 8) {
+        showError('passwordError', 'Password must be at least 8 characters long.');
+        if (!firstErrorField) firstErrorField = passwordInput;
+        formIsValid = false;
+    }
+
+    if (!confirmPassword.trim()) {
+        showError('confirmPasswordError', 'Confirm Password is required.');
+        if (!firstErrorField) firstErrorField = confirmPasswordInput;
+        formIsValid = false;
+    } else if (password !== confirmPassword) {
+        showError('confirmPasswordError', 'Passwords do not match.');
+        if (!firstErrorField) firstErrorField = confirmPasswordInput;
+        formIsValid = false;
+    }
+
+    // --- CAPTCHA Validation ---
+    if (captchaInput.value.trim().toLowerCase() !== currentCaptcha.toLowerCase()) {
+        showError('captchaError', 'Incorrect CAPTCHA. Please try again.');
+        if (!firstErrorField) firstErrorField = captchaInput;
+        generateCaptcha();
+        formIsValid = false;
+    }
+
+    // --- Terms and Conditions Validation ---
+    if (!agreeTermsCheckbox.checked) {
+        showError('termsError', 'You must agree to the Terms and Conditions.');
+        if (!firstErrorField) firstErrorField = agreeTermsCheckbox;
+        formIsValid = false;
+    }
+
+    // Handle form submission based on validation results
+    if (!formIsValid) {
+        // Prevent form submission
+        event.preventDefault();
+        
+        // Focus on the first field with an error
+        if (firstErrorField) {
+            firstErrorField.focus();
+            firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        alert('Please correct the highlighted errors in the form.');
+        return false;
+    }
+
+    // If we reach here, form is valid - allow normal submission
+    // Show loading state on submit button
+    const submitButton = document.getElementById('completeRegistration');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Processing...';
+    
+    // Form will submit normally to the server
+    // Don't call event.preventDefault() here - let it submit naturally
+});
     </script>
 </body>
 </html>

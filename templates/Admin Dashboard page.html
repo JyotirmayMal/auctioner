@@ -517,46 +517,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for payment in payments %}
                                     <tr>
-                                        <td>TXN001</td>
-                                        <td>John Doe</td>
-                                        <td>103</td>
-                                        <td>$5,200</td>
-                                        <td class="text-green-600">Paid</td>
-                                        <td>2023-09-22</td>
-                                        <td>Stripe</td>
+                                        <td>TXN{{ "%04d" % payment.id }}</td>
+                                        <td>{{ payment.user.first_name }} {{ payment.user.last_name }}</td>
+                                        <td>{{ payment.item.id }}</td>
+                                        <td>${{ "{:,.2f}".format(payment.amount) }}</td>
+                                        <td class="{% if payment.status == 'successful' %}text-green-600
+                                                    {% elif payment.status == 'pending' %}text-yellow-600
+                                                    {% else %}text-red-600{% endif %}">
+                                            {{ payment.status|capitalize }}
+                                        </td>
+                                        <td>{{ payment.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                        <td>Razorpay</td>
                                     </tr>
+                                    {% else %}
                                     <tr>
-                                        <td>TXN002</td>
-                                        <td>Alice Brown</td>
-                                        <td>101</td>
-                                        <td>$3,500</td>
-                                        <td class="text-yellow-600">Pending</td>
-                                        <td>2023-11-02</td>
-                                        <td>PayPal</td>
+                                        <td colspan="7" class="text-center text-gray-500 py-4">No transactions found.</td>
                                     </tr>
-                                    <tr>
-                                        <td>TXN003</td>
-                                        <td>Bob White</td>
-                                        <td>100</td>
-                                        <td>$1,200</td>
-                                        <td class="text-red-600">Failed</td>
-                                        <td>2023-10-10</td>
-                                        <td>Stripe</td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                         <div class="mt-6">
                             <h3 class="text-xl font-semibold text-gray-800 mb-3">Payment Gateway Settings</h3>
                             <div class="flex items-center mb-2">
-                                <label class="mr-4">Stripe API Key:</label>
-                                <input type="text" value="sk_live_********************" class="p-2 border rounded w-1/2" disabled>
-                                <button class="btn-primary ml-4">Edit</button>
-                            </div>
-                            <div class="flex items-center">
-                                <label class="mr-4">PayPal Client ID:</label>
-                                <input type="text" value="sb_client_********************" class="p-2 border rounded w-1/2" disabled>
+                                <label class="mr-4">Razorpay API Key:</label>
+                                <input type="text" value="rzp_live_********************" class="p-2 border rounded w-1/2" disabled>
                                 <button class="btn-primary ml-4">Edit</button>
                             </div>
                         </div>
