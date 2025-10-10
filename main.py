@@ -8,6 +8,7 @@ from blueprints.admin.routes import admin_bp
 from blueprints.auctions.routes import auctions_bp
 from blueprints.payments.routes import payments_bp
 from blueprints.blog.routes import blog_bp
+from blueprints.seller.routes import seller_bp
 
 def create_app():
     app = Flask(__name__)
@@ -21,6 +22,8 @@ def create_app():
     app.register_blueprint(auctions_bp, url_prefix="/auctions")
     app.register_blueprint(payments_bp, url_prefix="/payments")
     app.register_blueprint(blog_bp, url_prefix="/blog")
+    app.register_blueprint(seller_bp, url_prefix='/seller')
+
 
     @app.route("/")
     def home():

@@ -14,7 +14,7 @@
             color: #333;
         }
         .sidebar {
-            background-color: #2d3748; /* Darker gray for sidebar */
+            background-color: #2d3748;
             color: #cbd5e0;
         }
         .sidebar a {
@@ -25,7 +25,7 @@
             transition: background-color 0.2s;
         }
         .sidebar a:hover, .sidebar a.active {
-            background-color: #4a5568; /* Slightly lighter gray on hover/active */
+            background-color: #4a5568;
             color: #fff;
         }
         .header {
@@ -38,14 +38,14 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
         .btn-primary {
-            background-color: #f6ad55; /* Amber-like color */
+            background-color: #f6ad55;
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 0.25rem;
             transition: background-color 0.2s;
         }
         .btn-primary:hover {
-            background-color: #ed8936; /* Darker amber */
+            background-color: #ed8936;
         }
         table {
             width: 100%;
@@ -70,48 +70,13 @@
             <div class="text-white text-2xl font-bold mb-8 text-center">Admin Panel</div>
             <nav>
                 <ul>
-                    <li class="mb-2">
-                        <a href="#dashboard" class="active">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#users">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.146-1.28-.42-1.823M7 20h4m-4 0v-2c0-.653.146-1.28.42-1.823M12 10a6 6 0 00-6 6v2h12v-2a6 6 0 00-6-6zm-2 4h4"></path></svg>
-                            User Management
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#listings">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                            Listings Management
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#news">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                            BLogs & News Management
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#payments">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V9m0 3v2m0 3.5V21M12 3v1.5m0 3V7"></path></svg>
-                            Payment Management
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#disputes">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                            Dispute Resolution
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#reports">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 2v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            Reports Section
-                        </a>
-                    </li>
+                    <li class="mb-2"><a href="#dashboard" class="active"><svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>Dashboard</a></li>
+                    <li class="mb-2"><a href="#users"><svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.146-1.28-.42-1.823M7 20h4m-4 0v-2c0-.653.146-1.28.42-1.823M12 10a6 6 0 00-6 6v2h12v-2a6 6 0 00-6-6zm-2 4h4"></path></svg>User Management</a></li>
+                    <li class="mb-2"><a href="#listings"><svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>Listings Management</a></li>
+                    <li class="mb-2"><a href="#news"><svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>BLogs & News Management</a></li>
+                    <li class="mb-2"><a href="#payments"><svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V9m0 3v2m0 3.5V21M12 3v1.5m0 3V7"></path></svg>Payment Management</a></li>
+                    <li class="mb-2"><a href="#disputes"><svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>Dispute Resolution</a></li>
+                    <li class="mb-2"><a href="#reports"><svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 2v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Reports Section</a></li>
                 </ul>
             </nav>
         </aside>
@@ -123,9 +88,7 @@
                 <h1 class="text-2xl font-semibold text-gray-800">Admin Dashboard</h1>
                 <div class="flex items-center space-x-4">
                     <span class="text-gray-600">Welcome, {{ admin_name }}!</span>
-                    <a href="{{ url_for('admin.logout') }}">
-                        <button class="btn-primary">Logout</button>
-                    </a>
+                    <a href="{{ url_for('admin.logout') }}"><button class="btn-primary">Logout</button></a>
                 </div>
             </header>
 
@@ -134,26 +97,38 @@
                 <!-- Dashboard Section -->
                 <section id="dashboard" class="content-section">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">Analytics Dashboard</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         <div class="card p-5">
                             <h3 class="text-lg font-semibold text-gray-600">Total Auctions</h3>
-                            <p class="text-4xl font-bold text-gray-900 mt-2">1,234</p>
+                            <p id="totalAuctions" class="text-4xl font-bold text-gray-900 mt-2">{{ cards.total_auctions }}</p>
+                        </div>
+                        <div class="card p-5">
+                            <h3 class="text-lg font-semibold text-gray-600">Active Auctions</h3>
+                            <p id="activeAuctions" class="text-4xl font-bold text-gray-900 mt-2">{{ cards.active_auctions }}</p>
+                        </div>
+                        <div class="card p-5">
+                            <h3 class="text-lg font-semibold text-gray-600">Completed Auctions</h3>
+                            <p id="completedAuctions" class="text-4xl font-bold text-gray-900 mt-2">{{ cards.completed_auctions }}</p>
                         </div>
                         <div class="card p-5">
                             <h3 class="text-lg font-semibold text-gray-600">Total Revenue</h3>
-                            <p class="text-4xl font-bold text-gray-900 mt-2">$5,678,900</p>
+                            <p id="totalRevenue" class="text-4xl font-bold text-gray-900 mt-2">₹{{ cards.total_revenue }}</p>
                         </div>
                         <div class="card p-5">
                             <h3 class="text-lg font-semibold text-gray-600">Active Users</h3>
-                            <p class="text-4xl font-bold text-gray-900 mt-2">8,765</p>
+                            <p id="activeUsers" class="text-4xl font-bold text-gray-900 mt-2">{{ cards.active_users }}</p>
+                        </div>
+                        <div class="card p-5">
+                            <h3 class="text-lg font-semibold text-gray-600">Total Users</h3>
+                            <p id="totalUsers" class="text-4xl font-bold text-gray-900 mt-2">{{ cards.total_users }}</p>
                         </div>
                         <div class="card p-5">
                             <h3 class="text-lg font-semibold text-gray-600">Pending Disputes</h3>
-                            <p class="text-4xl font-bold text-gray-900 mt-2">12</p>
+                            <p id="pendingDisputes" class="text-4xl font-bold text-gray-900 mt-2">{{ cards.pending_disputes }}</p>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                         <div class="card p-5">
                             <h3 class="text-xl font-semibold text-gray-800 mb-4">Auction Status Overview</h3>
                             <canvas id="auctionStatusChart"></canvas>
@@ -161,6 +136,78 @@
                         <div class="card p-5">
                             <h3 class="text-xl font-semibold text-gray-800 mb-4">Revenue by Category</h3>
                             <canvas id="revenueByCategoryChart"></canvas>
+                        </div>
+                        <div class="card p-5">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Auctions by Category</h3>
+                            <canvas id="categoryCountsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card p-5">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-3">Recent Bids</h4>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Bid ID</th>
+                                            <th>Item</th>
+                                            <th>User</th>
+                                            <th>Amount</th>
+                                            <th>Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for bid in recent_activity.bids %}
+                                        <tr>
+                                            <td>{{ bid.id }}</td>
+                                            <td>{{ bid.item_title }}</td>
+                                            <td>{{ bid.user_name }}</td>
+                                            <td>₹{{ "{:,.2f}".format(bid.bid_amount) }}</td>
+                                            <td>{{ bid.timestamp }}</td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="5" class="text-center text-gray-500 py-4">No recent bids.</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-3">Recent Payments</h4>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Payment ID</th>
+                                            <th>Item</th>
+                                            <th>User</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for payment in recent_activity.payments %}
+                                        <tr>
+                                            <td>{{ payment.id }}</td>
+                                            <td>{{ payment.item_title }}</td>
+                                            <td>{{ payment.user_name }}</td>
+                                            <td>₹{{ "{:,.2f}".format(payment.amount) }}</td>
+                                            <td class="{% if payment.status == 'Successful' %}text-green-600{% elif payment.status == 'Pending' %}text-yellow-600{% else %}text-red-600{% endif %}">
+                                                {{ payment.status }}
+                                            </td>
+                                            <td>{{ payment.timestamp }}</td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="6" class="text-center text-gray-500 py-4">No recent payments.</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -171,7 +218,7 @@
                     <div class="card p-6">
                         <div class="flex justify-between items-center mb-4">
                             <input type="text" placeholder="Search users..." class="p-2 border rounded w-1/3">
-                            <button class="btn-primary" onclick="toggleUserModal(true)" >Add New User</button>
+                            <button class="btn-primary" onclick="toggleUserModal(true)">Add New User</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table>
@@ -218,36 +265,29 @@
                         <h2 id="userModalTitle" class="text-xl font-bold mb-4">Add New User</h2>
                         <form id="userForm" method="POST">
                             <div class="grid grid-cols-2 gap-4">
-                                <!-- Personal Information -->
                                 <div class="col-span-2">
                                     <h3 class="text-lg font-semibold text-gray-700 mb-3">Personal Information</h3>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">First Name</label>
                                     <input type="text" name="first_name" id="first_name" class="w-full border rounded p-2" required>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">Last Name</label>
                                     <input type="text" name="last_name" id="last_name" class="w-full border rounded p-2" required>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">Email</label>
                                     <input type="email" name="email" id="email" class="w-full border rounded p-2" required>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">Phone Number</label>
                                     <input type="tel" name="phone_number" id="phone_number" class="w-full border rounded p-2" required>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">Date of Birth</label>
                                     <input type="date" name="date_of_birth" id="date_of_birth" class="w-full border rounded p-2" required>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">Role</label>
                                     <select name="role" id="role" class="w-full border rounded p-2" required>
@@ -258,38 +298,29 @@
                                         <option value="admin">Admin</option>
                                     </select>
                                 </div>
-                                
-                                <!-- Address Information -->
                                 <div class="col-span-2 mt-4">
                                     <h3 class="text-lg font-semibold text-gray-700 mb-3">Address Information</h3>
                                 </div>
-                                
                                 <div class="col-span-2 mb-3">
                                     <label class="block text-sm font-bold mb-1">Street Address</label>
                                     <input type="text" name="street_address" id="street_address" class="w-full border rounded p-2" required>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">City</label>
                                     <input type="text" name="city" id="city" class="w-full border rounded p-2" required>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">State/Province</label>
                                     <input type="text" name="state_province" id="state_province" class="w-full border rounded p-2" required>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">Postal Code</label>
                                     <input type="text" name="postal_code" id="postal_code" class="w-full border rounded p-2" required>
                                 </div>
-                                
                                 <div class="mb-3">
                                     <label class="block text-sm font-bold mb-1">Country</label>
                                     <input type="text" name="country" id="country" class="w-full border rounded p-2" required>
                                 </div>
-                                
-                                <!-- Password (only for new users) -->
                                 <div class="col-span-2" id="passwordSection">
                                     <div class="mb-3">
                                         <label class="block text-sm font-bold mb-1">Password</label>
@@ -297,7 +328,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="flex justify-end mt-6">
                                 <button type="button" onclick="toggleUserModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
                                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save User</button>
@@ -312,7 +342,7 @@
                     <div class="card p-6">
                         <div class="flex justify-between items-center mb-4">
                             <input type="text" placeholder="Search listings..." class="p-2 border rounded w-1/3">
-                            <button class="btn-primary" onclick="toggleModal(true)" >Create New Listing</button>
+                            <button class="btn-primary" onclick="toggleModal(true)">Create New Listing</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table>
@@ -334,15 +364,13 @@
                                             <td>{{ item.id }}</td>
                                             <td>{{ item.title }}</td>
                                             <td>{{ item.seller_name }}</td>
-                                            <td class="text-green-600">
-                                                {% if item.auction_end_time > now %}
-                                                    Active
-                                                {% else %}
-                                                    Completed
-                                                {% endif %}
+                                            <td class="{% if item.auction_end_time > now and not item.is_sold %}text-green-600{% else %}text-gray-600{% endif %}">
+                                                {{ item.auction_end_time.strftime("%Y-%m-%d %H:%M:%S") if item.auction_end_time else "N/A" }}
                                             </td>
-                                            <td>{{ item.auction_end_time.strftime('%Y-%m-%d %H:%M') }}</td>
-                                            <td>{{ item.current_bid }}</td>
+
+
+                                            <td>{{ item.auction_end_time }}</td>
+                                            <td>₹{{ "{:,.2f}".format(item.current_bid) }}</td>
                                             <td>
                                                 <button class="text-blue-500 hover:underline mr-2">Edit</button>
                                                 <button class="text-red-500 hover:underline">Delete</button>
@@ -356,144 +384,140 @@
                 </section>
                 <!-- Item Listing Modal -->
                 <div id="createModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-                <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
-                    <h2 class="text-xl font-bold mb-4">Add New Item</h2>
-                    <form method="POST" action="{{ url_for('admin.add_item') }}">
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Item Title</label>
-                        <input type="text" name="title" class="w-full border rounded p-2" required>
+                    <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
+                        <h2 class="text-xl font-bold mb-4">Add New Item</h2>
+                        <form method="POST" action="{{ url_for('admin.add_item') }}">
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Item Title</label>
+                                <input type="text" name="title" class="w-full border rounded p-2" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Seller Name</label>
+                                <input type="text" name="seller_name" class="w-full border rounded p-2" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Description</label>
+                                <textarea name="description" class="w-full border rounded p-2"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Current Bid</label>
+                                <input type="number" name="current_bid" value="0" class="w-full border rounded p-2">
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Min Bid Increment</label>
+                                <input type="number" name="min_bid_increment" value="10" class="w-full border rounded p-2">
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Auction End Time</label>
+                                <input type="datetime-local" name="auction_end_time" class="w-full border rounded p-2" required>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="button" onclick="toggleModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded">Cancel</button>
+                                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Save</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Seller Name</label>
-                        <input type="text" name="seller_name" class="w-full border rounded p-2" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Description</label>
-                        <textarea name="description" class="w-full border rounded p-2"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Current Bid</label>
-                        <input type="number" name="current_bid" value="0" class="w-full border rounded p-2">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Min Bid Increment</label>
-                        <input type="number" name="min_bid_increment" value="10" class="w-full border rounded p-2">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Auction End Time</label>
-                        <input type="datetime-local" name="auction_end_time" class="w-full border rounded p-2" required>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" onclick="toggleModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Save</button>
-                    </div>
-                    </form>
-                </div>
                 </div>
                 <!-- News & Blogs Management Section -->
                 <section id="news" class="content-section hidden">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6">News & Blogs Management</h2>
-                <div class="card p-6">
-                    <div class="flex justify-between items-center mb-4">
-                    <input type="text" placeholder="Search posts..." class="p-2 border rounded w-1/3">
-                    <button class="btn-primary" onclick="toggleBlogModal(true)">Create New Post</button>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">News & Blogs Management</h2>
+                    <div class="card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <input type="text" placeholder="Search posts..." class="p-2 border rounded w-1/3">
+                            <button class="btn-primary" onclick="toggleBlogModal(true)">Create New Post</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Author</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for post in posts %}
+                                    <tr>
+                                        <td>{{ post.id }}</td>
+                                        <td>{{ post.title }}</td>
+                                        <td>{{ post.category }}</td>
+                                        <td>{{ post.author }}</td>
+                                        <td>{{ post.created_at.strftime('%Y-%m-%d') }}</td>
+                                        <td>
+                                            <button class="text-blue-500 hover:underline mr-2" onclick="openEditBlogModal({{ post.id }}, '{{ post.title }}', '{{ post.category }}', '{{ post.author }}', `{{ post.content }}`)">Edit</button>
+                                            <form method="POST" action="{{ url_for('admin.delete_blog', post_id=post.id) }}" style="display:inline;">
+                                                <button type="submit" class="text-red-500 hover:underline">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="overflow-x-auto">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Author</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for post in posts %}
-                        <tr>
-                            <td>{{ post.id }}</td>
-                            <td>{{ post.title }}</td>
-                            <td>{{ post.category }}</td>
-                            <td>{{ post.author }}</td>
-                            <td>{{ post.created_at.strftime('%Y-%m-%d') }}</td>
-                            <td>
-                            <button class="text-blue-500 hover:underline mr-2"
-                                    onclick="openEditBlogModal({{ post.id }}, '{{ post.title }}', '{{ post.category }}', '{{ post.author }}', `{{ post.content }}`)">
-                                Edit
-                            </button>
-                            <form method="POST" action="{{ url_for('admin.delete_blog', post_id=post.id) }}" style="display:inline;">
-                                <button type="submit" class="text-red-500 hover:underline">Delete</button>
-                            </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
                 </section>
 
                 <!-- Create Blog Modal -->
                 <div id="createBlogModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-                <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
-                    <h2 class="text-xl font-bold mb-4">Add New Blog Post</h2>
-                    <form method="POST" action="{{ url_for('admin.add_blog') }}">
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Title</label>
-                        <input type="text" name="title" class="w-full border rounded p-2" required>
+                    <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
+                        <h2 class="text-xl font-bold mb-4">Add New Blog Post</h2>
+                        <form method="POST" action="{{ url_for('admin.add_blog') }}">
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Title</label>
+                                <input type="text" name="title" class="w-full border rounded p-2" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Category</label>
+                                <input type="text" name="category" class="w-full border rounded p-2" placeholder="Announcement, Update, FAQ">
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Author</label>
+                                <input type="text" name="author" class="w-full border rounded p-2" value="Admin">
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Content</label>
+                                <textarea name="content" class="w-full border rounded p-2" required></textarea>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="button" onclick="toggleBlogModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded">Cancel</button>
+                                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Save</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Category</label>
-                        <input type="text" name="category" class="w-full border rounded p-2" placeholder="Announcement, Update, FAQ">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Author</label>
-                        <input type="text" name="author" class="w-full border rounded p-2" value="Admin">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Content</label>
-                        <textarea name="content" class="w-full border rounded p-2" required></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" onclick="toggleBlogModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Save</button>
-                    </div>
-                    </form>
-                </div>
                 </div>
 
                 <!-- Edit Blog Modal -->
                 <div id="editBlogModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-                <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
-                    <h2 class="text-xl font-bold mb-4">Edit Blog Post</h2>
-                    <form method="POST" id="editBlogForm">
-                    <input type="hidden" name="post_id" id="editPostId">
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Title</label>
-                        <input type="text" name="title" id="editTitle" class="w-full border rounded p-2" required>
+                    <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
+                        <h2 class="text-xl font-bold mb-4">Edit Blog Post</h2>
+                        <form method="POST" id="editBlogForm">
+                            <input type="hidden" name="post_id" id="editPostId">
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Title</label>
+                                <input type="text" name="title" id="editTitle" class="w-full border rounded p-2" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Category</label>
+                                <input type="text" name="category" id="editCategory" class="w-full border rounded p-2">
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Author</label>
+                                <input type="text" name="author" id="editAuthor" class="w-full border rounded p-2">
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Content</label>
+                                <textarea name="content" id="editContent" class="w-full border rounded p-2"></textarea>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="button" onclick="toggleEditBlogModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded">Cancel</button>
+                                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Update</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Category</label>
-                        <input type="text" name="category" id="editCategory" class="w-full border rounded p-2">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Author</label>
-                        <input type="text" name="author" id="editAuthor" class="w-full border rounded p-2">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm font-bold">Content</label>
-                        <textarea name="content" id="editContent" class="w-full border rounded p-2"></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" onclick="toggleEditBlogModal(false)" class="px-4 py-2 mr-2 bg-gray-300 rounded">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Update</button>
-                    </div>
-                    </form>
                 </div>
-                </div>
-
 
                 <!-- Payment Management Section -->
                 <section id="payments" class="content-section hidden">
@@ -522,10 +546,8 @@
                                         <td>TXN{{ "%04d" % payment.id }}</td>
                                         <td>{{ payment.user.first_name }} {{ payment.user.last_name }}</td>
                                         <td>{{ payment.item.id }}</td>
-                                        <td>${{ "{:,.2f}".format(payment.amount) }}</td>
-                                        <td class="{% if payment.status == 'successful' %}text-green-600
-                                                    {% elif payment.status == 'pending' %}text-yellow-600
-                                                    {% else %}text-red-600{% endif %}">
+                                        <td>₹{{ "{:,.2f}".format(payment.amount) }}</td>
+                                        <td class="{% if payment.status == 'successful' %}text-green-600{% elif payment.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %}">
                                             {{ payment.status|capitalize }}
                                         </td>
                                         <td>{{ payment.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
@@ -640,7 +662,6 @@
                             <button class="btn-primary mr-4">Generate PDF</button>
                             <button class="btn-primary">Generate CSV</button>
                         </div>
-
                         <h3 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Scheduled Reports</h3>
                         <div class="overflow-x-auto">
                             <table>
@@ -682,7 +703,7 @@
             </div>
         </main>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Sidebar Navigation Logic
         document.addEventListener('DOMContentLoaded', () => {
@@ -692,139 +713,99 @@
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-
-                    // Remove active class from all links
                     navLinks.forEach(nav => nav.classList.remove('active'));
-                    // Add active class to clicked link
                     link.classList.add('active');
-
-                    // Hide all sections
                     sections.forEach(section => section.classList.add('hidden'));
-
-                    // Show the target section
                     const targetId = link.getAttribute('href').substring(1);
                     document.getElementById(targetId).classList.remove('hidden');
                 });
             });
 
-            // Initialize Charts for Dashboard
+            // Initialize Charts
+            const auctionStatusData = {{ charts.auction_status | tojson }};
             const auctionStatusCtx = document.getElementById('auctionStatusChart').getContext('2d');
             new Chart(auctionStatusCtx, {
-                type: 'pie',
+                type: 'doughnut',
                 data: {
-                    labels: ['Active', 'Upcoming', 'Completed', 'Cancelled'],
+                    labels: Object.keys(auctionStatusData),
                     datasets: [{
-                        data: [300, 150, 700, 84],
-                        backgroundColor: ['#f6ad55', '#63b3ed', '#48bb78', '#fc8181'],
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: false,
-                            text: 'Auction Status Overview'
-                        }
-                    }
-                }
-            });
-
-            const revenueByCategoryCtx = document.getElementById('revenueByCategoryChart').getContext('2d');
-            new Chart(revenueByCategoryCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Furniture', 'Porcelain', 'Jewelry', 'Timepieces', 'Art'],
-                    datasets: [{
-                        label: 'Revenue ($)',
-                        data: [1500000, 1200000, 900000, 800000, 1000000],
-                        backgroundColor: [
-                            'rgba(246, 173, 85, 0.8)', // Amber
-                            'rgba(99, 179, 237, 0.8)', // Blue
-                            'rgba(72, 187, 120, 0.8)', // Green
-                            'rgba(252, 129, 129, 0.8)', // Red
-                            'rgba(155, 89, 182, 0.8)' // Purple
-                        ],
-                        borderColor: [
-                            'rgba(246, 173, 85, 1)',
-                            'rgba(99, 179, 237, 1)',
-                            'rgba(72, 187, 120, 1)',
-                            'rgba(252, 129, 129, 1)',
-                            'rgba(155, 89, 182, 1)'
-                        ],
+                        label: 'Auctions',
+                        data: Object.values(auctionStatusData),
+                        backgroundColor: ['#4ade80', '#f87171'],
+                        borderColor: ['#fff', '#fff'],
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false,
-                        },
-                        title: {
-                            display: false,
-                            text: 'Revenue by Category'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    return '$' + value.toLocaleString();
-                                }
-                            }
-                        }
-                    }
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+            const revenueByCategoryData = {{ charts.revenue_by_category | tojson }};
+            const revenueByCategoryCtx = document.getElementById('revenueByCategoryChart').getContext('2d');
+            new Chart(revenueByCategoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(revenueByCategoryData),
+                    datasets: [{
+                        label: 'Revenue (₹)',
+                        data: Object.values(revenueByCategoryData),
+                        backgroundColor: ['#60a5fa', '#facc15', '#f472b6', '#34d399', '#f97316', '#818cf8', '#ec4899']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Revenue ($)' } } }
+                }
+            });
+
+            const categoryCountsData = {{ charts.category_counts | tojson }};
+            const categoryCountsCtx = document.getElementById('categoryCountsChart').getContext('2d');
+            new Chart(categoryCountsCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(categoryCountsData),
+                    datasets: [{
+                        label: 'Number of Auctions',
+                        data: Object.values(categoryCountsData),
+                        backgroundColor: ['#60a5fa', '#facc15', '#f472b6', '#34d399', '#f97316', '#818cf8', '#ec4899']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Number of Auctions' } } }
                 }
             });
         });
-        const modal = document.getElementById("createModal");
-        function toggleModal(show) {
-            if (show) {
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
-            } else {
-            modal.classList.add("hidden");
-            modal.classList.remove("flex");
-            }
-        }
-        document.querySelector(".btn-primary").addEventListener("click", () => toggleModal(true));
 
-        //User Management Section
-        document.addEventListener('DOMContentLoaded', function() {
+        // Modal logic
+        function toggleModal(show) {
+            const modal = document.getElementById("createModal");
+            modal.classList.toggle("hidden", !show);
+            modal.classList.toggle("flex", show);
+        }
+
+        // User Management
         const userModal = document.getElementById("userModal");
         const userForm = document.getElementById("userForm");
         const userModalTitle = document.getElementById("userModalTitle");
         const passwordSection = document.getElementById("passwordSection");
-        
         let isEditing = false;
         let editingUserId = null;
 
-        // Add event listener for the Add New User button
-        const addUserBtn = document.getElementById("addUserBtn");
-        if (addUserBtn) {
-            addUserBtn.addEventListener('click', function() {
-                console.log("Add User button clicked via event listener");
-                toggleUserModal(true);
-            });
-        }
-
-        // Toggle User Modal
         window.toggleUserModal = function(show, editing = false, userId = null) {
             if (show) {
                 userModal.classList.remove("hidden");
                 userModal.classList.add("flex");
-                
                 if (editing) {
                     isEditing = true;
                     editingUserId = userId;
                     userModalTitle.textContent = "Edit User";
                     userForm.action = `/admin/edit_user/${userId}`;
-                    passwordSection.style.display = "none"; // Hide password field when editing
+                    passwordSection.style.display = "none";
                     document.getElementById("password").required = false;
                 } else {
                     isEditing = false;
@@ -842,16 +823,12 @@
             }
         };
 
-        // Edit User Function
         window.editUser = function(userId) {
-            // Fetch user data and populate form
             fetch(`/admin/get_user/${userId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         const user = data.user;
-                        
-                        // Populate form fields
                         document.getElementById("first_name").value = user.first_name;
                         document.getElementById("last_name").value = user.last_name;
                         document.getElementById("email").value = user.email;
@@ -863,7 +840,6 @@
                         document.getElementById("state_province").value = user.state_province;
                         document.getElementById("postal_code").value = user.postal_code;
                         document.getElementById("country").value = user.country;
-                        
                         toggleUserModal(true, true, userId);
                     } else {
                         alert("Error fetching user data: " + data.message);
@@ -875,24 +851,18 @@
                 });
         };
 
-        // Toggle User Status (Block/Activate)
         window.toggleUserStatus = function(userId, action) {
-            const confirmMessage = action === 'block' ? 
-                "Are you sure you want to block this user?" : 
-                "Are you sure you want to activate this user?";
-                
+            const confirmMessage = action === 'block' ? "Are you sure you want to block this user?" : "Are you sure you want to activate this user?";
             if (confirm(confirmMessage)) {
                 fetch(`/admin/toggle_user_status/${userId}`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: action })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        location.reload(); // Refresh the page to show updated status
+                        location.reload();
                     } else {
                         alert("Error updating user status: " + data.message);
                     }
@@ -904,23 +874,17 @@
             }
         };
 
-        // Delete User Function
         window.deleteUser = function(userId) {
             if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
                 fetch(`/admin/delete_user/${userId}`, {
                     method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
+                    headers: { 'Content-Type': 'application/json' }
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Remove the row from the table
                         const row = document.querySelector(`tr[data-user-id="${userId}"]`);
-                        if (row) {
-                            row.remove();
-                        }
+                        if (row) row.remove();
                         alert("User deleted successfully");
                     } else {
                         alert("Error deleting user: " + data.message);
@@ -933,23 +897,19 @@
             }
         };
 
-        // Handle form submission
         userForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const formData = new FormData(userForm);
             const url = isEditing ? `/admin/edit_user/${editingUserId}` : '/admin/add_user';
-            const method = 'POST';
-
             fetch(url, {
-                method: method,
+                method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     alert(isEditing ? "User updated successfully!" : "User added successfully!");
-                    location.reload(); // Refresh the page to show the new/updated user
+                    location.reload();
                 } else {
                     alert("Error: " + data.message);
                 }
@@ -959,29 +919,26 @@
                 alert("Error submitting form");
             });
         });
-    });
 
-    //Blogs & News Management Section
-    function toggleBlogModal(show) {
-        document.getElementById('createBlogModal').classList.toggle('hidden', !show);
-        document.getElementById('createBlogModal').classList.toggle('flex', show);
-    }
+        function toggleBlogModal(show) {
+            document.getElementById('createBlogModal').classList.toggle('hidden', !show);
+            document.getElementById('createBlogModal').classList.toggle('flex', show);
+        }
 
-    function toggleEditBlogModal(show) {
-        document.getElementById('editBlogModal').classList.toggle('hidden', !show);
-        document.getElementById('editBlogModal').classList.toggle('flex', show);
-    }
+        function toggleEditBlogModal(show) {
+            document.getElementById('editBlogModal').classList.toggle('hidden', !show);
+            document.getElementById('editBlogModal').classList.toggle('flex', show);
+        }
 
-    function openEditBlogModal(id, title, category, author, content) {
-        document.getElementById('editPostId').value = id;
-        document.getElementById('editTitle').value = title;
-        document.getElementById('editCategory').value = category;
-        document.getElementById('editAuthor').value = author;
-        document.getElementById('editContent').value = content;
-        document.getElementById('editBlogForm').action = `/admin/edit_blog/${id}`;
-        toggleEditBlogModal(true);
-    }
-
+        function openEditBlogModal(id, title, category, author, content) {
+            document.getElementById('editPostId').value = id;
+            document.getElementById('editTitle').value = title;
+            document.getElementById('editCategory').value = category;
+            document.getElementById('editAuthor').value = author;
+            document.getElementById('editContent').value = content;
+            document.getElementById('editBlogForm').action = `/admin/edit_blog/${id}`;
+            toggleEditBlogModal(true);
+        }
     </script>
 </body>
 </html>

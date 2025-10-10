@@ -1,10 +1,13 @@
 from datetime import datetime
+import pandas as pd
+import numpy as np
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, session, url_for
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from models import BlogPost, Payment, User, AuctionItem
+from models import BlogPost, Payment, User, AuctionItem, ActiveBiddingItem, Bid
 from extensions import db
+from collections import defaultdict
 
 admin_bp = Blueprint("admin", __name__, template_folder="../../templates")
 
@@ -45,25 +48,115 @@ def login():
 
 @admin_bp.route("/dashboard")
 def dashboard():
+    # --- Auth check ---
     if "user_id" not in session or session.get("role") != "admin":
         flash("Please log in as admin.", "danger")
         return redirect(url_for("admin.login"))
 
+    # --- Users ---
     users = User.query.filter(User.role != "admin").all()
+    total_users = len(users)
+
+    # --- Auction Items ---
     items = AuctionItem.query.all()
-    payments = Payment.query.order_by(Payment.timestamp.desc()).all()
-    posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
-    
+    total_auctions = len(items)
+    active_auctions = sum(1 for item in items if item.auction_end_time > datetime.now() and not item.is_sold)
+    completed_auctions = sum(1 for item in items if item.is_sold)
+
+    # --- Payments ---
+    payments = Payment.query.all()
+    total_revenue = sum(p.amount for p in payments if p.status == "successful")
+    pending_disputes = sum(1 for p in payments if p.status == "failed")
+
+    # --- Active Users (Bidders) ---
+    active_bidders = ActiveBiddingItem.query.filter_by(is_active=True).all()
+    active_user_ids = set(ab.highest_bidder_id for ab in active_bidders if ab.highest_bidder_id)
+    active_users = len(active_user_ids)
+
+    # --- Recent Activity ---
+    recent_bids = Bid.query.order_by(Bid.timestamp.desc()).limit(5).all()
+    recent_payments = Payment.query.order_by(Payment.timestamp.desc()).limit(5).all()
+
+    # --- Auction Status Chart ---
+    auction_status_counts = {
+        "Active": active_auctions,
+        "Completed": completed_auctions
+    }
+
+    # --- Revenue by Category Chart ---
+    revenue_by_category = defaultdict(float)
+    for item in items:
+        category = getattr(item, "category", "General")
+        if item.is_sold:
+            revenue_by_category[category] += item.current_bid
+
+    # --- Top Categories by Auction Count ---
+    category_counts = defaultdict(int)
+    for item in items:
+        category = getattr(item, "category", "General")
+        category_counts[category] += 1
+
+    # --- Prepare cards and charts ---
+    cards = {
+        "total_auctions": total_auctions,
+        "total_revenue": "{:,.2f}".format(total_revenue),
+        "active_users": active_users,
+        "pending_disputes": pending_disputes,
+        "total_users": total_users,
+        "active_auctions": active_auctions,
+        "completed_auctions": completed_auctions
+    }
+
+    charts = {
+        "auction_status": auction_status_counts,
+        "revenue_by_category": dict(revenue_by_category),
+        "category_counts": dict(category_counts)
+    }
+
+    # --- Convert items for template ---
+    items_list = [{
+        "id": item.id,
+        "title": item.title,
+        "current_bid": item.current_bid,
+        "is_sold": item.is_sold,
+        "category": getattr(item, "category", "General"),
+        "auction_end_time": item.auction_end_time, 
+        "seller_name": item.seller_name
+    } for item in items]
+
+    # --- Convert recent activity for template ---
+    recent_activity = {
+        "bids": [{
+            "id": bid.id,
+            "item_title": bid.item.title,
+            "user_name": f"{bid.user.first_name} {bid.user.last_name}",
+            "bid_amount": bid.bid_amount,
+            "timestamp": bid.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        } for bid in recent_bids],
+        "payments": [{
+            "id": payment.id,
+            "user_name": f"{payment.user.first_name} {payment.user.last_name}",
+            "item_title": payment.item.title,
+            "amount": payment.amount,
+            "status": payment.status.capitalize(),
+            "timestamp": payment.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        } for payment in recent_payments]
+    }
 
     return render_template(
         "Admin Dashboard page.html",
+        admin_name=session.get("first_name"),
+        items=items_list,
         users=users,
-        items=items,
         payments=payments,
-        posts=posts,
+        posts=BlogPost.query.order_by(BlogPost.created_at.desc()).all(),
         now=datetime.now(),
-        admin_name=session.get("first_name")
+        cards=cards,
+        charts=charts,
+        recent_activity=recent_activity
     )
+
+
 
 @admin_bp.route("/add_item", methods=["POST"])
 def add_item():

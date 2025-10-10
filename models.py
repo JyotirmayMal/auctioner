@@ -40,7 +40,7 @@ class AuctionItem(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255), nullable=False)
-    image = db.Column(db.String(500), nullable=True)
+    image = db.Column(db.Text, nullable=True)
     description = db.Column(db.Text, nullable=True)
     specs = db.Column(db.Text, nullable=True)  # store as JSON or comma-separated string
     current_bid = db.Column(db.Float, default=0.0)
@@ -59,6 +59,27 @@ class AuctionItem(db.Model):
     # Relationships
     highest_bidder_user = db.relationship("User", foreign_keys=[highest_bidder], backref="winning_items", lazy=True)
     buyer = db.relationship("User", foreign_keys=[buyer_id], backref="purchased_items", lazy=True)
+
+class ActiveBiddingItem(db.Model):
+    __tablename__ = "active_bidding_items"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    auction_item_id = db.Column(db.Integer, db.ForeignKey("auction_items.id"), nullable=False)
+    current_price = db.Column(db.Float, nullable=False, default=0.0)
+    highest_bidder_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    total_bids = db.Column(db.Integer, default=0)
+    start_time = db.Column(db.DateTime, default=datetime.now)
+    end_time = db.Column(db.DateTime, nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
+    last_bid_time = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+
+    # Relationships
+    auction_item = db.relationship("AuctionItem", backref=db.backref("active_bidding", uselist=False))
+    highest_bidder = db.relationship("User", backref="active_bids")
+
+    def __repr__(self):
+        return f"<ActiveBiddingItem {self.auction_item.title} - Current: {self.current_price}>"
+
 
 class BlogPost(db.Model):
     __tablename__ = "blog_posts"

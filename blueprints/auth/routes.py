@@ -1,11 +1,12 @@
 from datetime import date, datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from models import AuctionItem, User
+from models import AuctionItem, User, Bid, ActiveBiddingItem
 from extensions import db
 import traceback
 import uuid
 
 auth_bp = Blueprint("auth", __name__, template_folder="../../templates")
+
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -23,7 +24,11 @@ def login():
             session["role"] = user.role
             flash("Logged in successfully", "success")
             print("✅ Login success:", session["user_id"], session["role"])
-            return redirect(url_for("auth.dashboard"))
+            # Role-based redirection
+            if user.role == "seller":
+                return redirect(url_for("seller.dashboard"))
+            else:
+                return redirect(url_for("auth.dashboard"))
 
         flash("Invalid credentials", "error")
         return redirect(url_for("auth.login"))
@@ -209,7 +214,6 @@ def register():
     return render_template("Registration Page.html")
 
 
-
 @auth_bp.route("/dashboard")
 def dashboard():
     if "user_id" not in session:
@@ -219,12 +223,47 @@ def dashboard():
     user = User.query.get(session["user_id"])
     print("🟢 Session in dashboard:", dict(session))
 
-    bought_items = AuctionItem.query.filter_by(buyer_id=user.id).all()
+    # Fetch ActiveBiddingItem records
+    active_items = (
+        ActiveBiddingItem.query
+        .join(AuctionItem, isouter=True)
+        .filter(ActiveBiddingItem.is_active == True)
+        .filter(ActiveBiddingItem.end_time > datetime.now())
+        .order_by(ActiveBiddingItem.start_time.desc())
+        .all()
+    )
+
+    print("🟢 Dashboard Active Items Count:", len(active_items))
+    for ai in active_items:
+        print("🟢 ID:", ai.id, "AuctionItem:", ai.auction_item.title if ai.auction_item else "None", "Current Price:", ai.current_price)
+
+    # Fetch latest 3 auction items
+    items = AuctionItem.query.order_by(AuctionItem.id.desc()).limit(3).all()
+
+    # Fetch items bought by current user
+    bought_items = AuctionItem.query.filter_by(buyer_id=user.id, is_sold=True).all()
+
+    # Fetch user's active bids
+    user_bids = (
+        Bid.query
+        .filter_by(user_id=user.id)
+        .join(AuctionItem)
+        .filter(AuctionItem.auction_end_time > datetime.now())
+        .order_by(Bid.timestamp.desc())
+        .all()
+    )
+
+    print("🟢 Dashboard Bought Items Count:", len(bought_items))
+    print("🟢 Dashboard User Bids Count:", len(user_bids))
 
     return render_template(
         "Users DashBoard Page.html",
+        items=items,
         user=user,
-        bought_items=bought_items
+        now=datetime.now(),
+        active_items=active_items,
+        bought_items=bought_items,
+        user_bids=user_bids
     )
 
 @auth_bp.route("/logout")
