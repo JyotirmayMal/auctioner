@@ -36,13 +36,14 @@ def publish_item():
     is_active = 'is_active' in request.form  # ✅ safe checkbox handling
 
     new_item = AuctionItem(
-        title=request.form["title"],
-        description=request.form["description"],
-        image=request.form["image_url"],
-        current_bid=request.form["reserve_price"],
-        seller_name=f"{user.first_name} {user.last_name}",
-        auction_end_time=datetime.strptime(request.form["auction_end_time"], "%Y-%m-%dT%H:%M"),
-        is_sold=False,
+    title=request.form["title"],
+    description=request.form["description"],
+    image=request.form["image_url"],
+    category=request.form["category"],  # ✅ Add this line
+    current_bid=request.form["reserve_price"],
+    seller_name=f"{user.first_name} {user.last_name}",
+    auction_end_time=datetime.strptime(request.form["auction_end_time"], "%Y-%m-%dT%H:%M"),
+    is_sold=False,
     )
     db.session.add(new_item)
     db.session.commit()

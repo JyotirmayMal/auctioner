@@ -165,6 +165,7 @@ def add_item():
         return redirect(url_for("admin.login"))
 
     title = request.form.get("title")
+    category = request.form.get("category")
     seller_name = request.form.get("seller_name")
     description = request.form.get("description")
     current_bid = request.form.get("current_bid", 0.0)
@@ -174,6 +175,7 @@ def add_item():
     new_item = AuctionItem(
         title=title,
         description=description,
+        category=category,
         current_bid=float(current_bid),
         min_bid_increment=int(min_bid_increment),
         auction_end_time=datetime.fromisoformat(auction_end_time),

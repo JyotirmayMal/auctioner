@@ -107,16 +107,8 @@
                             <p id="activeAuctions" class="text-4xl font-bold text-gray-900 mt-2">{{ cards.active_auctions }}</p>
                         </div>
                         <div class="card p-5">
-                            <h3 class="text-lg font-semibold text-gray-600">Completed Auctions</h3>
-                            <p id="completedAuctions" class="text-4xl font-bold text-gray-900 mt-2">{{ cards.completed_auctions }}</p>
-                        </div>
-                        <div class="card p-5">
                             <h3 class="text-lg font-semibold text-gray-600">Total Revenue</h3>
                             <p id="totalRevenue" class="text-4xl font-bold text-gray-900 mt-2">₹{{ cards.total_revenue }}</p>
-                        </div>
-                        <div class="card p-5">
-                            <h3 class="text-lg font-semibold text-gray-600">Active Users</h3>
-                            <p id="activeUsers" class="text-4xl font-bold text-gray-900 mt-2">{{ cards.active_users }}</p>
                         </div>
                         <div class="card p-5">
                             <h3 class="text-lg font-semibold text-gray-600">Total Users</h3>
@@ -390,6 +382,18 @@
                             <div class="mb-3">
                                 <label class="block text-sm font-bold">Item Title</label>
                                 <input type="text" name="title" class="w-full border rounded p-2" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-bold">Category</label>
+                                <select name="category" class="w-full border rounded p-2" required>
+                                    <option value="">Select a category</option>
+                                    <option value="Timepieces">Timepieces</option>
+                                    <option value="Porcelain & Ceramics">Porcelain & Ceramics</option>
+                                    <option value="Furniture">Furniture</option>
+                                    <option value="Jewelry">Jewelry</option>
+                                    <option value="Collectibles & Memorabilia">Collectibles & Memorabilia</option>
+                                    <option value="Art & Sculptures">Art & Sculptures</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label class="block text-sm font-bold">Seller Name</label>

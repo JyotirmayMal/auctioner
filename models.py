@@ -43,6 +43,7 @@ class AuctionItem(db.Model):
     image = db.Column(db.Text, nullable=True)
     description = db.Column(db.Text, nullable=True)
     specs = db.Column(db.Text, nullable=True)  # store as JSON or comma-separated string
+    category = db.Column(db.String(100), nullable=False)
     current_bid = db.Column(db.Float, default=0.0)
     highest_bidder = db.Column(db.String(100), nullable=True)
     min_bid_increment = db.Column(db.Integer, default=10)

@@ -82,50 +82,105 @@
     <!-- Navigation -->
     <nav class="bg-gray-900 shadow-sm py-4 px-6">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
+            
+            <!-- Logo -->
             <div class="flex items-center">
-                <a href="{{ url_for('auctions.auctions_home') }}" class="text-2xl font-bold text-white font-serif">Antique Auction</a>
+                <a href="{{ url_for('auctions.auctions_home') }}" class="text-2xl font-bold text-white font-serif">
+                    Antique Auction
+                </a>
             </div>
+
+            <!-- Center Menu -->
             <div class="hidden md:flex space-x-8 items-center">
-                <a href="{{ url_for('auctions.auctions_home') }}" class="text-gray-300 hover:text-amber-400 transition duration-300">Home</a>
-                
+
+                <!-- Home -->
+                <a href="{{ url_for('auctions.auctions_home') }}" 
+                class="text-gray-300 hover:text-amber-400 transition duration-300">
+                    Home
+                </a>
+
                 <!-- Browse Dropdown -->
-                <div class="relative dropdown">
+                <div class="relative dropdown group">
                     <button class="text-gray-300 hover:text-amber-400 transition duration-300 focus:outline-none flex items-center">
                         Browse 
-                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M19 9l-7 7-7-7"></path>
+                        </svg>
                     </button>
-                    <div class="dropdown-menu">
-                        <a href="#auctions">Auctions</a>
-                        <a href="#categories">Categories</a>
+                    <div class="dropdown-menu absolute hidden group-hover:block bg-gray-800 mt-2 rounded-lg shadow-lg py-2">
+                        <a href="{{ url_for('auctions.auctions_home') }}" 
+                        class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-amber-400">All Auctions</a>
+                        <a href="{{ url_for('auctions.category_page', category_name='Antiques') }}" 
+                        class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-amber-400">Antiques</a>
+                        <a href="{{ url_for('auctions.category_page', category_name='Art') }}" 
+                        class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-amber-400">Art</a>
+                        <a href="{{ url_for('auctions.category_page', category_name='Jewelry') }}" 
+                        class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-amber-400">Jewelry</a>
+                        <a href="{{ url_for('auctions.category_page', category_name='Collectibles') }}" 
+                        class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-amber-400">Collectibles</a>
                     </div>
                 </div>
 
-                <a href="#" class="text-gray-300 hover:text-amber-400 transition duration-300">About</a>
-                <a href="#live-auction" class="text-gray-300 hover:text-amber-400 transition duration-300">Live Auction</a>
-                <a href="#blog" class="text-gray-300 hover:text-amber-400 transition duration-300">Blog</a>
-                
-                <!-- My Account Dropdown -->
-                <div class="relative dropdown">
-                    <button class="text-gray-300 hover:text-amber-400 transition duration-300 focus:outline-none flex items-center">
-                        My Account 
-                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <!-- About -->
+                <a href="{{ url_for('auctions.about_us') }}" 
+                class="text-gray-300 hover:text-amber-400 transition duration-300">
+                    About
+                </a>
+
+                <!-- How It Works -->
+                <a href="{{ url_for('auctions.how_it_works') }}" 
+                class="text-gray-300 hover:text-amber-400 transition duration-300">
+                    How It Works
+                </a>
+
+                <!-- Live Auction -->
+                <a href="{{ url_for('auctions.auctions_home') }}#live-auction" 
+                class="text-gray-300 hover:text-amber-400 transition duration-300">
+                    Live Auction
+                </a>
+
+                <!-- Blog -->
+                <a href="#blog" class="text-gray-300 hover:text-amber-400 transition duration-300">
+                    Blog
+                </a>
+
+                <!-- My Account (if logged in) -->
+                {% if user %}
+                <div class="relative dropdown group">
+                    <button class="text-gray-300 hover:text-amber-400 transition duration-300 flex items-center">
+                        {{ user.username }}
+                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M19 9l-7 7-7-7"></path>
+                        </svg>
                     </button>
-                    <div class="dropdown-menu">
-                        <a href="#user-dashboard">My Dashboard</a>
-                        <a href="#user-dashboard">Active Bids</a>
-                        <a href="#user-dashboard">Won Items</a>
-                        <a href="#user-dashboard">Edit Profile</a>
+                    <div class="dropdown-menu absolute hidden group-hover:block bg-gray-800 mt-2 rounded-lg shadow-lg py-2">
+                        <a href="{{ url_for('auctions.auctions_home') }}#user-dashboard" 
+                        class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-amber-400">My Dashboard</a>
+                        <a href="{{ url_for('auctions.auctions_home') }}#active-bids" 
+                        class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-amber-400">Active Bids</a>
+                        <a href="{{ url_for('auctions.auctions_home') }}#won-items" 
+                        class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-amber-400">Won Items</a>
+                        <a href="{{ url_for('auth.logout') }}" 
+                        class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-amber-400">Logout</a>
                     </div>
                 </div>
+                {% endif %}
             </div>
+
+            <!-- Right Side Buttons -->
             <div class="flex items-center space-x-4">
-                <a href="{{ url_for('auth.login') }}" class="px-4 py-2 text-gray-300 hover:text-amber-600 transition duration-300">Login</a>
-                <a href="{{ url_for('auth.register') }}" class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition duration-300">Register</a>
-                <!-- <button class="px-4 py-2 text-gray-300 hover:text-amber-600 transition duration-300">Login</button>
-                <button class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition duration-300">Register</button> -->
+                {% if not user %}
+                    <a href="{{ url_for('auth.login') }}" 
+                    class="px-4 py-2 text-gray-300 hover:text-amber-600 transition duration-300">Login</a>
+                    <a href="{{ url_for('auth.register') }}" 
+                    class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition duration-300">Register</a>
+                {% endif %}
             </div>
         </div>
     </nav>
+
 
     <!-- Hero Section -->
     <section class="hero-gradient py-20 px-6">

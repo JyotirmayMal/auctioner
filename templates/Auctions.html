@@ -94,14 +94,14 @@
     <nav class="bg-gray-900 shadow-sm py-4 px-6">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center">
-                <a href="#" class="text-2xl font-bold text-white font-serif">Antique Auction</a>
+                <a href="{{ url_for('auctions.auctions_home') }}" class="text-2xl font-bold text-white font-serif">Antique Auction</a>
             </div>
             <div class="hidden md:flex space-x-8">
-                <a href="#" class="text-gray-300 hover:text-amber-400">Home</a>
-                <a href="#" class="text-gray-300 hover:text-amber-400">Auctions</a>
-                <a href="#" class="text-gray-300 hover:text-amber-400">Categories</a>
-                <a href="#" class="text-gray-300 hover:text-amber-400">How It Works</a>
-                <a href="#" class="text-gray-300 hover:text-amber-400">About</a>
+                <a href="{{ url_for('auctions.auctions_home') }}" class="text-gray-300 hover:text-amber-400">Home</a>
+                <a href="{{ url_for('auctions.auctions_home') }}#auctions" class="text-gray-300 hover:text-amber-400">Auctions</a>
+                <a href="{{ url_for('auctions.category_page', category_name='All') }}" class="text-gray-300 hover:text-amber-400">Categories</a>
+                <a href="{{ url_for('blog.blog_home') }}" class="text-gray-300 hover:text-amber-400">Blog</a>
+                <a href="{{ url_for('auctions.about_us') }}" class="text-gray-300 hover:text-amber-400">About</a>
             </div>
             <div class="flex items-center space-x-4">
                 {% if session.get("user_id") %}
